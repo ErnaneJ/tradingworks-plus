@@ -60,6 +60,46 @@ main{
   flex: 1;
 }
 
+.table{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
+}
+
+.table--header, .table--row{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-direction: row;
+}
+
+
+.table--item, .table--title{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc((100% / 3) - .25rem);
+}
+
+.table--title{ font-weight: bold; }
+
+.table--body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.table--item.break{
+  min-width: 100%;
+  background-color: var(--atlantis-700);
+  color: white;
+}
+
 footer{
   display: flex;
   align-items: center;
