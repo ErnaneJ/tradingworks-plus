@@ -1,0 +1,75 @@
+:root{
+  --atlantis-50: #fafbea;
+  --atlantis-100: #f2f6d1;
+  --atlantis-200: #e4eda9;
+  --atlantis-300: #d1e076;
+  --atlantis-400: #bbcf4c;
+  --atlantis-500: #a7bf30; /* base */
+  --atlantis-600: #7c9020;
+  --atlantis-700: #5d6e1d;
+  --atlantis-800: #4c581c;
+  --atlantis-900: #404b1c;
+
+  --popup-width: 250px;
+  --popup-height: 300px;
+}
+
+body{
+  background-color: var(--atlantis-50);
+  width: var(--popup-width);
+  height: var(--popup-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .5rem;
+  width: 100%;
+}
+
+.header--logo{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: .35rem;
+}
+
+.header--logo h1{
+  font-size: 1rem;
+}
+
+.header--btn-config{
+  background-color: var(--atlantis-200);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  font-size: 1.5rem;
+  height: 2rem;
+  width: 2rem;
+}
+
+main{
+  padding: .5rem;
+  width: 100%;
+  flex: 1;
+}
+
+footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  width: 100%;
+}
+
+footer a{
+  color: var(--atlantis-600);
+  text-decoration: none;
+  font-weight: bold;
+}
