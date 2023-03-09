@@ -11,17 +11,17 @@
   --atlantis-900: #404b1c;
 
   --popup-width: 250px;
-  --popup-height: 300px;
+  --popup-height: 350px;
 }
 
 body{
   background-color: var(--atlantis-50);
-  width: var(--popup-width);
-  height: var(--popup-height);
+  min-width: var(--popup-width);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  overflow: auto;
 }
 
 header{
@@ -58,6 +58,11 @@ main{
   padding: .5rem;
   width: 100%;
   flex: 1;
+  gap: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
 .table{
@@ -66,6 +71,17 @@ main{
   justify-content: center;
   width: 100%;
   flex-direction: column;
+  border: 1px solid var(--atlantis-300);
+  color: var(--atlantis-900);
+  border-radius: .25rem;
+  font-size: .80rem;
+}
+
+.table--header{
+  border-bottom: 1px solid var(--atlantis-300);
+  background-color: var(--atlantis-300);
+  color: var(--atlantis-900);
+  padding: .25rem;
 }
 
 .table--header, .table--row{
@@ -84,7 +100,11 @@ main{
   min-width: calc((100% / 3) - .25rem);
 }
 
-.table--title{ font-weight: bold; }
+.table--title{ font-weight: bold; padding: .15rem; }
+
+.table--item{
+  padding: .30rem;
+}
 
 .table--body{
   display: flex;
@@ -96,8 +116,57 @@ main{
 
 .table--item.break{
   min-width: 100%;
+  background-color: var(--atlantis-200);
+  font-weight: bold;
+  padding: .15rem;
+}
+
+.totals{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: .5rem;
+}
+
+.totals-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: calc((100% / 2) - .25rem);
   background-color: var(--atlantis-700);
-  color: white;
+  border-radius: .25rem;
+  padding: .15rem;
+}
+
+.totals-item--value{
+  font-size: .85rem;
+  font-weight: bold;
+  color: var(--atlantis-50);
+}
+
+.totals-item--title{
+  font-size: .60rem;
+  color: var(--atlantis-100);
+  font-style: italic;
+}
+
+span#current-date{
+  font-size: .65rem;
+  color: var(--atlantis-900);
+  font-weight: bold;
+  font-style: italic;
+}
+
+.message{
+  text-align: center;
+  font-size: .65rem;
+  color: var(--atlantis-900);
+  margin-top: .5rem;
+  background-color: var(--atlantis-300);
+  padding: .5rem .25rem;
+  border-radius: .5rem;
 }
 
 footer{
@@ -106,6 +175,7 @@ footer{
   justify-content: center;
   padding: .5rem;
   width: 100%;
+  border-top: 1px solid var(--atlantis-300);
 }
 
 footer a{

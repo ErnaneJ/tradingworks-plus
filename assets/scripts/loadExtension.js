@@ -30,15 +30,6 @@ function updateWorkedHours(){
     totalBreakTime,
     minutesToFinish,
   });
-  
-  console.log(`${Math.floor(totalWorkedTime/60)} horas e ${totalWorkedTime%60} minutos de trabalho`);
-  console.log(`${Math.floor(totalBreakTime/60)} horas e ${totalBreakTime%60} minutos de pausas`);
-  if(minutesToFinish >= 0){
-    console.log(`Faltam apenas ${Math.floor(minutesToFinish/60)} horas e ${minutesToFinish%60} minutos o fim do expediente (6 horas).`);
-  }else{
-    console.log(minutesToFinish)
-    console.log(`Opa! Se preparando para as férias? Você ultrapassou ${Math.floor((minutesToFinish * (-1))/60)} horas e ${(minutesToFinish* (-1))%60} minutos de trabalho`);
-  }
 }
 
 function parse(horario){
@@ -67,6 +58,4 @@ function requestUpdatePopup(infoToUpdate){
   });
 }
   
-(() => {
-  updateWorkedHours();
-})();
+updateWorkedHours();

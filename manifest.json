@@ -8,8 +8,8 @@
     "48": "assets/favicon48.png"
   },
   "manifest_version": 3,
-  "permissions": ["activeTab", "tabs", "storage", "scripting", "tabs", "notifications"],
-  "host_permissions": [ "http://*/*", "https://*/*" ],
+  "permissions": ["activeTab", "tabs", "storage", "scripting", "notifications"],
+  "host_permissions": [ "https://app.tradingworks.net/" ],
   "action": {
     "default_popup": "./popup.html",
     "default_title": "Tradingworks"

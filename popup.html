@@ -29,18 +29,32 @@
         <div class="table--title">Térnino</div>
         <div class="table--title">Duração</div>
       </div>
-      <div class="table--body" id="table-body">
+      <div class="table--body" id="table-body-times">
         ...
       </div>
     </div>
 
-    <p class="message">
+    <span id="current-date"></span>
+
+    <div class="totals">
+      <div class="totals-item">
+        <div class="totals-item--value" id="total-worked-hours">00:00 h</div>
+        <small class="totals-item--title">Trabalhando</small>
+      </div>
+
+      <div class="totals-item">
+        <div class="totals-item--value" id="total-break-hours">00:00 h</div>
+        <small class="totals-item--title">Em pausa</small>
+      </div>
+    </div>
+
+    <p class="message" id="msg">
       Opa! Se preparando para as férias? Você ultrapassou 0 horas e 2 minutos de trabalho
     </p>
   </main>
 
   <footer>
-    <p>Feito com 💙 por <a href="https://links.ernane.dev/">Ernane Ferreira</a></p>
+    <p>Feito com ❤ por <a href="https://links.ernane.dev/">Ernane Ferreira</a></p>
   </footer>
   <script src="./assets/scripts/initialize.js"></script>
 </body>
