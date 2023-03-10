@@ -1,15 +1,10 @@
 function updateContent(document, data){
-  const update = () => {
-    checkConfig(document);
-    handleSentMessages(data);
-    updateTableTimes(document, data.tableRows, data.workedTimes);
-    updateTableTotals(document, data.totalWorkedTime, data.totalBreakTime);
-    updateMsg(document, data.totalWorkedTime);
-    showDate(document);
-  }; update();
-  
+  checkConfig(document);
+  updateTableTimes(document, data.tableRows, data.workedTimes);
+  updateTableTotals(document, data.totalWorkedTime, data.totalBreakTime);
+  updateMsg(document, data.totalWorkedTime);
+  showDate(document);
   handleButtonConfig(document);
-  setInterval(update, 1000);
 }
 
 function updateTableTimes(document, tableRows, workedTimes){
@@ -87,38 +82,4 @@ function openConfig(){
 
 function checkConfig(){
   window.localStorage.getItem('tradingworks-plus-data') ? '' : openConfig();
-}
-
-function sendMsg(phone, apiKey, msg, msgId){
-  let msgDates = {}
-  const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${msg.replace(/ /g, '+')}&apikey=${apiKey}`;
-  const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
-
-  msgDates[msgId] = { date: new Date().toLocaleDateString() }
-
-  if(
-    config['sent-msg-dates'] && 
-    config['sent-msg-dates'][msgId] && 
-    config['sent-msg-dates'][msgId].date === new Date().toLocaleDateString()
-  ) return;
-
-  console.log('.:: Enviando mensagem! 📲')
-  fetch(callMeBotURL);
-
-  window.localStorage.setItem('tradingworks-plus-data', JSON.stringify({
-    ...config,
-    'sent-msg-dates': { ...msgDates }
-  }));
-}
-
-
-function handleSentMessages(data){
-  const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
-  if(config['allow-send-messages'] !== 'on') return;
-
-  const minutesToFinish = parse(config['work-time']) - data.totalWorkedTime;
-  
-  if(minutesToFinish >= 0 && minutesToFinish <= 15) sendMsg(config['whatsapp-number'], config['api-key'], "Opa! Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente.", 0);
-  if(minutesToFinish <= 0 && minutesToFinish >= 1) sendMsg(config['whatsapp-number'], config['api-key'], "Fim do dia! Não esquece de bater o ponto.", 1);
-  if(parse(config['break-time']) === data.totalBreakTime) sendMsg(config['whatsapp-number'], config['api-key'], "Intervalo finalizado, hora de voltar! 🚀", 2);
 }
