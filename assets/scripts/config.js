@@ -21,15 +21,18 @@ function handleSubmit(){
     event.preventDefault();
   
     const data = new FormData(event.target);
-  
-    localStorage.setItem('tradingworks-plus-data', JSON.stringify(
-      Object.fromEntries(
-        data.entries()
-      )
-    ));
+    const formatedData = Object.fromEntries(data.entries());
+
+    localStorage.setItem('tradingworks-plus-data', JSON.stringify(formatedData));
 
     const button = document.querySelector('button[type="submit"]');
     button.innerHTML = 'Sucesso! 🎉';
+
+    if(formatedData['allow-send-messages'] === 'on'){
+      const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${formatedData['whatsapp-number']}&text=${"Opa! Sistema de lembrete configurado. 🔔".replace(/ /g, '+')}&apikey=${formatedData['api-key']}`;
+      fetch(callMeBotURL);
+    }
+
     setTimeout(() => {
       button.innerHTML = 'Salvar';
     }, 2000);
