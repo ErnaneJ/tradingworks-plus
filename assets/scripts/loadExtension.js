@@ -30,7 +30,7 @@ function updateWorkedHours(){
   requestUpdatePopup(data);
   handleSentMessages(data);
 
-  setTimeout(updateWorkedHours, 1000); 
+  setTimeout(updateWorkedHours, 1000);
 }
 
 function parse(horario){
@@ -94,7 +94,8 @@ function handleSentMessages(data){
   
   if(minutesToFinish >= 0 && minutesToFinish <= 15) sendMsg(config, "Opa! Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente.", 159);
   if(minutesToFinish <= 0 && minutesToFinish >= 1) sendMsg(config, "Fim do dia! Não esquece de bater o ponto.", 1);
-  if(parse(config['break-time']) === data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", 2);
+  if(parse(config['break-time']) >= data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", 2);
 }
 
 updateWorkedHours();
+setInterval(() => location.reload(), 60000);
