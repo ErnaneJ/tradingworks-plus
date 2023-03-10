@@ -1,7 +1,3 @@
-// function sentWhatsappMessage(){
-//   const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=Bater+o+ponto&apikey=${apikey}`;
-// }
-
 function updateWorkedHours(){
   const workedHours = document.querySelectorAll('table tbody tr');
   
@@ -21,14 +17,12 @@ function updateWorkedHours(){
   
   const totalWorkedTime = workedTimes.map(time => time.worked.workedMinutes).reduce((total, currentTime) => total + currentTime, 0);
   const totalBreakTime = workedTimes.map(time => time.break).reduce((total, currentTime) => total + currentTime, 0);
-  const minutesToFinish = 360 - totalWorkedTime;
 
   requestUpdatePopup({
     workedHours,
     workedTimes,
     totalWorkedTime,
     totalBreakTime,
-    minutesToFinish,
   });
 }
 

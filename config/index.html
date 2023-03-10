@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon">
+  <title>Tradingworks+ | Configurações</title>
+  <link rel="stylesheet" href="../assets/styles/root.css">
+  <link rel="stylesheet" href="../assets/styles/config.css">
+  <script src="../assets/scripts/config.js"></script>
+</head>
+<body>
+  <header>
+    <img src="../assets/logobw.png" alt="logo tradingworks" >
+    <h1 class="header--title">+</h1>
+  </header>
+
+  <main>
+    <section class="container">
+      <h2 class="container--title">Configurações</h2>
+      <form class="container--content">
+        <div class="container--content--row">
+          <div class="container--item">
+            <label for="work-time">Jornada de trabalho</label>
+            <input type="text" pattern="[0-9]{2}:[0-9]{2}" id="work-time" name="work-time" placeholder="00:00" required>
+            <small>Ex.: 08:00 (8 horas de jornada trabalho)</small>
+          </div>
+          <div class="container--item">
+            <label for="break-time">Período de intervalo</label>
+            <input type="text" pattern="[0-9]{2}:[0-9]{2}" id="break-time" name="break-time" placeholder="00:00" required>
+            <small>Ex.: 00:15 (15 minutos de intervalo)</small>
+          </div>
+        </div>
+        <div class="container--content--row">
+          <div class="container--item">
+            <label for="whatsapp-number">Número do Whatsapp</label>
+            <input type="text" id="whatsapp-number" name="whatsapp-number" placeholder="8499999999">
+            <small>Ex.: 8499999999</small>
+          </div>
+          <div class="container--item checkbox-container">
+            <label for="allow-send-messages">Permitir mensagens</label>
+            <label class="toggle" for="allow-send-messages">
+              <input class="toggle--input" name="allow-send-messages" type="checkbox" id="allow-send-messages">
+              <div class="toggle--fill"></div>
+            </label>
+          </div>
+        </div>
+        <div class="container--content--row">
+          <div class="container--item">
+            <label for="api-key">Chave de API</label>
+            <input type="text" id="api-key" name="api-key" placeholder="1234567890">
+          </div>
+        </div>
+        <small class="alert-callmebot">* Para ter acesso às funcionalidades de notificações no whatsapp você precisa criar uma chave de API para o seu número. Acesse <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank">www.callmebot.com</a> e configure. </small>
+        <div class="container--content--row">
+          <div class="container--item">
+            <button class="save-data" type="submit">Salvar</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <p class="alert-info">* Para utilizar o <strong>TradingWorks+</strong> você precisa preencher as informações acima.</p>
+  </main>
+
+  <footer>
+    <p>Feito com ❤ por <a href="https://links.ernane.dev/">Ernane Ferreira</a></p>
+  </footer>
+</body>
+</html>

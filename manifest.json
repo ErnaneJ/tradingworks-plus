@@ -9,7 +9,7 @@
   },
   "manifest_version": 3,
   "permissions": ["activeTab", "tabs", "storage", "scripting", "notifications"],
-  "host_permissions": [ "https://app.tradingworks.net/" ],
+  "host_permissions": ["https://app.tradingworks.net/*", "https://api.callmebot.com/*"],
   "action": {
     "default_popup": "./popup.html",
     "default_title": "Tradingworks"

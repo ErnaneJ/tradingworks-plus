@@ -1,0 +1,210 @@
+body{
+  background-image: linear-gradient(135deg, rgb(167, 191, 48) 0%, rgb(76, 88, 28) 100%);
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .10rem;
+  padding: .5rem;
+  width: 100%;
+  font-size: 1rem;
+  color: var(--atlantis-100)
+}
+
+main{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+main .alert-info{
+  color: var(--atlantis-100)
+}
+
+main section.container{
+  background-color: var(--atlantis-50);
+  min-height: 100%;
+  max-width: 500px;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.container--title{
+  width: 100%;
+  font-size: 1.25rem;
+  border-bottom: 1px solid var(--atlantis-800);
+  color: var(--atlantis-800);
+  margin-bottom: 1rem;
+}
+
+.container--content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.container--content--row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: .5rem;
+}
+
+.container--item{
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  flex-direction: column;
+  gap: .25rem;
+  width: 100%;
+}
+
+.container--item label{
+  color: var(--atlantis-800);
+  font-weight: bold;
+  font-size: .80rem;
+}
+
+.container--item small{
+  color: var(--atlantis-800);
+  font-weight: bold;
+}
+
+.container--item input[type="text"]{	
+  border: none;
+  background-color: var(--atlantis-200);
+  padding: .5rem;
+  border-radius: .25rem;
+  width: 100%;
+  outline: none;
+  color: var(--atlantis-800);
+}
+
+.container--item input:focus, button:focus, a:focus{
+  outline: 2px solid var(--atlantis-600);
+}
+
+.container--item input::placeholder{
+  color: var(--atlantis-500);
+}
+
+
+.toggle {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.toggle--input {
+  display: none;
+}
+
+.toggle--fill {
+  position: relative;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  border-radius: var(--toggle-border-radius);
+  background: var(--atlantis-200);
+  transition: background-color ease-in-out 0.2s;
+}
+
+.toggle--fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--toggle-height);
+  width: var(--toggle-height);
+  background: var(--atlantis-50);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  border-radius: var(--toggle-border-radius);
+  transition: transform 0.2s;
+}
+
+.toggle--input:checked ~ .toggle--fill {
+  background: var(--atlantis-500);
+}
+
+.toggle--input:checked ~ .toggle--fill::after {
+  transform: translateX(var(--toggle-height));
+}
+
+.container--item.checkbox-container{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: .5rem;
+  width: 100%;
+}
+
+.container--item small{
+  color: var(--atlantis-800);
+  font-weight: bold;
+  font-style: italic;
+  font-size: .60rem;
+}
+
+.alert-callmebot{
+  color: var(--atlantis-800);
+  font-style: italic;
+  font-size: .65rem;
+}
+
+.alert-callmebot a{
+  color: var(--atlantis-900);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.save-data{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+  width: 100%;
+  margin-top: 1rem;
+  border: 0;
+  background-color: var(--atlantis-500);
+  padding: .5rem;
+  border-radius: .25rem;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: background-color ease-in-out .2s;
+  font-weight: bold;
+  color: var(--atlantis-100);
+}
+
+.save-data:hover{
+  background-color: var(--atlantis-600);
+  color: var(--atlantis-50);
+}
+
+footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  width: 100%;
+  font-size: .85rem;
+  color: var(--atlantis-300);
+}
+
+footer a{
+  color: var(--atlantis-100);
+  text-decoration: none;
+  font-weight: bold;
+}
