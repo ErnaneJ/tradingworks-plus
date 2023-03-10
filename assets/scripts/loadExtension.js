@@ -94,7 +94,7 @@ function handleSentMessages(data){
   
   if(minutesToFinish >= 0 && minutesToFinish <= 15) sendMsg(config, "Opa! Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente.", 159);
   if(minutesToFinish <= 0 && minutesToFinish >= 1) sendMsg(config, "Fim do dia! Não esquece de bater o ponto.", 1);
-  if(true || parse(config['break-time']) === data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", 2);
+  if(parse(config['break-time']) === data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", 2);
 }
 
 updateWorkedHours();
