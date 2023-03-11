@@ -5,6 +5,7 @@ function updateContent(document, data){
   updateMsg(document, data.totalWorkedTime);
   showDate(document);
   handleButtonConfig(document);
+  handleLinks(document);
 }
 
 function updateTableTimes(document, tableRows, workedTimes){
@@ -71,10 +72,6 @@ function formatDate(date, format) {
   return format.replace(/mm|dd|aa|aaaa|MM|hh|min|ss/gi, matched => map[matched])
 }
 
-function handleButtonConfig(document){
-  const buttonConfig = document.getElementById('button-config');
-  buttonConfig.addEventListener('click', openConfig);
-}
 
 function openConfig(){
   chrome.tabs.create({'url': chrome.runtime.getURL('./config/index.html')}, (tab) => { });

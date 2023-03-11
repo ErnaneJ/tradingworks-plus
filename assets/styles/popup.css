@@ -149,7 +149,7 @@ span#current-date{
   color: var(--atlantis-900);
   margin-top: .5rem;
   background-color: var(--atlantis-300);
-  padding: .5rem .25rem;
+  padding: .5rem;
   border-radius: .5rem;
 }
 

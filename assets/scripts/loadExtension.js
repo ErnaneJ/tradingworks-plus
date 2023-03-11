@@ -1,67 +1,69 @@
 function updateWorkedHours(){
   const workedHours = document.querySelectorAll('table tbody tr');
 
-  if(workedHours.length === 0) return console.log('Não estou no site do TradingWorks');
+  if(workedHours.length === 0) return console.log('Não estou no site do TradingWorks. 🤔');
   
-  let workedTimes = [...workedHours].map((workedHour, index) => {
-    const start = workedHour.querySelector('td:nth-child(2)').innerText;
-    const end = workedHour.querySelector('td:nth-child(3)').innerText;
-    
-    return {worked: { startInText: start, endInText: end, workedMinutes: parse(end) - parse(start) }, break: 0}
-  });
-  
-  workedTimes = workedTimes.map((currentTime, index) => {
-    let lastTime = workedTimes[index - 1];
-    if(lastTime) currentTime.break = parse(currentTime.worked.startInText) - parse(lastTime.worked.endInText);
-    
-    return currentTime;
-  });
+  let workedTimes = timeCrawler(workedHours);
+      workedTimes = calculatesBreaks(workedTimes);
   
   const totalWorkedTime = workedTimes.map(time => time.worked.workedMinutes).reduce((total, currentTime) => total + currentTime, 0);
   const totalBreakTime = workedTimes.map(time => time.break).reduce((total, currentTime) => total + currentTime, 0);
 
-  const data = {
+  const workInformations = {
     workedHours,
     workedTimes,
     totalWorkedTime,
     totalBreakTime
   }
 
-  requestUpdatePopup(data);
-  handleSentMessages(data);
+  requestUpdatePopup(workInformations);
+  handleSentMessages(workInformations);
 
   setTimeout(updateWorkedHours, 1000);
 }
 
-function parse(horario){
-  let [hora, minuto] = horario.split(':').map(v => parseInt(v));
+function timeCrawler(workedHours){
+  [...workedHours].map((workedHour, index) => {
+    const start = workedHour.querySelector('td:nth-child(2)').innerText;
+    const end = workedHour.querySelector('td:nth-child(3)').innerText;
+    
+    return {worked: { startInText: start, endInText: end, workedMinutes: passTimeInStringToMinutes(end) - passTimeInStringToMinutes(start) }, break: 0}
+  });
+}
+
+
+function calculatesBreaks(workedTimes){
+  workedTimes.map((currentTime, index) => {
+    let lastTime = workedTimes[index - 1];
+    if(lastTime) currentTime.break = passTimeInStringToMinutes(currentTime.worked.startInText) - passTimeInStringToMinutes(lastTime.worked.endInText);
+    
+    return currentTime;
+  });
+}
+
+function passTimeInStringToMinutes(time){
+  let [hour, minute] = time.split(':').map(v => parseInt(v));
   
-  if(isNaN(hora)) hora = (new Date).getHours();
-  if(isNaN(minuto)) minuto = (new Date).getMinutes();
+  if(isNaN(hour)) hour = (new Date).getHours();
+  if(isNaN(minute)) minute = (new Date).getMinutes();
   
-  if(!minuto) minuto = 0;
+  if(!minute) minute = 0;
   
-  return minuto + (hora * 60);
+  return minute + (hour * 60);
 }
 
 async function requestUpdatePopup(infoToUpdate){
-  const tableRows = [...infoToUpdate.workedHours].map(data => {
-    return [
-      data.querySelector('td:nth-child(2)').innerText,
-      data.querySelector('td:nth-child(3)').innerText,
-      data.querySelector('td:nth-child(4)').innerText
-    ]
-  });
+  const tableRows = [...infoToUpdate.workedHours].map(data => (
+    [ data.querySelector('td:nth-child(2)').innerText, data.querySelector('td:nth-child(3)').innerText, data.querySelector('td:nth-child(4)').innerText ]
+  ));
 
   let response;
   try{
     response = await chrome.runtime.sendMessage({
-      msg: "popup_update", 
-      data: {...infoToUpdate, tableRows}
+      msg: "popup_update",  data: {...infoToUpdate, tableRows}
     });
   }catch(e){
-    response = undefined;
-    return;
+    return (response = undefined);
   }
 
   window.localStorage.setItem('tradingworks-plus-data', response.config)
@@ -85,17 +87,18 @@ function sendMsg(config, msg, msgId){
   localStorage.setItem('tradingworks-plus-sent-msg-dates', JSON.stringify(sentData));
 }
 
-
 function handleSentMessages(data){
   const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
   if(!config || config['allow-send-messages'] !== 'on') return;
 
-  const minutesToFinish = parse(config['work-time']) - data.totalWorkedTime;
+  const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - data.totalWorkedTime;
   
-  if(minutesToFinish >= 0 && minutesToFinish <= 15) sendMsg(config, "Opa! Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente.", 159);
+  if(minutesToFinish >= 0 && minutesToFinish <= 15) sendMsg(config, "Opa! Fica ligeiro. Faltam apenas 15 minutes para o fim do expediente.", 159);
   if(minutesToFinish <= 0 && minutesToFinish >= 1) sendMsg(config, "Fim do dia! Não esquece de bater o ponto.", 1);
-  if(parse(config['break-time']) >= data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", 2);
+  if(passTimeInStringToMinutes(config['break-time']) >= data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hour de voltar! 🚀", 2);
 }
 
-updateWorkedHours();
-setInterval(() => location.reload(), 60000);
+(() => {
+  updateWorkedHours();
+  setInterval(() => location.reload(), 60000);
+})();
