@@ -40,7 +40,7 @@ function  updateTableTotals(document, totalWorkedTime, totalBreakTime){
 
 function updateMsg(document, totalWorkedTime){
   const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
-  const minutesToFinish = parse(config['work-time']) - totalWorkedTime;
+  const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - totalWorkedTime;
   const msg = document.getElementById('msg');
 
   if(minutesToFinish >= 0){
@@ -54,7 +54,6 @@ function showDate(document){
   const date = new Date();
   const dateElement = document.getElementById('current-date');
   dateElement.innerHTML = formatDate(date, 'dd de MM, hh:min:ss');
-  console.log(formatDate(date, 'dd de MM, hh:min:ss'));
 }
 
 function formatDate(date, format) {

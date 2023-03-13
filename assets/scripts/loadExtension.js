@@ -1,7 +1,9 @@
 function updateWorkedHours(){
   const workedHours = document.querySelectorAll('table tbody tr');
 
-  if(workedHours.length === 0) return console.log('Não estou no site do TradingWorks. 🤔');
+  if(workedHours.length === 0 && !document.title.includes('Gestão inteligente')) {
+    return console.log('Não estou no site do TradingWorks. 🤔');
+  }
   
   let workedTimes = timeCrawler(workedHours);
       workedTimes = calculatesBreaks(workedTimes);
@@ -10,10 +12,8 @@ function updateWorkedHours(){
   const totalBreakTime = workedTimes.map(time => time.break).reduce((total, currentTime) => total + currentTime, 0);
 
   const workInformations = {
-    workedHours,
-    workedTimes,
-    totalWorkedTime,
-    totalBreakTime
+    workedHours, workedTimes,
+    totalWorkedTime, totalBreakTime
   }
 
   requestUpdatePopup(workInformations);
@@ -23,7 +23,7 @@ function updateWorkedHours(){
 }
 
 function timeCrawler(workedHours){
-  [...workedHours].map((workedHour, index) => {
+  return [...workedHours].map((workedHour, index) => {
     const start = workedHour.querySelector('td:nth-child(2)').innerText;
     const end = workedHour.querySelector('td:nth-child(3)').innerText;
     
@@ -33,7 +33,7 @@ function timeCrawler(workedHours){
 
 
 function calculatesBreaks(workedTimes){
-  workedTimes.map((currentTime, index) => {
+  return workedTimes.map((currentTime, index) => {
     let lastTime = workedTimes[index - 1];
     if(lastTime) currentTime.break = passTimeInStringToMinutes(currentTime.worked.startInText) - passTimeInStringToMinutes(lastTime.worked.endInText);
     
@@ -62,11 +62,12 @@ async function requestUpdatePopup(infoToUpdate){
     response = await chrome.runtime.sendMessage({
       msg: "popup_update",  data: {...infoToUpdate, tableRows}
     });
+
+    window.localStorage.setItem('tradingworks-plus-data', response.config)
   }catch(e){
     return (response = undefined);
   }
 
-  window.localStorage.setItem('tradingworks-plus-data', response.config)
 }
 
 function sendMsg(config, msg, msgId){
@@ -93,12 +94,12 @@ function handleSentMessages(data){
 
   const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - data.totalWorkedTime;
   
-  if(minutesToFinish >= 0 && minutesToFinish <= 15) sendMsg(config, "Opa! Fica ligeiro. Faltam apenas 15 minutes para o fim do expediente.", 159);
-  if(minutesToFinish <= 0 && minutesToFinish >= 1) sendMsg(config, "Fim do dia! Não esquece de bater o ponto.", 1);
-  if(passTimeInStringToMinutes(config['break-time']) >= data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hour de voltar! 🚀", 2);
+  if(data.totalWorkedTime >= 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! 👾", 0);
+  if(minutesToFinish >= 0 && minutesToFinish <= 15) sendMsg(config, "Opa! Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente.", 0);
+  if(minutesToFinish <= 1) sendMsg(config, "Fim do dia! Não esquece de bater o ponto hein.", 1);
+  if(passTimeInStringToMinutes(config['break-time']) >= data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", 2);
 }
 
-(() => {
-  updateWorkedHours();
-  setInterval(() => location.reload(), 60000);
-})();
+
+updateWorkedHours();
+setInterval(() => location.reload(), 60000);
