@@ -34,25 +34,37 @@
         </div>
         <div class="container--content--row">
           <div class="container--item">
+            <label for="email">E-mail de Login</label>
+            <input type="email" id="email" name="email" placeholder="usuario@tradingworks.plus" required>
+            <small>Ex.: usuario@tradingworks.plus</small>
+          </div>
+          <div class="container--item">
+            <label for="password">Senha de acesso</label>
+            <input type="password" id="password" name="password" required>
+            <small>Ex.: 123456789</small>
+          </div>
+        </div>
+        <div class="container--content--row">
+          <div class="container--item disabled">
             <label for="whatsapp-number">Número do Whatsapp</label>
-            <input type="text" id="whatsapp-number" name="whatsapp-number" placeholder="8499999999">
+            <input type="text" disabled id="whatsapp-number" name="whatsapp-number" placeholder="8499999999">
             <small>Ex.: 8499999999</small>
           </div>
-          <div class="container--item checkbox-container">
+          <div class="container--item checkbox-container disabled">
             <label for="allow-send-messages">Permitir mensagens</label>
             <label class="toggle" for="allow-send-messages">
-              <input class="toggle--input" name="allow-send-messages" type="checkbox" id="allow-send-messages">
+              <input class="toggle--input" disabled  name="allow-send-messages" type="checkbox" id="allow-send-messages">
               <div class="toggle--fill"></div>
             </label>
           </div>
         </div>
         <div class="container--content--row">
-          <div class="container--item">
+          <div class="container--item disabled">
             <label for="api-key">Chave de API</label>
-            <input type="text" id="api-key" name="api-key" placeholder="1234567890">
+            <input type="text" disabled id="api-key" name="api-key" placeholder="1234567890">
           </div>
         </div>
-        <small class="alert-callmebot">* Para ter acesso às funcionalidades de notificações no whatsapp você precisa criar uma chave de API para o seu número. Acesse <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank">www.callmebot.com</a> e configure. </small>
+        <small class="alert-callmebot disabled">* Para ter acesso às funcionalidades de notificações no whatsapp você precisa criar uma chave de API para o seu número. Acesse <a href="https://www.callmebot.com/blog/free-api-whatsapp-messages/" target="_blank">www.callmebot.com</a> e configure. </small>
         <div class="container--content--row">
           <div class="container--item">
             <button class="save-data" type="submit">Salvar</button>

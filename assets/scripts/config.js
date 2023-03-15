@@ -7,11 +7,13 @@ function loadFormByData(){
   const form = document.querySelector('form');
   const data = JSON.parse(localStorage.getItem('tradingworks-plus-data'));
   if(data){
-    form['work-time'].value = data['work-time'];
-    form['break-time'].value = data['break-time'];
-    form['whatsapp-number'].value = data['whatsapp-number'];
+    form['work-time'].value = data['work-time'] || '';
+    form['break-time'].value = data['break-time'] || '';
+    form['whatsapp-number'].value = data['whatsapp-number'] || '';
     form['allow-send-messages'].checked = data['allow-send-messages'] === 'on';
-    form['api-key'].value = data['api-key'];
+    form['api-key'].value = data['api-key'] || '';
+    form['password'].value = data['password'] || '';
+    form['email'].value = data['email'] || '';
   }
 }
 
@@ -27,11 +29,6 @@ function handleSubmit(){
 
     const button = document.querySelector('button[type="submit"]');
     button.innerHTML = 'Sucesso! 🎉';
-
-    if(formatedData['allow-send-messages'] === 'on'){
-      const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${formatedData['whatsapp-number']}&text=${"Opa! Sistema de lembrete configurado. 🔔".replace(/ /g, '+')}&apikey=${formatedData['api-key']}`;
-      fetch(callMeBotURL);
-    }
 
     setTimeout(() => {
       button.innerHTML = 'Salvar';

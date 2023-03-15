@@ -85,7 +85,7 @@ main section.container{
   font-weight: bold;
 }
 
-.container--item input[type="text"]{	
+.container--item input[type="text"], .container--item input[type="password"], .container--item input[type="email"]{	
   border: none;
   background-color: var(--atlantis-200);
   padding: .5rem;
@@ -156,6 +156,13 @@ main section.container{
   font-weight: bold;
   font-style: italic;
   font-size: .60rem;
+}
+
+.disabled{
+  opacity: .7;
+}
+.disabled *{
+  cursor: not-allowed;
 }
 
 .alert-callmebot{

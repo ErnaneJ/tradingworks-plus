@@ -1,14 +1,13 @@
-function updateContent(document, data){
-  checkConfig(document);
-  updateTableTimes(document, data.tableRows, data.workedTimes);
-  updateTableTotals(document, data.totalWorkedTime, data.totalBreakTime);
-  updateMsg(document, data.totalWorkedTime);
-  showDate(document);
-  handleButtonConfig(document);
-  handleLinks(document);
+function updateContent(data){
+  updateTableTimes(data.tableRows, data.workedTimes);
+  updateTableTotals(data.totalWorkedTime, data.totalBreakTime);
+  updateMsg(data.totalWorkedTime);
+  showDate();
+  handleButtonConfig();
+  handleLinks();
 }
 
-function updateTableTimes(document, tableRows, workedTimes){
+function updateTableTimes(tableRows, workedTimes){
   const tableBodyTimes = document.getElementById('table-body-times');
 
   tableBodyTimes.innerHTML = tableRows.map((row, index) => {
@@ -30,7 +29,7 @@ function formatNumber(number){
   return String(Math.floor(number)).padStart(2, '0');
 }
 
-function  updateTableTotals(document, totalWorkedTime, totalBreakTime){
+function  updateTableTotals(totalWorkedTime, totalBreakTime){
   const totalWorkedHours = document.getElementById('total-worked-hours');
   const totalBreakHours = document.getElementById('total-break-hours');
 
@@ -38,7 +37,7 @@ function  updateTableTotals(document, totalWorkedTime, totalBreakTime){
   totalBreakHours.innerHTML = `${formatNumber(totalBreakTime/60)}:${formatNumber(totalBreakTime%60)} h`;
 }
 
-function updateMsg(document, totalWorkedTime){
+function updateMsg(totalWorkedTime){
   const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
   const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - totalWorkedTime;
   const msg = document.getElementById('msg');
@@ -50,10 +49,12 @@ function updateMsg(document, totalWorkedTime){
   } 
 }
 
-function showDate(document){
-  const date = new Date();
-  const dateElement = document.getElementById('current-date');
-  dateElement.innerHTML = formatDate(date, 'dd de MM, hh:min:ss');
+function showDate(){
+  setInterval(() => {
+    const date = new Date();
+    const dateElement = document.getElementById('current-date');
+    dateElement.innerHTML = formatDate(date, 'dd de MM, hh:min:ss');
+  });
 }
 
 function formatDate(date, format) {
@@ -77,5 +78,14 @@ function openConfig(){
 }
 
 function checkConfig(){
-  window.localStorage.getItem('tradingworks-plus-data') ? '' : openConfig();
+  const config = window.localStorage.getItem('tradingworks-plus-data');
+  if(
+    !config               ||
+    !config['work-time']  ||
+    !config['break-time'] ||
+    !config['password']   ||
+    !config['email']
+  ){
+    openConfig();
+  } 
 }
