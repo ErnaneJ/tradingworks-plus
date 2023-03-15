@@ -13,11 +13,5 @@
   "action": {
     "default_popup": "./popup.html",
     "default_title": "Tradingworks"
-  },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "teste",
-      "strict_min_version": "42.0"
-    }
   }
 }

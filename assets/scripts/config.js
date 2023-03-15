@@ -12,8 +12,6 @@ function loadFormByData(){
     form['whatsapp-number'].value = data['whatsapp-number'] || '';
     form['allow-send-messages'].checked = data['allow-send-messages'] === 'on';
     form['api-key'].value = data['api-key'] || '';
-    form['password'].value = data['password'] || '';
-    form['email'].value = data['email'] || '';
   }
 }
 

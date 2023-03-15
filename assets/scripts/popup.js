@@ -39,9 +39,11 @@ function  updateTableTotals(totalWorkedTime, totalBreakTime){
 
 function updateMsg(totalWorkedTime){
   const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
+  checkConfig(config);
+  
   const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - totalWorkedTime;
   const msg = document.getElementById('msg');
-
+  
   if(minutesToFinish >= 0){
     msg.innerHTML = `Faltam apenas <strong>${formatNumber(minutesToFinish/60)} horas</strong> e <strong>${minutesToFinish%60} minutos</strong> para o fim do expediente de ${config['work-time']} horas. 🎉`;
   }else{
@@ -77,15 +79,13 @@ function openConfig(){
   chrome.tabs.create({'url': chrome.runtime.getURL('./config/index.html')}, (tab) => { });
 }
 
-function checkConfig(){
-  const config = window.localStorage.getItem('tradingworks-plus-data');
+function checkConfig(config){
   if(
     !config               ||
     !config['work-time']  ||
-    !config['break-time'] ||
-    !config['password']   ||
-    !config['email']
+    !config['break-time']
   ){
     openConfig();
+    window.close();
   } 
 }
