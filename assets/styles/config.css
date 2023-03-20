@@ -85,7 +85,7 @@ main section.container{
   font-weight: bold;
 }
 
-.container--item input[type="text"], .container--item input[type="password"], .container--item input[type="email"]{	
+.container--item input[type="text"], .container--item input[type="password"], .container--item input[type="email"], .container--item input[type="time"]{	
   border: none;
   background-color: var(--atlantis-200);
   padding: .5rem;

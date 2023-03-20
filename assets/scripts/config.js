@@ -19,7 +19,6 @@ function handleSubmit(){
   const form = document.querySelector('form');
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-  
     const data = new FormData(event.target);
     const formatedData = Object.fromEntries(data.entries());
 
