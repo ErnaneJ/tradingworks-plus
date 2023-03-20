@@ -141,7 +141,7 @@ main{
   font-style: italic;
 }
 
-span#current-date{
+span#current-date, span#estimated-output-hour{
   font-size: .65rem;
   color: var(--atlantis-900);
   font-weight: bold;
