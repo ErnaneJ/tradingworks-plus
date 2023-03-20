@@ -42,12 +42,17 @@ function updateMsg(totalWorkedTime){
   checkConfig(config);
   
   const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - totalWorkedTime;
+  const date = new Date();
+  const outputDate = date.setMinutes(date.getMinutes() + minutesToFinish);
+  const estimatedOutputHour = document.getElementById('estimated-output-hour');
   const msg = document.getElementById('msg');
   
   if(minutesToFinish >= 0){
     msg.innerHTML = `Faltam apenas <strong>${formatNumber(minutesToFinish/60)} horas</strong> e <strong>${minutesToFinish%60} minutos</strong> para o fim do expediente de ${config['work-time']} horas. 🎉`;
+    estimatedOutputHour.innerHTML = `Estimativa de saída às ${formatDate(new Date(outputDate), 'hhhmin')}`;
   }else{
     msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez <strong>${formatNumber((minutesToFinish * (-1))/60)} horas<strong> e <strong>${formatNumber((minutesToFinish* (-1))%60)}</strong> minutos extra.`;
+    estimatedOutputHour.innerHTML = '';
   } 
 }
 
