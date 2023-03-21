@@ -4,7 +4,6 @@ function updateContent(data){
   updateMsg(data.totalWorkedTime);
   showDate();
   handleButtonConfig();
-  handleLinks();
 }
 
 function updateTableTimes(tableRows, workedTimes){
