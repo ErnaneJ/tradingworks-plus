@@ -8,10 +8,14 @@
     "48": "assets/favicon48.png"
   },
   "manifest_version": 3,
-  "permissions": ["activeTab", "tabs", "storage", "scripting", "notifications"],
+  "permissions": ["activeTab", "tabs", "storage", "scripting", "notifications", "offscreen"],
   "host_permissions": ["https://app.tradingworks.net/*", "https://api.callmebot.com/*"],
   "action": {
     "default_popup": "./popup.html",
     "default_title": "Tradingworks"
+  },
+  "background": {
+    "service_worker": "./assets/scripts/background.js",
+    "type": "module"
   }
 }

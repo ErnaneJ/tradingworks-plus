@@ -23,6 +23,7 @@ function handleSubmit(){
     const formatedData = Object.fromEntries(data.entries());
 
     localStorage.setItem('tradingworks-plus-data', JSON.stringify(formatedData));
+    chrome.runtime.sendMessage({tradingworksPlusExtension: true, settings: JSON.stringify(formatedData)});
 
     const button = document.querySelector('button[type="submit"]');
     button.innerHTML = 'Sucesso! 🎉';

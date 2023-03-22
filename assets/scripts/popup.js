@@ -93,3 +93,14 @@ function checkConfig(config){
     window.close();
   } 
 }
+
+function passTimeInStringToMinutes(time){
+  let [hour, minute] = time.split(':').map(v => parseInt(v));
+  
+  if(isNaN(hour)) hour = (new Date).getHours();
+  if(isNaN(minute)) minute = (new Date).getMinutes();
+  
+  if(!minute) minute = 0;
+  
+  return minute + (hour * 60);
+}
