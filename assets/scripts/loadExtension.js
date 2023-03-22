@@ -3,5 +3,5 @@ async function updateWorkedHours(){
   
   updateContent(informations['tradingworksPlusSharedData']);
 
-  setTimeout(updateWorkedHours, 10000);
+  setTimeout(updateWorkedHours, 60000);
 }

@@ -10,6 +10,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
 async function createOffscreen() {
   if (await chrome.offscreen.hasDocument?.()) return;
+
   await chrome.offscreen.createDocument({
     url: './offscreen/index.html',
     reasons: ['BLOBS'],
@@ -27,21 +28,31 @@ async function check(informations){
 
 async function handleSentMessages(data){
   const config = JSON.parse((await chrome.storage.local.get('settings')).settings);
-  if(!config || config['allow-send-messages'] !== 'on') return;
 
   const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - data.totalWorkedTime;
   const breakTimeParsed = passTimeInStringToMinutes(config['break-time']);
 
-  if(data.totalWorkedTime === 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! 👾");
+  if(data.totalWorkedTime === 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎");
 
   if(breakTimeParsed === data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀");
 
   if(minutesToFinish === 60) sendMsg(config, "Opa! Faltam apenas 1 hora para o fim do expediente. 🎉");
-  if(minutesToFinish === 15) sendMsg(config, "Opa! Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente.");
-  if(minutesToFinish === 1)  sendMsg(config, "Fim do dia! Não esquece de bater o ponto hein.");
+  if(minutesToFinish === 15) sendMsg(config, "Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente.");
+  if(minutesToFinish === 1)  sendMsg(config, "Fim do dia! Não esquece de bater o ponto! Até mais. 🚀");
 }
 
 async function sendMsg(config, msg){
+  chrome.notifications.create(
+    "trading-works-plus", {
+      type: "basic",
+      iconUrl: "../favicon48.png",
+      title: "TradingWorks+",
+      message: msg,
+    }, () => { }
+  );
+
+  if(!config || config['allow-send-messages'] !== 'on') return;
+
   const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${config['whatsapp-number']}&text=${msg.replace(/ /g, '+')}&apikey=${config['api-key']}`;
 
   try{
