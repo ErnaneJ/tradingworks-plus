@@ -1,27 +1,46 @@
 function updateContent(data){
-  updateTableTimes(data.tableRows, data.workedTimes);
+  updateTableTimes(data);
   updateTableTotals(data.totalWorkedTime, data.totalBreakTime);
-  updateMsg(data.totalWorkedTime);
+  updateMsg(data);
   showDate();
   handleButtonConfig();
 }
 
-function updateTableTimes(tableRows, workedTimes){
+function updateTableTimes(data){
+  const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
   const tableBodyTimes = document.getElementById('table-body-times');
 
-  tableBodyTimes.innerHTML = tableRows.map((row, index) => {
+  tableBodyTimes.innerHTML = data.tableRows.map((row, index) => {
     return (`<div class="table--row">
       <div class="table--item">${row[0]}</div>
       <div class="table--item">${row[1]}</div>
-      <div class="table--item">${String(Math.floor(workedTimes[index].worked.workedMinutes/60)).padStart(2, '0')}:${String(workedTimes[index].worked.workedMinutes%60).padStart(2, '0')} h</div>
-    </div>` + ((row[2] != "" && (index !== (tableRows.length - 1))) ? `
+      <div class="table--item">${String(Math.floor(data.workedTimes[index].worked.workedMinutes/60)).padStart(2, '0')}h${String(data.workedTimes[index].worked.workedMinutes%60).padStart(2, '0')}m</div>
+    </div>` + ((row[2] != "" && (index !== (data.tableRows.length - 1))) ? `
     <div class="table--row">
       <div class="table--item break">
-        Pausa de ${String(Math.floor(workedTimes[index + 1]?.break/60)).padStart(2, '0')}:${String(workedTimes[index + 1]?.break%60).padStart(2, '0')} h
+        Pausa de ${String(Math.floor(data.workedTimes[index + 1]?.break/60)).padStart(2, '0')}h${String(data.workedTimes[index + 1]?.break%60).padStart(2, '0')}m
       </div>
-    </div>
-    ` : ''));
+    </div>` : ''))
   }).join('');
+
+  if(!data.isWorking && data.totalWorkedTime <= passTimeInStringToMinutes(config['work-time'])) {
+    const lastWorkedTimeEnd = data.workedTimes.slice(-1)[0].worked.endInText;
+    const currentDate = new Date();
+    const lastWorkedTimeEndInMinutes = passTimeInStringToMinutes(lastWorkedTimeEnd);
+    const nowInMinutes = passTimeInStringToMinutes(`${currentDate.getHours()}:${currentDate.getMinutes()}`);
+    const currentBreakTime = nowInMinutes - lastWorkedTimeEndInMinutes;
+
+    const totalBreakTime = data.totalBreakTime + currentBreakTime;
+    const breakInformedTime = passTimeInStringToMinutes(config['break-time']);
+
+    tableBodyTimes.innerHTML += `
+      <div class="table--row">
+        <div class="table--item break" ${totalBreakTime >= breakInformedTime && 'style="color: red;'}">
+          Em pausa por ${String(Math.floor(currentBreakTime/60)).padStart(2, '0')}:${String(currentBreakTime%60).padStart(2, '0')} h
+        </div>
+      </div>
+    `;
+  }
 }
 
 function formatNumber(number){
@@ -36,23 +55,29 @@ function  updateTableTotals(totalWorkedTime, totalBreakTime){
   totalBreakHours.innerHTML = `${formatNumber(totalBreakTime/60)}:${formatNumber(totalBreakTime%60)} h`;
 }
 
-function updateMsg(totalWorkedTime){
+function updateMsg(data){
   const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
   checkConfig(config);
   
-  const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - totalWorkedTime;
+  const informedWorkTime = passTimeInStringToMinutes(config['work-time']);
+  const minutesToFinish = informedWorkTime - data.totalWorkedTime;
   const date = new Date();
   const outputDate = date.setMinutes(date.getMinutes() + minutesToFinish);
   const estimatedOutputHour = document.getElementById('estimated-output-hour');
   const msg = document.getElementById('msg');
   
-  if(minutesToFinish >= 0){
-    msg.innerHTML = `Faltam apenas <strong>${formatNumber(minutesToFinish/60)} horas</strong> e <strong>${minutesToFinish%60} minutos</strong> para o fim do expediente de ${config['work-time']} horas. 🎉`;
+  if (minutesToFinish >= 0) {
+    msg.innerHTML = `Faltam <strong>${formatNumber(minutesToFinish/60)} hora(s)</strong> e <strong>${minutesToFinish%60} minuto(s)</strong> para o fim do seu expediente de ${config['work-time']} horas. 🎉`;
     estimatedOutputHour.innerHTML = `Estimativa de saída às ${formatDate(new Date(outputDate), 'hhhmin')}`;
-  }else{
-    msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez <strong>${formatNumber((minutesToFinish * (-1))/60)} horas<strong> e <strong>${formatNumber((minutesToFinish* (-1))%60)}</strong> minutos extra.`;
+  } else if (data.isWorking){
+    msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez <strong>${formatNumber((minutesToFinish * (-1))/60)} hora(s)</strong> e <strong>${formatNumber((minutesToFinish* (-1))%60)} minuto(s)</strong> extra.`;
     estimatedOutputHour.innerHTML = '';
-  } 
+  } else{
+    msg.innerHTML = "Que ótimo dia de trabalho. "
+    if(minutesToFinish <= 0) msg.innerHTML += `Você fez <strong>${formatNumber((minutesToFinish * (-1))/60)} hora(s)</strong> e <strong>${formatNumber((minutesToFinish* (-1))%60)} minuto(s)</strong> extra hoje.`
+    msg.innerHTML += " Até mais! 👋";
+    estimatedOutputHour.innerHTML = '';
+  }
 }
 
 function showDate(){
