@@ -53,7 +53,7 @@ async function updateWorkedHours(){
 }
 
 function timeCrawler(workedHours){
-  [...workedHours].map((workedHour, index) => {
+  return [...workedHours].map((workedHour, index) => {
     const start = workedHour.querySelector('td:nth-child(2)').innerText;
     const end = workedHour.querySelector('td:nth-child(3)').innerText;
     
