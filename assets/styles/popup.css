@@ -32,7 +32,7 @@ header{
   color: inherit;
 }
 
-.header--btn-config, .header--btn-refresh{
+.header--btn-config{
   background-color: var(--atlantis-200);
   border: none;
   border-radius: 50%;
