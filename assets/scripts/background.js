@@ -36,7 +36,7 @@ async function handleSentMessages(data){
 
   if(data.totalWorkedTime === 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎");
 
-  if(breakTimeParsed === data.totalBreakTime - 1) setTimeOut(() => sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀"), 60000);
+  if(breakTimeParsed === data.totalBreakTime - 1) setTimeout(() => sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀"), 60000);
 
   if(minutesToFinish === 60) sendMsg(config, "Opa! Faltam apenas 1 hora para o fim do expediente. 🎉");
   if(minutesToFinish === 15) sendMsg(config, "Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente. ⌛");
