@@ -3,6 +3,7 @@ setInterval(() => chrome.runtime.sendMessage({ keepAlive: true }), 1000);
 updateWorkedHours();
 
 async function updateWorkedHours(){
+  console.log("Buscando informações atualizadas...")
   const config = JSON.parse(localStorage.getItem('tradingworks-plus-data'));
 
   if(!config) return setTimeout(updateWorkedHours, 120000);
@@ -22,7 +23,7 @@ async function updateWorkedHours(){
     return setTimeout(updateWorkedHours, 120000);
   }
   
-  const isWorking = tableRows.slice(-1)[0].slice(2)?.includes("__:__");
+  const isWorking = tableRows.slice(-1)[0].slice(1)?.join(',').includes("__:__");
   let workedTimes = timeCrawler(workedHours);
       workedTimes = calculatesBreaks(workedTimes, isWorking);
   
