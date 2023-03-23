@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-  updateWorkedHours();
+  loadWorkedHours();
   handleButtonConfig();
   sendSettingsToBackgroundScript();
 });
@@ -7,6 +7,13 @@ window.addEventListener('DOMContentLoaded', () => {
 function handleButtonConfig(){
   const buttonConfig = document.getElementById('button-config');
   buttonConfig.addEventListener('click', openConfig);
+}
+
+function handleButtonRefresh(){
+  const buttonRefresh = document.getElementById('button-refresh');
+  buttonRefresh.addEventListener('click', () => {
+    console.log('working')
+  });
 }
 
 function sendSettingsToBackgroundScript(){

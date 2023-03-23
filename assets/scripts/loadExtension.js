@@ -1,7 +1,7 @@
-async function updateWorkedHours(){
+async function loadWorkedHours(){
   const informations = await chrome.storage.local.get('tradingworksPlusSharedData');
   
   updateContent(informations['tradingworksPlusSharedData']);
 
-  setTimeout(updateWorkedHours, 60000);
+  setTimeout(loadWorkedHours, 60000);
 }
