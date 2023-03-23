@@ -8,7 +8,6 @@
   <title>Tradingworks+ | Configurações</title>
   <link rel="stylesheet" href="../assets/styles/root.css">
   <link rel="stylesheet" href="../assets/styles/config.css">
-  <script src="../assets/scripts/config.js"></script>
 </head>
 <body>
   <header>
@@ -23,12 +22,12 @@
         <div class="container--content--row">
           <div class="container--item">
             <label for="work-time">Jornada de trabalho</label>
-            <input type="time" id="work-time" name="work-time" placeholder="00:00" required>
+            <input type="text" pattern="\d{1,4}" id="work-time" name="work-time" value="00:00" required>
             <small>Ex.: 08:00 (8 horas de jornada trabalho)</small>
           </div>
           <div class="container--item">
             <label for="break-time">Período de intervalo</label>
-            <input type="time" id="break-time" name="break-time" placeholder="00:00" required>
+            <input type="text" pattern="\d{1,4}" id="break-time" name="break-time" value="00:00" required>
             <small>Ex.: 00:15 (15 minutos de intervalo)</small>
           </div>
         </div>
@@ -68,4 +67,5 @@
     <p>Feito com ❤ por <a href="https://links.ernane.dev/" target="_blank">Ernane Ferreira</a></p>
   </footer>
 </body>
+<script src="../assets/scripts/config.js"></script>
 </html>
