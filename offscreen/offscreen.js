@@ -49,7 +49,7 @@ async function updateWorkedHours(){
 
   chrome.runtime.sendMessage(workInformations)
 
-  setTimeout(updateWorkedHours, 10000);
+  setTimeout(updateWorkedHours, 60000);
 }
 
 function timeCrawler(workedHours){
