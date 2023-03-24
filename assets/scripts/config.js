@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
   loadFormByData();
   handleSubmit();
+  handleTimeInputs()
 });
 
 function loadFormByData(){
@@ -15,9 +16,10 @@ function loadFormByData(){
   }
 }
 
-let hoursInputs = document.querySelectorAll("#work-time, #break-time")
+function handleTimeInputs(){
+  let hoursInputs = document.querySelectorAll("#work-time, #break-time")
 
-hoursInputs.forEach((input) => {
+  hoursInputs.forEach((input) => {
   input.addEventListener('blur', (event) => {
     const value = event.target.value.padStart(4, '0');
     const hours = value.slice(0, 2);
@@ -34,6 +36,7 @@ hoursInputs.forEach((input) => {
     event.target.value = formattedValue;
   });
 });
+}
 
 
 function handleSubmit(){
