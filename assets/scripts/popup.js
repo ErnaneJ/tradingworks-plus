@@ -1,4 +1,4 @@
-var port = chrome.runtime.connect({name: "extensionOpen"});
+const port = chrome.runtime.connect({name: "extensionOpen"});
 
 function updateContent(data){
   updateTableTimes(data);
