@@ -20,7 +20,7 @@ async function createOffscreen() {
 
 chrome.runtime.onStartup.addListener(createOffscreen);
 chrome.runtime.onInstalled.addListener(createOffscreen);
-chrome.runtime.onConnect.addListener(function(port) {
+chrome.runtime.onConnect.addListener(port => {
   chrome.offscreen.closeDocument()
   createOffscreen();
 });
