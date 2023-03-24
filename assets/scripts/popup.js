@@ -25,7 +25,7 @@ function updateTableTimes(data){
     </div>` : ''))
   }).join('');
 
-  if(!data.isWorking && data.totalWorkedTime <= passTimeInStringToMinutes(config['work-time'])) {
+  if(!data.isWorking && data.totalWorkedTime < passTimeInStringToMinutes(config['work-time'])) {
     const lastWorkedTimeEnd = data.workedTimes.slice(-1)[0].worked.endInText;
     const currentDate = new Date();
     const lastWorkedTimeEndInMinutes = passTimeInStringToMinutes(lastWorkedTimeEnd);
