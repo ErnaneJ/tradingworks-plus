@@ -20,6 +20,10 @@ async function createOffscreen() {
 
 chrome.runtime.onStartup.addListener(createOffscreen);
 chrome.runtime.onInstalled.addListener(createOffscreen);
+chrome.runtime.onConnect.addListener(port => {
+  chrome.offscreen.closeDocument()
+  createOffscreen();
+});
 
 async function check(informations){
   await chrome.storage.local.set({'tradingworksPlusSharedData': informations});

@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-  updateWorkedHours();
+  loadWorkedHours();
   handleButtonConfig();
   sendSettingsToBackgroundScript();
 });

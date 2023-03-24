@@ -1,3 +1,5 @@
+const port = chrome.runtime.connect({name: "extensionOpen"});
+
 function updateContent(data){
   updateTableTimes(data);
   updateTableTotals(data.totalWorkedTime, data.totalBreakTime);
