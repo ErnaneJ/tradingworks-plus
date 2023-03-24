@@ -46,6 +46,7 @@ function handleTimeInputs(){
       document.querySelector('form').classList.add('invalid');
       event.target.style.outline = '2px solid #db4444';
     }else{
+      document.querySelector('form').classList.remove('invalid');
       event.target.style.outline = 'initial';
     }
   }
