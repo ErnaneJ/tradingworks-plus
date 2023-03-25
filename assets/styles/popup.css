@@ -6,6 +6,9 @@ body{
   justify-content: center;
   flex-direction: column;
   overflow: auto;
+  min-height: 361px;
+  opacity: 0;
+  transition: all 0.25s ease;
 }
 
 header{
@@ -139,6 +142,32 @@ main{
   font-size: .60rem;
   color: var(--atlantis-100);
   font-style: italic;
+}
+
+.signed{
+  display: none;
+}
+
+.notsigned{
+  display: none;
+  padding: .5rem;
+}
+
+.notsigned--btn{
+  margin-bottom: 1.25rem;
+  border-radius: 1.25rem;
+  padding: .5rem 1rem;
+  background-color: var(--atlantis-600);
+  color: white;
+  cursor: pointer;
+}
+
+.notsigned--message{
+  display: flex;
+  gap: 1.15rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 span#current-date, span#estimated-output-hour{
