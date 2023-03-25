@@ -1,7 +1,10 @@
 window.addEventListener('DOMContentLoaded', () => {
   loadFormByData();
   handleSubmit();
-  handleTimeInputs()
+  handleTimeInputs();
+  handleButtonSendMessage();
+  handleAllowSendMessageToggle();
+  handleInputsBot();
 });
 
 function loadFormByData(){
@@ -12,6 +15,17 @@ function loadFormByData(){
     form['break-time'].value = data['break-time'] || '';
     form['whatsapp-number'].value = data['whatsapp-number'] || '';
     form['allow-send-messages'].checked = data['allow-send-messages'] === 'on';
+
+    if(data['allow-send-messages'] !== 'on'){
+      const number = document.querySelector('#whatsapp-number');
+      const apiKey = document.querySelector('#api-key');
+
+      [number, apiKey].forEach(input => {
+        input.classList.add('disabled');
+        input.disabled = true;
+      });
+    }
+
     form['api-key'].value = data['api-key'] || '';
   }
 }
@@ -69,11 +83,78 @@ function handleSubmit(){
     localStorage.setItem('tradingworks-plus-data', JSON.stringify(formatedData));
     chrome.runtime.sendMessage({tradingworksPlusExtension: true, settings: JSON.stringify(formatedData)});
 
+    notifications({
+      whats: 'Sistema configurado com sucesso! 🎉',
+      browser: 'Sistema configurado com sucesso! 🎉',
+    })
+
     const button = document.querySelector('button[type="submit"]');
     button.innerHTML = 'Sucesso! 🎉';
 
     setTimeout(() => {
-      button.innerHTML = 'Salvar';
+      button.innerHTML = '💾 Salvar';
     }, 2000);
+  });
+}
+
+function handleButtonSendMessage(){
+  const button = document.querySelector('button#send-message');
+  button.addEventListener('click', e => {
+    e.preventDefault();
+    
+    notifications({
+      browser: 'Olá!👋 Teste de notificações do TradingWorks+ no navegador. Por aqui está tudo certo. 🤗',
+      whats: 'Olá!👋 teste de notificações do TradingWorksPlus no Whatsapp. Por aqui também está tudo certo! 🤗'
+    })
+    chrome.runtime.sendMessage({tradingworksPlusExtension: true, sendMessage: true});
+  });
+}
+
+async function notifications(messages){
+  const number = document.querySelector('#whatsapp-number').value;
+  const apiKey = document.querySelector('#api-key').value;
+  const allowSendMessage = document.querySelector('#allow-send-messages').checked;
+
+  const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${number}&text=${messages.whats.replace(/ /g, '+')}&apikey=${apiKey}`;
+
+  await chrome.notifications.create(
+    `trading-works-plus-msg-${new Date().getTime()}`, {
+      type: "basic",
+      iconUrl: "/assets/favicon48.png",
+      title: "TradingWorks+",
+      message: messages.browser,
+    }, () => { }
+  );
+
+  if(!allowSendMessage) return alert('Você precisa permitir o envio de mensagens para poder receber notificações no whatsapp! 😢');
+
+  fetch(callMeBotURL).then(data => {
+    if(data.status === 200)  return true;
+    
+    alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢');
+  }).catch(e => alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢', e));
+}
+
+function handleAllowSendMessageToggle(){
+  const toggle = document.querySelector('#allow-send-messages');
+  toggle.addEventListener('change', e => {
+    const number = document.querySelector('#whatsapp-number');
+    const apiKey = document.querySelector('#api-key');
+
+    [number, apiKey].forEach(input => {
+      input.classList.toggle('disabled');
+      input.disabled = !input.disabled;
+    });
+  });
+}
+
+function handleInputsBot(){
+  const number = document.querySelector('#whatsapp-number');
+  const apiKey = document.querySelector('#api-key');
+
+  [number, apiKey].forEach(input => {
+    input.addEventListener('keyup', e => {
+      e.target.value = e.target.value.replace(/[^0-9]+/g, '');
+    });
   });
 }
