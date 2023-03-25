@@ -16,7 +16,8 @@ header{
   padding: .5rem;
   width: 100%;
   font-size: 1rem;
-  color: var(--atlantis-100)
+  color: var(--atlantis-100);
+  margin-top: 1rem;
 }
 
 main{
@@ -162,7 +163,7 @@ main section.container{
   opacity: .7;
 }
 .disabled *{
-  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .alert-callmebot{
@@ -173,11 +174,11 @@ main section.container{
 
 .alert-callmebot a{
   color: var(--atlantis-900);
-  text-decoration: none;
+  text-decoration: underline var(--atlantis-600);
   font-weight: bold;
 }
 
-.save-data{
+.container--item button{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,7 +196,7 @@ main section.container{
   color: var(--atlantis-100);
 }
 
-.save-data:hover{
+.container--item button:hover{
   background-color: var(--atlantis-600);
   color: var(--atlantis-50);
 }
@@ -208,6 +209,7 @@ footer{
   width: 100%;
   font-size: .85rem;
   color: var(--atlantis-300);
+  margin-bottom: 1rem;
 }
 
 footer a{
