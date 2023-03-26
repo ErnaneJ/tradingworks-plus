@@ -25,37 +25,54 @@
   </header>
 
   <main>
-    <div class="table">
-      <div class="table--header">
-        <div class="table--title">Início</div>
-        <div class="table--title">Término</div>
-        <div class="table--title">Duração</div>
+    <section id='loading-screen' style="display: none;">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
       </div>
-      <div class="table--body" id="table-body-times">
-        <div class="table--row">
-          <div class="table--item break" style="text-align: center;">
-            Ainda não temos nenhum registro de horário. 🕗
+      <span>Carregando..</span>
+    </section>
+
+    <section id='not-signed-in-screen' style="display: none;">
+      <p>Para usar o <strong>TradingWorks+</strong> você precisa estar logado no <strong>TradingWorks</strong>. Clique no botão abaixo para continuar.</p>
+      <a href="https://app.tradingworks.net/" target="_blank">Entrar</a>
+    </section>
+
+    <section id='not-started-screen' style="display: none;">
+      <p>Nenhuma jornada identificada. Acesse o <strong>TradingWorks</strong> com o botão abaixo para iniciarmos.</p>
+      <a href="https://app.tradingworks.net/" target="_blank">Acessar</a>
+    </section>
+
+    <section id='started-screen' style="display: none;">
+      <div class="table">
+        <div class="table--header">
+          <div class="table--title">Início</div>
+          <div class="table--title">Término</div>
+          <div class="table--title">Duração</div>
+        </div>
+        <div class="table--body" id="table-body-times">
+          <div class="table--row">
           </div>
         </div>
       </div>
-    </div>
-
-    <span id="current-date"></span>
-
-    <div class="totals">
-      <div class="totals-item">
-        <div class="totals-item--value" id="total-worked-hours">00:00 h</div>
-        <small class="totals-item--title">Trabalhando</small>
+  
+      <span id="current-date"></span>
+  
+      <div class="totals">
+        <div class="totals-item">
+          <div class="totals-item--value" id="total-worked-hours">00:00 h</div>
+          <small class="totals-item--title">Trabalhando</small>
+        </div>
+  
+        <div class="totals-item">
+          <div class="totals-item--value" id="total-break-hours">00:00 h</div>
+          <small class="totals-item--title">Em pausa</small>
+        </div>
       </div>
-
-      <div class="totals-item">
-        <div class="totals-item--value" id="total-break-hours">00:00 h</div>
-        <small class="totals-item--title">Em pausa</small>
-      </div>
-    </div>
-
-    <span id="estimated-output-hour"></span>
-    <p class="message" id="msg"> Hora de trabalhar! 💼 </p>
+  
+      <span id="estimated-output-hour"></span>
+      <p class="message" id="msg"> Que tal iniciarmos mais um dia de trabalho?! 💼 </p>
+    </section>
   </main>
 
   <footer>

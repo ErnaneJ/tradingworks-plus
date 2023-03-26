@@ -3,12 +3,20 @@ setInterval(() => chrome.runtime.sendMessage({ keepAlive: true }), 1000);
 updateWorkedHours();
 
 async function updateWorkedHours(){
-  console.log("Buscando informações atualizadas...")
+  const defaultInformations = {
+    workInformations: true,
+    informations: { isDefault: true }
+  }
+
+  chrome.runtime.sendMessage(defaultInformations)
+
   const config = JSON.parse(localStorage.getItem('tradingworks-plus-data'));
 
   if(!config) return setTimeout(updateWorkedHours, 120000);
   
   const html = await getUpdatedHTML();
+
+  if(html.includes('Entre com seus dados')) return setScreen('not-signed-in');
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
@@ -18,10 +26,9 @@ async function updateWorkedHours(){
     [ data.querySelector('td:nth-child(2)').innerText, data.querySelector('td:nth-child(3)').innerText, data.querySelector('td:nth-child(4)').innerText ]
   ));
 
-  if(workedHours.length === 0 && !doc.title.includes('Gestão inteligente')){
-    chrome.runtime.sendMessage({ debug: "true", data: 'Ops.. Algo deu errado! 🤔' })
-    return setTimeout(updateWorkedHours, 120000);
-  }
+  if(workedHours.length === 0) return setScreen('not-started');
+
+  setScreen('started');
   
   const isWorking = tableRows.slice(-1)[0].slice(1)?.join(',').includes("__:__");
   let workedTimes = timeCrawler(workedHours);
@@ -83,7 +90,14 @@ function passTimeInStringToMinutes(time){
 }
 
 async function getUpdatedHTML(){
-  const response = await fetch("https://app.tradingworks.net/");
+  setScreen('loading');
+  const html = await fetch("https://app.tradingworks.net/")
+    .then(data => data.text())
+    .then(text => text);
 
-  return await response.text();
+  return html;
+}
+
+async function setScreen(screen) {
+  await chrome.runtime.sendMessage({ changeScreen: true, screen: screen });
 }
