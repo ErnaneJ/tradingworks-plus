@@ -1,5 +1,6 @@
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.debug) console.log(message.data);
+
   if (message.keepAlive) console.log('keepAlive');
   if (message.tradingworksPlusExtension) await chrome.storage.local.set({settings: message.settings});
   if (message.workInformations) check(message.informations);
