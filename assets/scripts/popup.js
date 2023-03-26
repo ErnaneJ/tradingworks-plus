@@ -9,6 +9,8 @@ function updateContent(data){
 }
 
 function updateTableTimes(data){
+  if(data.isDefault) return;
+
   const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
   const tableBodyTimes = document.getElementById('table-body-times');
 

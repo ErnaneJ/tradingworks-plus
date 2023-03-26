@@ -17,6 +17,9 @@
   --toggle-width: 40px;
   --toggle-height: calc(var(--toggle-width) / 2);
   --toggle-border-radius: calc(var(--toggle-height) / 2);
+
+  --rond-min: 30px;
+  --rond-max: 100px;
 }
 
 *{ 

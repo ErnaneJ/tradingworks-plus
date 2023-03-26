@@ -3,7 +3,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
   if (message.keepAlive) console.log('keepAlive');
   if (message.tradingworksPlusExtension) await chrome.storage.local.set({settings: message.settings});
-  if (message.workInformations) check(message.informations);
+  if (message.workInformations) updateWorkInformations(message.informations);
+
+  if(message.changeScreen) chrome.runtime.sendMessage({ setScreen: true, screen: message.screen }).catch(() => { });
   
   return true;
 });
@@ -25,7 +27,7 @@ chrome.runtime.onConnect.addListener(async(port) => {
   await createOffscreen();
 });
 
-async function check(informations){
+async function updateWorkInformations(informations){
   await chrome.storage.local.set({'tradingworksPlusSharedData': informations});
   handleSentMessages(informations);
 }
@@ -40,6 +42,7 @@ async function handleSentMessages(data){
 
   if(data.totalWorkedTime === 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎");
 
+  // TODO: Fix this
   // console.log(breakTimeParsed === data.totalBreakTime - 1)
   // if(breakTimeParsed === data.totalBreakTime - 1) setTimeout(() => sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀"), 60000);
 
