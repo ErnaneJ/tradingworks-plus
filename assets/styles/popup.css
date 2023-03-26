@@ -8,8 +8,6 @@ body{
   overflow: auto;
 }
 
-section {transition: opacity .5s ease-in-out; opacity: 1; display: block;}
-
 header{
   display: flex;
   align-items: center;
