@@ -115,7 +115,7 @@ Go [here](https://github.com/ErnaneJ/tradingworks-plus/releases) to view availab
   </p>
 
 
-  Ready! 🎊
+  - Ready! 🎊
 
   <p align="center">
     <img alt="loaded" src="./doc/imgs/ok.png">

@@ -114,7 +114,7 @@ Acesse [aqui](https://github.com/ErnaneJ/tradingworks-plus/releases) para vizual
   </p>
 
 
-  Prontinho! 🎊
+  - Prontinho! 🎊
 
   <p align="center">
     <img alt="Extensão carregada" src="../imgs/ok.png">
