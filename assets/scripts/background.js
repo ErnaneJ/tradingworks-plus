@@ -55,16 +55,18 @@ async function sendMsg(config, msg, idMsg){
 
   if(msgHandle[idMsg] === currentDate)  return; // message already sent
 
-  chrome.notifications.create(
-    `trading-works-plus-msg-${new Date().getTime()}`, {
-      type: "basic",
-      iconUrl: "../favicon48.png",
-      title: "TradingWorks+",
-      message: msg,
-    }, () => { }
-  );
+  if(config && config['allow-send-messages-browser'] === 'on'){
+    chrome.notifications.create(
+      `trading-works-plus-msg-${new Date().getTime()}`, {
+        type: "basic",
+        iconUrl: "../favicon48.png",
+        title: "TradingWorks+",
+        message: msg,
+      }, () => { }
+    );
+  }
 
-  if(config && config['allow-send-messages'] === 'on'){
+  if(config && config['allow-send-messages-whatsapp'] === 'on'){
     const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${config['whatsapp-number']}&text=${msg.replace(/ /g, '+')}&apikey=${config['api-key']}`;
   
     try{

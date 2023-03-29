@@ -14,9 +14,10 @@ function loadFormByData(){
     form['work-time'].value = data['work-time'] || '';
     form['break-time'].value = data['break-time'] || '';
     form['whatsapp-number'].value = data['whatsapp-number'] || '';
-    form['allow-send-messages'].checked = data['allow-send-messages'] === 'on';
+    form['allow-send-messages-whatsapp'].checked = data['allow-send-messages-whatsapp'] === 'on';
+    form['allow-send-messages-browser'].checked = data['allow-send-messages-browser'] === 'on';
 
-    if(data['allow-send-messages'] !== 'on'){
+    if(data['allow-send-messages-whatsapp'] !== 'on'){
       const number = document.querySelector('#whatsapp-number');
       const apiKey = document.querySelector('#api-key');
 
@@ -113,11 +114,14 @@ function handleButtonSendMessage(){
 async function notifications(messages){
   const number = document.querySelector('#whatsapp-number').value;
   const apiKey = document.querySelector('#api-key').value;
-  const allowSendMessage = document.querySelector('#allow-send-messages').checked;
+  const allowSendMessageWhatsapp = document.querySelector('#allow-send-messages-whatsapp')?.checked;
+  const allowSendMessageBrowser = document.querySelector('#allow-send-messages-browser')?.checked;
 
   const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${number}&text=${messages.whats.replace(/ /g, '+')}&apikey=${apiKey}`;
 
-  await chrome.notifications.create(
+  if(!allowSendMessageBrowser && !allowSendMessageWhatsapp) alert('Nenhum canal de mensagem habilitado. 😢')
+
+  if(allowSendMessageBrowser) await chrome.notifications.create(
     `trading-works-plus-msg-${new Date().getTime()}`, {
       type: "basic",
       iconUrl: "/assets/favicon48.png",
@@ -126,17 +130,15 @@ async function notifications(messages){
     }, () => { }
   );
 
-  if(!allowSendMessage) return alert('Você precisa permitir o envio de mensagens para poder receber notificações no whatsapp! 😢');
-
-  fetch(callMeBotURL).then(data => {
+  if(allowSendMessageWhatsapp) fetch(callMeBotURL).then(data => {
     if(data.status === 200)  return true;
     
-    alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢');
+    alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente em alguns instantes. 😢');
   }).catch(e => alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢', e));
 }
 
 function handleAllowSendMessageToggle(){
-  const toggle = document.querySelector('#allow-send-messages');
+  const toggle = document.querySelector('#allow-send-messages-whatsapp');
   toggle.addEventListener('change', e => {
     const number = document.querySelector('#whatsapp-number');
     const apiKey = document.querySelector('#api-key');
