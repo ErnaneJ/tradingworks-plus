@@ -140,7 +140,7 @@ Ao finalizar, você poderá abrir um PR e eu ficarei extremamente feliz em revis
 
 Qualquer crítica (desde que contrutiva) sempre será bem-vinda. Além disso, você poderá realizar uma doação para patricinar o projeto caso julgue pertinente. 
 
-__um dos objetivos futuros para essa extensão é publica-la na loja oficial do Google Extensions. Entretanto, para isso, é necessário pagar uma taxa de licenciamento de $5.__
+_Um dos objetivos futuros para essa extensão é publica-la na loja oficial do Google Extensions. Entretanto, para isso, é necessário pagar uma taxa de licenciamento de $5._
 
 <br/><p align="center">
   <a href="https://github.com/sponsors/ErnaneJ">

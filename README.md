@@ -40,7 +40,7 @@ This application was developed with the following technologies:
 - CSS
 - Javascript
 
-## 💻 Projeto
+## 💻 Project
 
 Extension developed with the aim of facilitating the usability of the TradingWorks platform for point management between workdays. His idea was due to the need for some features that are not natively present in the application.
 
@@ -48,7 +48,7 @@ Extension developed with the aim of facilitating the usability of the TradingWor
   <b>This extension has NO direct link to the TradingWorks platform and its development purpose is entirely educational.</b>
 </p>
 
-## ✨ Funcionalidades
+## ✨ Features
 
 In order to make life easier for the user, this extension has the following features:
 
@@ -141,7 +141,7 @@ When you're done, you can open a PR and I'll be extremely happy to review and po
 
 Any criticism (as long as it's constructive) is always welcome. In addition, you can make a donation to support the project if you deem it appropriate.
 
-__one of the future goals for this extension is to publish it on the official Google Extensions store. However, to do so, you need to pay a licensing fee of $5.__
+_One of the future goals for this extension is to publish it on the official Google Extensions store. However, to do so, you need to pay a licensing fee of $5._
 
 <br/><p align="center">
   <a href="https://github.com/sponsors/ErnaneJ">
