@@ -40,18 +40,21 @@ async function handleSentMessages(data){
   const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - data.totalWorkedTime;
   const breakTimeParsed = passTimeInStringToMinutes(config['break-time']);
 
-  if(data.totalWorkedTime === 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎");
+  if(data.totalWorkedTime === 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎", "msg-0");
 
-  // TODO: Fix this
-  // console.log(breakTimeParsed === data.totalBreakTime - 1)
-  // if(breakTimeParsed === data.totalBreakTime - 1) setTimeout(() => sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀"), 60000);
+  if(breakTimeParsed === data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", "msg-1");
 
-  if(minutesToFinish === 60) sendMsg(config, "Opa! Faltam apenas 1 hora para o fim do expediente. 🎉");
-  if(minutesToFinish === 15) sendMsg(config, "Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente. ⌛");
-  if(minutesToFinish === 1)  sendMsg(config, "Fim do dia! Não esquece de bater o ponto! Até mais. 👋");
+  if(minutesToFinish === 60) sendMsg(config, "Opa! Faltam apenas 1 hora para o fim do expediente. 🎉", "msg-2");
+  if(minutesToFinish === 15) sendMsg(config, "Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente. ⌛", "msg-3");
+  if(minutesToFinish === 1)  sendMsg(config, "Fim do dia! Não esquece de bater o ponto! Até mais. 👋", "msg-4");
 }
 
-async function sendMsg(config, msg){
+async function sendMsg(config, msg, idMsg){
+  let msgHandle = (await chrome.storage.local.get('message-handle'))['message-handle'] || {};
+  const currentDate = (new Date().toISOString().slice(0, 10)); // yyyy-dd-mm
+
+  if(msgHandle[idMsg] === currentDate)  return; // message already sent
+
   chrome.notifications.create(
     `trading-works-plus-msg-${new Date().getTime()}`, {
       type: "basic",
@@ -61,15 +64,18 @@ async function sendMsg(config, msg){
     }, () => { }
   );
 
-  if(!config || config['allow-send-messages'] !== 'on') return;
-
-  const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${config['whatsapp-number']}&text=${msg.replace(/ /g, '+')}&apikey=${config['api-key']}`;
-
-  try{
-    fetch(callMeBotURL);
-  }catch(e){
-    console.log('Erro ao enviar mensagem! 😢', e);
+  if(config && config['allow-send-messages'] === 'on'){
+    const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${config['whatsapp-number']}&text=${msg.replace(/ /g, '+')}&apikey=${config['api-key']}`;
+  
+    try{
+      fetch(callMeBotURL);
+    }catch(e){
+      console.log('Erro ao enviar mensagem! 😢', e);
+    }
   }
+
+  if(msgHandle) msgHandle[idMsg] = currentDate;
+  await chrome.storage.local.set({'message-handle': msgHandle});
 }
 
 function passTimeInStringToMinutes(time){
