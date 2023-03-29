@@ -167,10 +167,15 @@ footer{
   border-top: 1px solid var(--atlantis-300);
 }
 
+footer img {
+  margin-left: .25rem;
+}
+
 footer a{
   color: var(--atlantis-600);
   text-decoration: none;
   font-weight: bold;
+  margin-left: .25rem;
 }
 
 #started-screen{

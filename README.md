@@ -1,16 +1,40 @@
 <h1 align="center">
-  <img alt="Icone" src="./doc/icon.png" width="25"> TradingWorks+
+  <img alt="Icone" src="./doc/imgs/icon.png" width="25"> TradingWorks+
 </h1>
 
 <br/>
 
+<div align="center">
+  <a href="#-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-project">Project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-features">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#%EF%B8%8F-use">Use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-support">Support</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#%EF%B8%8F-contribute">Contribute</a>&nbsp;&nbsp;&nbsp;
+</div>
+
+<br/>
+
+<div align="center">
+  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v1.0.0-brightgreen?logo=github">
+</div>
+
+<br/>
+
 <p align="center">
-  <img alt="Imagem de preview da aplicação" src="./doc/preview.png" width="100%">
+  <a href="https://github.com/ErnaneJ/tradingworks-plus/blob/master/doc/ptbr">PT-BR</a>
 </p>
 
-## 🚀 Tecnologias
+<br/>
 
-Esta aplicação foi desenvolvida com as seguintes tecnologias:
+<p align="center">
+  <img alt="Application preview image" src="./doc/imgs/preview.png" width="100%">
+</p>
+
+
+## 🚀 Technologies
+
+This application was developed with the following technologies:
 
 - HTML
 - CSS
@@ -18,44 +42,45 @@ Esta aplicação foi desenvolvida com as seguintes tecnologias:
 
 ## 💻 Projeto
 
-Extensão desenvolvida com o intuito de facilicar a usabilidade da plataforma TradingWorks para gerenciamento de ponto entre jornadas de trabalho. Sua ideia se deu pela necessidade de algumas funcionalidades que não estão presentes nativamente na aplicação. 
+Extension developed with the aim of facilitating the usability of the TradingWorks platform for point management between workdays. His idea was due to the need for some features that are not natively present in the application.
 
 <p align="center">
-  <b>Essa extensão não possui NENHUM vínculo direto com a plataforma TradingWorks e seu objetivo de desenvolvimento é totalmente educacional.</b>
+  <b>This extension has NO direct link to the TradingWorks platform and its development purpose is entirely educational.</b>
 </p>
 
 ## ✨ Funcionalidades
 
-Com o intuito de facilitar a vida do usuário, essa extensão conta com as seguintes funcionalidades:
+In order to make life easier for the user, this extension has the following features:
 
-- Listagem de horários;
-  - Entrada;
-  - Saída;
-- Cálculo automático de tempo decorrido;
-  - Tempo decorrido de jornada de trabalho;
-  - Tempo decorrido em intervalos;
-  - Tempo decorrido de jornada extra, quando o tempo pre-definido já estiver sido finalizado.
+- List of schedules;
+  - Prohibited;
+  - Exit;
+- Automatic calculation of elapsed time;
+  - Elapsed time of working day;
+  - Time elapsed in intervals;
+  - Elapsed time of extra journey, when the pre-defined time has already been finalized.
+- Notifications
+  - Background execution of a journey monitor that captures this information every X time and notifies the user in specific cases through the [https://www.callmebot.com/](callmebot.com) API.
+    - Notifications on Whatsapp
+    - Browser Notifications
 
-### ⚒️ Funcionalidades extras em desenvolvimento:
-  - Execução em background de um monitor de jornada que capture essas informações a cada X tempo e notifique o usuário em casos específicos por meio da API do [https://www.callmebot.com/](callmebot.com).
-
-
-_Obs.: Todas as informações são capturadas diretamente da plataforma [TradingWorks.net](https://app.tradingworks.net/) para garantir a exatidão dos calculos. A mesma somente necessita identificar cookies de sessão do usuário no navegador para conseguir o acesso necessário para entrar na plataforma com o perfil do colaborador e realizar a captura das informações._
+_Note: All information is captured directly from the [TradingWorks.net](https://app.tradingworks.net/) platform to ensure the accuracy of the calculations. It only needs to identify user session cookies in the browser to obtain the necessary access to enter the platform with the collaborator's profile and capture the information._
 
 ## ⚙️ Use
 
-### 🧩 Instalando pela loja de extensões
+### 🧩 Installing from the extension store
 
-Infelizmente ainda não é posível obter a extensão por meio de loja oficial. O desejo é que no futuro se torne possível. Abaixo estão listadas outras formas de instalar a extensão.
+Unfortunately it is still not possible to obtain the extension through the official store. The wish is that in the future it becomes possible. Below are listed other ways to install the extension.
 
-### 📦 Manualmente
-Abaixo está explicado o processo para realizar o download e instalação da extensão de forma manual. Nenhum desses passos é necessário caso a mesma tenha sido instalada diretamente pela loja. 
+### 📦 Installation by downloading packages
 
-#### ⬇️ Baixe
+Below is explained the process to download and install the extension manually. None of these steps are necessary if it has been installed directly by the store.
 
-Acesse [aqui](https://github.com/ErnaneJ/tradingworks-plus/releases) para vizualizar os pacotes e versões disponíveis (ZIP) ou baixe diretamente pelo Git.
+#### ⬇️ Download
 
-- Clone esse repositório
+Go [here](https://github.com/ErnaneJ/tradingworks-plus/releases) to view available packages and versions (ZIP) or download directly from Git.
+
+- Clone this repository
 
   - SSH
   ```bash
@@ -67,62 +92,65 @@ Acesse [aqui](https://github.com/ErnaneJ/tradingworks-plus/releases) para vizual
   https://github.com/ErnaneJ/tradingworks-plus.git
     ```
 
-#### 🟢 Instale
+#### 🟢 Install
 
-  - Acesse seu navegador na sessão de extensões
+  - Access your browser in the extensions section
 
   <p align="center">
-    <img alt="Acessando sessão de extensões" src="./doc/extensoes.png">
+    <img alt="Accessing extensions session" src="./doc/imgs/en/extensions.png">
   </p>
 
 
-  - Libere o modo de desenvolvimento
+  - Enable development mode
 
   <p align="center">
-    <img alt="Liberando modo de desenvolvimento" src="./doc/dev.png">
+    <img alt="Enabling development mode" src="./doc/imgs/en/dev.png">
   </p>
 
 
-  - Carregue a pasta onde você clonou o repositório
+  - Upload the folder where you cloned the repository
 
   <p align="center">
-    <img alt="Carregando extensão" src="./doc/carregar.png">
+    <img alt="Loading extension" src="./doc/imgs/en/load.png">
   </p>
 
 
-  Prontinho! 🎊
+  Ready! 🎊
 
-## 🆙 Suporte
+  <p align="center">
+    <img alt="loaded" src="./doc/imgs/ok.png">
+  </p>
 
-Essa Extensão já foi testada e comprovada funcionamento nos seguintes navegadores:
-  - Google Chrome
-  - Edge
+## 🆙 Support
 
+This Extension has been tested and proven to work in the following browsers:
+  - **Google Chrome**: v111.0.5563.146	(2023-03-28)
+  - **Edge**: v111.0.1661.54 (2023-03-24)
 
-## ⚙️ Contribua
+## ⚙️ Contribute
 
-### 🚧 Desenvolvendo
+### 🚧 Developing
 
-Caso encontre algum problema ou deseja alguma nova funcionalidade, abra uma issue. Caso deseje implementar por conta própria realize processo de **instalação manual** presente nesse mesmo arquivo de documentação mais acima antes de iniciar.
+If you encounter a problem or want some new functionality, please open an issue. If you want to implement it on your own, carry out the **Installation by downloading packages** process present in the same documentation file above before starting.
 
-Com a extensão funcionando corretamente, abra o projeto no seu editor de texto favorito e bom desenvolvimento!
+With the extension working correctly, open the project in your favorite text editor and good development!
 
-Ao finalizar, você poderá abrir um PR e eu ficarei extremamente feliz em revisar e possivelmente aceitar seu código!
+When you're done, you can open a PR and I'll be extremely happy to review and possibly accept your code!
 
-### 💙 Incentivando
+### 💙 Encouraging
 
-Qualquer crítica (desde que contrutiva) sempre será bem-vinda. Além disso, você poderá realizar uma doação para patricinar o projeto caso julgue pertinente. 
+Any criticism (as long as it's constructive) is always welcome. In addition, you can make a donation to support the project if you deem it appropriate.
 
-__um dos objetivos futuros para essa extensão é publica-la na loja oficial do Google Extensions. Entretanto, para isso, é necessário pagar uma taxa de licenciamento de $5__
+__one of the future goals for this extension is to publish it on the official Google Extensions store. However, to do so, you need to pay a licensing fee of $5.__
 
 <br/><p align="center">
   <a href="https://github.com/sponsors/ErnaneJ">
-    <img alt="Buy Me a Coffe" src="./doc/BuyMeACoffee.webp" width="300">
+    <img alt="Buy Me a Coffe" src="./doc/imgs/buy-me-a-coffee.png" width="300">
   </a>
 </p><br/>
 
 ---
 
 <div align="center">
-  Desenvolvido com ❤ por <a target="_blank" rel="noopener" href="https://www.ernane.dev/">Ernane Ferreira</a>. 👋🏻
+  2023 | <b>TradingWorks+</b>
 </div>
