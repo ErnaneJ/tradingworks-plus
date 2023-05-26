@@ -46,7 +46,8 @@ async function handleSentMessages(data){
 
   if(minutesToFinish === 60) sendMsg(config, "Opa! Faltam apenas 1 hora para o fim do expediente. 🎉", "msg-2");
   if(minutesToFinish === 15) sendMsg(config, "Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente. ⌛", "msg-3");
-  if(minutesToFinish === 1)  sendMsg(config, "Fim do dia! Não esquece de bater o ponto! Até mais. 👋", "msg-4");
+  if(minutesToFinish === 1) sendMsg(config, "Faltam apenas 1 minuto, se prepara... ⌚", "msg-4");
+  if(minutesToFinish === 0)  sendMsg(config, "Fim do dia! Não esquece de bater o ponto! Até mais. 👋", "msg-5");
 }
 
 async function sendMsg(config, msg, idMsg){
