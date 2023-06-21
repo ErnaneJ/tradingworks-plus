@@ -19,15 +19,12 @@ function loadFormByData(){
 
     if(data['allow-send-messages-whatsapp'] !== 'on'){
       const number = document.querySelector('#whatsapp-number');
-      const apiKey = document.querySelector('#api-key');
 
-      [number, apiKey].forEach(input => {
+      [number].forEach(input => {
         input.classList.add('disabled');
         input.disabled = true;
       });
     }
-
-    form['api-key'].value = data['api-key'] || '';
   }
 }
 
@@ -105,7 +102,7 @@ function handleButtonSendMessage(){
     
     notifications({
       browser: 'Olá!👋 Teste de notificações do TradingWorks+ no navegador. Por aqui está tudo certo. 🤗',
-      whats: 'Olá!👋 teste de notificações do TradingWorksPlus no Whatsapp. Por aqui também está tudo certo! 🤗'
+      whats: '🤖 *TradingWorks+:* Olá!👋 Esse é um teste de notificação no Whatsapp. Por aqui está tudo certo. 🤗'
     })
     chrome.runtime.sendMessage({tradingworksPlusExtension: true, sendMessage: true});
   });
@@ -113,11 +110,14 @@ function handleButtonSendMessage(){
 
 async function notifications(messages){
   const number = document.querySelector('#whatsapp-number').value;
-  const apiKey = document.querySelector('#api-key').value;
   const allowSendMessageWhatsapp = document.querySelector('#allow-send-messages-whatsapp')?.checked;
   const allowSendMessageBrowser = document.querySelector('#allow-send-messages-browser')?.checked;
 
-  const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${number}&text=${messages.whats.replace(/ /g, '+')}&apikey=${apiKey}`;
+  const optionsMessage = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: `{"number":"${number}","message":"${messages.whats}","token":"token"}`
+  };
 
   if(!allowSendMessageBrowser && !allowSendMessageWhatsapp) alert('Nenhum canal de mensagem habilitado. 😢')
 
@@ -130,20 +130,19 @@ async function notifications(messages){
     }, () => { }
   );
 
-  if(allowSendMessageWhatsapp) fetch(callMeBotURL).then(data => {
-    if(data.status === 200)  return true;
-    
-    alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente em alguns instantes. 😢');
-  }).catch(e => alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢', e));
+  if(allowSendMessageWhatsapp) {
+    fetch('https://wppp-api-d0eaabc3aee0.herokuapp.com/send-message', optionsMessage)
+      .then(response => response.json()).then(response => console.log(response))
+      .catch(err => alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢', err));
+  }
 }
 
 function handleAllowSendMessageToggle(){
   const toggle = document.querySelector('#allow-send-messages-whatsapp');
   toggle.addEventListener('change', e => {
     const number = document.querySelector('#whatsapp-number');
-    const apiKey = document.querySelector('#api-key');
 
-    [number, apiKey].forEach(input => {
+    [number].forEach(input => {
       input.classList.toggle('disabled');
       input.disabled = !input.disabled;
     });
@@ -152,9 +151,8 @@ function handleAllowSendMessageToggle(){
 
 function handleInputsBot(){
   const number = document.querySelector('#whatsapp-number');
-  const apiKey = document.querySelector('#api-key');
 
-  [number, apiKey].forEach(input => {
+  [number].forEach(input => {
     input.addEventListener('keyup', e => {
       e.target.value = e.target.value.replace(/[^0-9]+/g, '');
     });

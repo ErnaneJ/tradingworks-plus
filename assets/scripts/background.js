@@ -40,14 +40,14 @@ async function handleSentMessages(data){
   const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - data.totalWorkedTime;
   const breakTimeParsed = passTimeInStringToMinutes(config['break-time']);
 
-  if(data.totalWorkedTime === 1) sendMsg(config, "Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎", "msg-0");
+  if(data.totalWorkedTime === 1) sendMsg(config, "🤖 *TradingWorks+:* Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎", "msg-0");
 
-  if(breakTimeParsed === data.totalBreakTime) sendMsg(config, "Intervalo finalizado, hora de voltar! 🚀", "msg-1");
+  if(breakTimeParsed === data.totalBreakTime) sendMsg(config, "🤖 *TradingWorks+:* Intervalo finalizado, hora de voltar! 🚀", "msg-1");
 
-  if(minutesToFinish === 60) sendMsg(config, "Opa! Faltam apenas 1 hora para o fim do expediente. 🎉", "msg-2");
-  if(minutesToFinish === 15) sendMsg(config, "Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente. ⌛", "msg-3");
-  if(minutesToFinish === 1) sendMsg(config, "Faltam apenas 1 minuto, se prepara... ⌚", "msg-4");
-  if(minutesToFinish === 0)  sendMsg(config, "Fim do dia! Não esquece de bater o ponto! Até mais. 👋", "msg-5");
+  if(minutesToFinish === 60) sendMsg(config, "🤖 *TradingWorks+:* Opa! Faltam apenas 1 hora para o fim do expediente. 🎉", "msg-2");
+  if(minutesToFinish === 15) sendMsg(config, "🤖 *TradingWorks+:* Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente. ⌛", "msg-3");
+  if(minutesToFinish === 1) sendMsg(config, "🤖 *TradingWorks+:* Faltam apenas 1 minuto, se prepara... ⌚", "msg-4");
+  if(minutesToFinish === 0)  sendMsg(config, "🤖 *TradingWorks+:* Fim do dia! Não esquece de bater o ponto! Até mais. 👋", "msg-5");
 }
 
 async function sendMsg(config, msg, idMsg){
@@ -62,19 +62,22 @@ async function sendMsg(config, msg, idMsg){
         type: "basic",
         iconUrl: "../favicon48.png",
         title: "TradingWorks+",
-        message: msg,
+        message: msg.replaceAll('*', ''),
       }, () => { }
     );
   }
 
-  if(config && config['allow-send-messages-whatsapp'] === 'on'){
-    const callMeBotURL = `https://api.callmebot.com/whatsapp.php?phone=${config['whatsapp-number']}&text=${msg.replace(/ /g, '+')}&apikey=${config['api-key']}`;
-  
-    try{
-      fetch(callMeBotURL);
-    }catch(e){
-      console.log('Erro ao enviar mensagem! 😢', e);
-    }
+  if(config && config['allow-send-messages-whatsapp'] === 'on'){    
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: `{"number":"${config['whatsapp-number']}","message":"${msg}","token":"token"}`
+    };
+    
+    fetch('https://wppp-api-d0eaabc3aee0.herokuapp.com/send-message', options)
+      .then(response => response.json())
+      .then(response => console.log(response))
+      .catch(err => console.log('Erro ao enviar mensagem! 😢', err));
   }
 
   if(msgHandle) msgHandle[idMsg] = currentDate;
