@@ -1,7 +1,7 @@
 {
   "name": "Tradingworks Plus",
   "version": "1.1.0",
-  "description": "Extension developed with the aim of facilitating the usability of the TradingWorks platform for point management between work shifts.",
+  "description": "Extensão com o objetivo de facilitar a usabilidade da plataforma TradingWorks para gerenciamento de pontos entre turnos de trabalho.",
   "icons": { 
     "16": "assets/favicon16.png",
     "32": "assets/favicon32.png",
