@@ -65,15 +65,19 @@ function updateMsg(data){
   
   const informedWorkTime = passTimeInStringToMinutes(config['work-time']);
   const minutesToFinish = informedWorkTime - data.totalWorkedTime;
+  const secondsToFinish = minutesToFinish * 60;
   const date = new Date();
   const outputDate = date.setMinutes(date.getMinutes() + minutesToFinish);
   const estimatedOutputHour = document.getElementById('estimated-output-hour');
   const msg = document.getElementById('msg');
   
-  if (minutesToFinish >= 0) {
+  if (minutesToFinish > 0) {
     msg.innerHTML = `Faltam <strong>${formatNumber(minutesToFinish/60)} hora(s)</strong> e <strong>${minutesToFinish%60} minuto(s)</strong> para o fim do seu expediente de ${config['work-time']} horas. 🎉`;
     estimatedOutputHour.innerHTML = `Estimativa de saída às ${formatDate(new Date(outputDate), 'hhhmin')}`;
-  } else if (data.isWorking){
+  }else if(minutesToFinish == 0 && secondsToFinish > 0){
+    msg.innerHTML = `Faltam <strong>menos de um minuto</strong> para o fim do seu expediente de ${config['work-time']} horas. 🎉`;
+    estimatedOutputHour.innerHTML = '';
+  }else if (data.isWorking){
     msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez <strong>${formatNumber((minutesToFinish * (-1))/60)} hora(s)</strong> e <strong>${formatNumber((minutesToFinish* (-1))%60)} minuto(s)</strong> extra.`;
     estimatedOutputHour.innerHTML = '';
   } else{
