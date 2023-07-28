@@ -1,0 +1,68 @@
+body{
+  background-image: linear-gradient(135deg, rgb(167, 191, 48) 0%, rgb(76, 88, 28) 100%);
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+main{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: .5rem;
+  color: white;
+}
+
+main .main--logo{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  color: white;
+}
+
+main nav{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  color: white;
+}
+main nav a{
+  color: white;
+  text-decoration: none;
+  font-weight: semibold;
+}
+
+main nav a:hover{
+  color: var(--atlantis-100);
+  text-decoration: underline;
+}
+footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  width: 100%;
+  font-size: .85rem;
+  color: var(--atlantis-300);
+  margin-bottom: 1rem;
+}
+
+footer img {
+  margin-left: .25rem;
+}
+
+footer a{
+  color: var(--atlantis-100);
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: .25rem;
+}

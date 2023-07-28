@@ -1,12 +1,12 @@
-# TradingWork+ Extension Privacy Policy
+# Privacy Policy
 
 > Last Updated: July 27, 2023
 
-Thank you for choosing to use the **TradingWork+** extension. This privacy policy aims to inform you about how we collect, use, and protect the information provided by the user during the use of our browser extension.
+Thank you for choosing to use the **TradingWorks+** extension. This privacy policy aims to inform you about how we collect, use, and protect the information provided by the user during the use of our browser extension.
 
 ## Information Collected:
 
-1.1 User-Provided Data: To use the **TradingWork+** extension, it is necessary for the user to provide some information, including but not limited to, WhatsApp phone number to receive notifications, break time, and work shift duration. All data manipulations occur exclusively on the client-side, on their own machine.
+1.1 User-Provided Data: To use the **TradingWorks+** extension, it is necessary for the user to provide some information, including but not limited to, WhatsApp phone number to receive notifications, break time, and work shift duration. All data manipulations occur exclusively on the client-side, on their own machine.
 
 1.2 Usage Data: Our extension may collect usage data, such as interactions with the extension, activity history, and user preferences. These data are used to improve the user experience and enhance our services.
 
@@ -22,7 +22,7 @@ Thank you for choosing to use the **TradingWork+** extension. This privacy polic
 
 3.1 Third Parties: We emphasize that NO information provided by the user will be shared, sold, or disclosed to third parties. All collected information is strictly used to provide the features and services of the extension on the user's own device.
 
-3.2 Messaging Service: The **TradingWork+** extension may make a request to a messaging service for WhatsApp chats, provided that the messaging system is also enabled. This request will be made solely with the phone number previously provided by the user, without sharing other WhatsApp-related information.
+3.2 Messaging Service: The **TradingWorks+** extension may make a request to a messaging service for WhatsApp chats, provided that the messaging system is also enabled. This request will be made solely with the phone number previously provided by the user, without sharing other WhatsApp-related information.
 
 ## Security Measures
 
@@ -34,6 +34,6 @@ Thank you for choosing to use the **TradingWork+** extension. This privacy polic
 
 ## Contact
 
-6.1 If you have any questions or concerns regarding privacy or the use of the **TradingWork+** extension, please contact us at ernane.juinor25@gmail.com.
+6.1 If you have any questions or concerns regarding privacy or the use of the **TradingWorks+** extension, please contact us at ernane.juinor25@gmail.com.
 
-By using the **TradingWork+** extension, you agree to the terms set forth in this Privacy Policy.
+By using the **TradingWorks+** extension, you agree to the terms set forth in this Privacy Policy.
