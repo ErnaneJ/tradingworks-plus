@@ -18,6 +18,5 @@
     "service_worker": "./assets/scripts/background.js",
     "type": "module"
   },
-  "homepage_url": "https://github.com/ErnaneJ/tradingworks-plus",
-  "privacy_policy": "https://github.com/ErnaneJ/tradingworks-plus/blob/master/doc/privacy_policy/en.md"
+  "homepage_url": "https://github.com/ErnaneJ/tradingworks-plus"
 }
