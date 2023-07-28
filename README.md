@@ -28,7 +28,7 @@
 <br/>
 
 <p align="center">
-  <img alt="Application preview image" src="./doc/imgs/preview.png" width="100%">
+  <img alt="Application preview image" src="./doc/imgs/prev.png" width="100%">
 </p>
 
 
@@ -126,6 +126,10 @@ Go [here](https://github.com/ErnaneJ/tradingworks-plus/releases) to view availab
 This Extension has been tested and proven to work in the following browsers:
   - **Google Chrome**: v111.0.5563.146	(2023-03-28)
   - **Edge**: v111.0.1661.54 (2023-03-24)
+
+## 📃 Privacy Policy
+
+[Privacy Policy.](./doc/privacy_policy/en.md)
 
 ## ⚙️ Contribute
 

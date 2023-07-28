@@ -10,6 +10,7 @@
   <a href="#-funcionalidades">Funcionalidades</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#%EF%B8%8F-use">Use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-suporte">Suporte</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-privacy%20policy">Politica de privacidade</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#%EF%B8%8F-contribua">Contribua</a>&nbsp;&nbsp;&nbsp;
 </div>
 
@@ -28,7 +29,7 @@
 <br/>
 
 <p align="center">
-  <img alt="Imagem de preview da aplicação" src="../imgs/preview.png" width="100%">
+  <img alt="Imagem de preview da aplicação" src="../imgs/prev.png" width="100%">
 </p>
 
 ## 🚀 Tecnologias
@@ -125,6 +126,10 @@ Acesse [aqui](https://github.com/ErnaneJ/tradingworks-plus/releases) para vizual
 Essa Extensão já foi testada e comprovada funcionamento nos seguintes navegadores:
   - **Google Chrome**: v111.0.5563.146	(28/03/2023)
   - **Edge**: v111.0.1661.54 (24/03/2023)
+
+## 📃 Política de Privacidade
+
+[Política de privacidade.](../privacy_policy/pt-BR.md)
 
 ## ⚙️ Contribua
 
