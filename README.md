@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="Icone" src="./doc/imgs/icon.png" width="25"> TradingWorks+
+  <img alt="Icone" src="./docs/imgs/icon.png" width="25"> TradingWorks+
 </h1>
 
 <br/>
@@ -22,13 +22,13 @@
 <br/>
 
 <p align="center">
-  <a href="https://github.com/ErnaneJ/tradingworks-plus/blob/master/doc/ptbr">PT-BR</a>
+  <a href="https://github.com/ErnaneJ/tradingworks-plus/blob/master/docs/ptbr">PT-BR</a>
 </p>
 
 <br/>
 
 <p align="center">
-  <img alt="Application preview image" src="./doc/imgs/prev.png" width="100%">
+  <img alt="Application preview image" src="./docs/imgs/prev.png" width="100%">
 </p>
 
 
@@ -97,28 +97,28 @@ Go [here](https://github.com/ErnaneJ/tradingworks-plus/releases) to view availab
   - Access your browser in the extensions section
 
   <p align="center">
-    <img alt="Accessing extensions session" src="./doc/imgs/en/extensions.png">
+    <img alt="Accessing extensions session" src="./docs/imgs/en/extensions.png">
   </p>
 
 
   - Enable development mode
 
   <p align="center">
-    <img alt="Enabling development mode" src="./doc/imgs/en/dev.png">
+    <img alt="Enabling development mode" src="./docs/imgs/en/dev.png">
   </p>
 
 
   - Upload the folder where you cloned the repository
 
   <p align="center">
-    <img alt="Loading extension" src="./doc/imgs/en/load.png">
+    <img alt="Loading extension" src="./docs/imgs/en/load.png">
   </p>
 
 
   - Ready! 🎊
 
   <p align="center">
-    <img alt="loaded" src="./doc/imgs/ok.png">
+    <img alt="loaded" src="./docs/imgs/ok.png">
   </p>
 
 ## 🆙 Support
@@ -129,7 +129,7 @@ This Extension has been tested and proven to work in the following browsers:
 
 ## 📃 Privacy Policy
 
-[Privacy Policy.](./doc/privacy_policy/en.md)
+[Privacy Policy.](./docs/privacy_policy/en.md)
 
 ## ⚙️ Contribute
 
@@ -149,7 +149,7 @@ _One of the future goals for this extension is to publish it on the official Goo
 
 <br/><p align="center">
   <a href="https://github.com/sponsors/ErnaneJ">
-    <img alt="Buy Me a Coffe" src="./doc/imgs/buy-me-a-coffee.png" width="300">
+    <img alt="Buy Me a Coffe" src="./docs/imgs/buy-me-a-coffee.png" width="300">
   </a>
 </p><br/>
 
