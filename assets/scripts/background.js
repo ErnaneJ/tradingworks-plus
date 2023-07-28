@@ -52,8 +52,7 @@ async function handleSentMessages(data){
 
 async function sendMsg(config, msg, idMsg){
   let msgHandle = (await chrome.storage.local.get('message-handle'))['message-handle'] || {};
-  const currentDate = (new Date().toISOString().slice(0, 10)); // yyyy-dd-mm
-
+  const currentDate = getCurrentUTCDate();
   if(msgHandle[idMsg] === currentDate)  return; // message already sent
 
   if(config && config['allow-send-messages-browser'] === 'on'){
@@ -93,4 +92,10 @@ function passTimeInStringToMinutes(time){
   if(!minute) minute = 0;
   
   return minute + (hour * 60);
+}
+
+function getCurrentUTCDate() {
+  const currentDate = new Date();
+  const utcDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
+  return utcDate.toISOString().slice(0, 10);
 }
