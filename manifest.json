@@ -17,5 +17,8 @@
   "background": {
     "service_worker": "./assets/scripts/background.js",
     "type": "module"
-  }
+  },
+  "options_page": "./config/index.html",
+  "homepage_url": "https://github.com/ErnaneJ/tradingworks-plus",
+  "privacy_policy": "https://github.com/ErnaneJ/tradingworks-plus/blob/master/doc/privacy_policy/en.md",
 }
