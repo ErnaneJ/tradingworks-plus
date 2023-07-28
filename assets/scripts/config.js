@@ -82,7 +82,7 @@ function handleSubmit(){
     chrome.runtime.sendMessage({tradingworksPlusExtension: true, settings: JSON.stringify(formatedData)});
 
     notifications({
-      whats: 'Sistema configurado com sucesso! 🎉',
+      whats: '🤖 *TW+:* Sistema configurado com sucesso! 🎉',
       browser: 'Sistema configurado com sucesso! 🎉',
     })
 
@@ -102,7 +102,7 @@ function handleButtonSendMessage(){
     
     notifications({
       browser: 'Olá!👋 Teste de notificações do TradingWorks+ no navegador. Por aqui está tudo certo. 🤗',
-      whats: '🤖 *TradingWorks+:* Olá!👋 Esse é um teste de notificação no Whatsapp. Por aqui está tudo certo. 🤗'
+      whats: '🤖 *TW+:* Olá!👋 Esse é um teste de notificação no Whatsapp. Por aqui está tudo certo.'
     })
     chrome.runtime.sendMessage({tradingworksPlusExtension: true, sendMessage: true});
   });
