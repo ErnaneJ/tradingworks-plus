@@ -73,7 +73,7 @@ async function sendMsg(config, msg, idMsg){
       body: `{"number":"${config['whatsapp-number']}","message":"${msg}","token":"token"}`
     };
     
-    fetch('https://wppp-api-d0eaabc3aee0.herokuapp.com/send-message', options)
+    fetch('https://buddy.ernane.dev/send-message', options)
       .then(response => response.json())
       .then(response => console.log(response))
       .catch(err => console.log('Erro ao enviar mensagem! 😢', err));

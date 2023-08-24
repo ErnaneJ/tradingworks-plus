@@ -2,7 +2,7 @@ const port = chrome.runtime.connect({name: "extensionOpen"});
 
 function updateContent(data){
   updateTableTimes(data);
-  updateTableTotals(data.totalWorkedTime, data.totalBreakTime);
+  updateTableTotals(data.totalWorkedTime, data.totalBreakTime, data.balance);
   updateMsg(data);
   showDate();
   handleButtonConfig();
@@ -51,12 +51,14 @@ function formatNumber(number){
   return String(Math.floor(number)).padStart(2, '0');
 }
 
-function  updateTableTotals(totalWorkedTime, totalBreakTime){
+function updateTableTotals(totalWorkedTime, totalBreakTime, balance){
   const totalWorkedHours = document.getElementById('total-worked-hours');
   const totalBreakHours = document.getElementById('total-break-hours');
+  const totalHoursBalance = document.getElementById('hours-balance');
 
   totalWorkedHours.innerHTML = `${formatNumber(totalWorkedTime/60)}:${formatNumber(totalWorkedTime%60)} h`;
   totalBreakHours.innerHTML = `${formatNumber(totalBreakTime/60)}:${formatNumber(totalBreakTime%60)} h`;
+  totalHoursBalance.innerHTML = balance;
 }
 
 function updateMsg(data){
