@@ -14,12 +14,13 @@ async function updateWorkedHours(){
 
   if(!config) return setTimeout(updateWorkedHours, 120000);
   
-  const html = await getUpdatedHTML();
-
-  if(html.includes('Entre com seus dados')) return setScreen('not-signed-in');
+  const htmlRoot = await getUpdatedHTML("https://app.tradingworks.net/");
+  const htmlBalance = await getUpdatedHTML("https://app.tradingworks.net/Payroll/MyTimeCards.aspx");
+  
+  if(htmlRoot.includes('Entre com seus dados')) return setScreen('not-signed-in');
 
   const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
+  const doc = parser.parseFromString(htmlRoot, "text/html");
 
   const workedHours = doc.querySelectorAll('table tbody tr');
   const tableRows = [...workedHours].map(data => (
@@ -51,13 +52,21 @@ async function updateWorkedHours(){
       workedTimes,
       totalWorkedTime, totalBreakTime,
       tableRows, 
-      isWorking: isWorking
+      isWorking: isWorking,
+      balance: updateBalance(htmlBalance)
     }
   }
 
   chrome.runtime.sendMessage(workInformations)
 
   setTimeout(updateWorkedHours, 60000);
+}
+
+function updateBalance(html){
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  return doc.querySelector('span#Body_Body_lblBalance').innerText;
 }
 
 function timeCrawler(workedHours){
@@ -89,9 +98,9 @@ function passTimeInStringToMinutes(time){
   return minute + (hour * 60);
 }
 
-async function getUpdatedHTML(){
+async function getUpdatedHTML(url){
   setScreen('loading');
-  const html = await fetch("https://app.tradingworks.net/")
+  const html = await fetch(url)
     .then(data => data.text())
     .then(text => text);
 

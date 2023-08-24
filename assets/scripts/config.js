@@ -102,7 +102,7 @@ function handleButtonSendMessage(){
     
     notifications({
       browser: 'Olá!👋 Teste de notificações do TradingWorks+ no navegador. Por aqui está tudo certo. 🤗',
-      whats: '🤖 *TW+:* Olá!👋 Esse é um teste de notificação no Whatsapp. Por aqui está tudo certo.'
+      whats: '🤖 *TW+:* Olá!👋 Esse é um teste de notificação do Tradingworks+ no Whatsapp. Por aqui está tudo certo! 🚀'
     })
     chrome.runtime.sendMessage({tradingworksPlusExtension: true, sendMessage: true});
   });
@@ -131,7 +131,7 @@ async function notifications(messages){
   );
 
   if(allowSendMessageWhatsapp) {
-    fetch('https://wppp-api-d0eaabc3aee0.herokuapp.com/send-message', optionsMessage)
+    fetch('https://buddy.ernane.dev/send-message', optionsMessage)
       .then(response => response.json()).then(response => console.log(response))
       .catch(err => alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢', err));
   }

@@ -142,11 +142,23 @@ main{
   font-style: italic;
 }
 
-span#current-date, span#estimated-output-hour{
+span#hours-balance-container{
+  margin-top: .10rem;
+  margin-bottom: -.5rem;
+  margin-left: .5rem;
+}
+
+span#current-date, span#estimated-output-hour, span#hours-balance-container{
   font-size: .65rem;
   color: var(--atlantis-900);
   font-weight: bold;
   font-style: italic;
+}
+
+span#hours-balance{
+  filter: blur(2px);
+} span#hours-balance:hover{
+  filter: blur(0px);
 }
 
 .message{
