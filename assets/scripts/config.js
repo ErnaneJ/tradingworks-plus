@@ -116,7 +116,7 @@ async function notifications(messages){
   const optionsMessage = {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: `{"number":"${number}","message":"${messages.whats}","token":"token"}`
+    body: `{"number":"${number}","message":"${messages.whats}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
   };
 
   if(!allowSendMessageBrowser && !allowSendMessageWhatsapp) alert('Nenhum canal de mensagem habilitado. 😢')
@@ -131,7 +131,7 @@ async function notifications(messages){
   );
 
   if(allowSendMessageWhatsapp) {
-    fetch('https://buddy.ernane.dev/send-message', optionsMessage)
+    fetch('https://buddy.ernane.dev/api/v1/send-message/', optionsMessage)
       .then(response => response.json()).then(response => console.log(response))
       .catch(err => alert('Houve um erro ao enviar mensagem no whatsapp, verifique as informações e tente novamente. 😢', err));
   }

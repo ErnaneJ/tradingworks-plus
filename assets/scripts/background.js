@@ -70,10 +70,10 @@ async function sendMsg(config, msg, idMsg){
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: `{"number":"${config['whatsapp-number']}","message":"${msg}","token":"token"}`
+      body: `{"number":"${config['whatsapp-number']}","message":"${msg}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
     };
     
-    fetch('https://buddy.ernane.dev/send-message', options)
+    fetch('https://buddy.ernane.dev/api/v1/send-message/', options)
       .then(response => response.json())
       .then(response => console.log(response))
       .catch(err => console.log('Erro ao enviar mensagem! 😢', err));

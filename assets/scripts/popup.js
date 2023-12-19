@@ -80,11 +80,15 @@ function updateMsg(data){
     msg.innerHTML = `Faltam <strong>menos de um minuto</strong> para o fim do seu expediente de ${config['work-time']} horas. 🎉`;
     estimatedOutputHour.innerHTML = '';
   }else if (data.isWorking){
-    msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez <strong>${formatNumber((minutesToFinish * (-1))/60)} hora(s)</strong> e <strong>${formatNumber((minutesToFinish* (-1))%60)} minuto(s)</strong> extra.`;
+    const hours = parseInt((minutesToFinish * (-1))/60);
+    const minutes = parseInt((minutesToFinish * (-1))%60);
+    msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez ${hours > 0 ? `<strong>${formatNumber(hours)} hora(s)</strong>` : ''} ${hours > 0 && minutes > 0 ? 'e' : ''} ${minutes > 0 ? `<strong>${formatNumber(minutes)} minutos(s)</strong>` : ''} extra.`;
     estimatedOutputHour.innerHTML = '';
   } else{
+    const hours = parseInt((minutesToFinish * (-1))/60);
+    const minutes = parseInt((minutesToFinish * (-1))%60);
     msg.innerHTML = "Que ótimo dia de trabalho. "
-    if(minutesToFinish <= 0) msg.innerHTML += `Você fez <strong>${formatNumber((minutesToFinish * (-1))/60)} hora(s)</strong> e <strong>${formatNumber((minutesToFinish* (-1))%60)} minuto(s)</strong> extra hoje.`
+    if(minutesToFinish <= 0) msg.innerHTML += `Você fez ${hours > 0 ? `<strong>${formatNumber(hours)} hora(s)</strong>` : ''} ${hours > 0 && minutes > 0 ? 'e' : ''} ${minutes > 0 ? `<strong>${formatNumber(minutes)} minutos(s)</strong>` : ''} extra hoje.`
     msg.innerHTML += " Até mais! 👋";
     estimatedOutputHour.innerHTML = '';
   }
