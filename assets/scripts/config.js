@@ -5,6 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
   handleButtonSendMessage();
   handleAllowSendMessageToggle();
   handleInputsBot();
+  breakTimeOptions();
 });
 
 function loadFormByData(){
@@ -27,6 +28,26 @@ function loadFormByData(){
     }
   }
 }
+
+function breakTimeOptions(){
+  const breakTimeInput = document.querySelector("#break-time");
+
+  const addOptions = () => {
+    for (let totalMinutes = 0; totalMinutes <= 60; totalMinutes += 5) {
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      const hourFormatted = hours.toString().padStart(2, '0');
+      const minuteFormatted = minutes.toString().padStart(2, '0');
+      const time = `${hourFormatted}:${minuteFormatted}`;
+      const option = document.createElement('option');
+      option.value = time;
+      option.textContent = time;
+      breakTimeInput.appendChild(option);
+    }
+  };
+  addOptions();
+}
+
 
 function handleTimeInputs(){
   let hoursInputs = document.querySelectorAll("#work-time, #break-time")
