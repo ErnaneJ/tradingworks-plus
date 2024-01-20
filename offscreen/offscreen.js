@@ -1,112 +1,97 @@
-setInterval(() => chrome.runtime.sendMessage({ keepAlive: true }), 1000);
+class TWOffscreen {
+  TRADING_WORKS_POINTS_API = 'https://api-main.tworh.com.br/api/attendanceregister/list';
+  TRADING_WORKS_TIME_BANK_API = 'https://api-main.tworh.com.br/api/CompTimeEvent/list';
 
-updateWorkedHours();
+  constructor() {
+    this.isWorking = false;
+    this.points = [];
+    this.totalInterval = 0.0;
+    this.totalTimeWorked = 0.0;
+    this.timeBank = 0.0;
 
-async function updateWorkedHours(){
-  const defaultInformations = {
-    workInformations: true,
-    informations: { isDefault: true }
+    this.companyId = "5135";
+    this.employeeId = "87497";
+
+    this.initialize();
   }
 
-  chrome.runtime.sendMessage(defaultInformations)
-
-  const config = JSON.parse(localStorage.getItem('tradingworks-plus-data'));
-
-  if(!config) return setTimeout(updateWorkedHours, 120000);
-  
-  const htmlRoot = await getUpdatedHTML("https://app.tradingworks.net/");
-  const htmlBalance = await getUpdatedHTML("https://app.tradingworks.net/Payroll/MyTimeCards.aspx");
-  
-  if(htmlRoot.includes('Entre com seus dados')) return setScreen('not-signed-in');
-
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlRoot, "text/html");
-
-  const workedHours = doc.querySelectorAll('table tbody tr');
-  const tableRows = [...workedHours].map(data => (
-    [ data.querySelector('td:nth-child(2)').innerText, data.querySelector('td:nth-child(3)').innerText, data.querySelector('td:nth-child(4)').innerText ]
-  ));
-
-  if(workedHours.length === 0) return setScreen('not-started');
-
-  setScreen('started');
-  
-  const isWorking = tableRows.slice(-1)[0].slice(1)?.join(',').includes("__:__");
-  let workedTimes = timeCrawler(workedHours);
-      workedTimes = calculatesBreaks(workedTimes, isWorking);
-  
-  const totalWorkedTime = workedTimes.map(time => time.worked.workedMinutes).reduce((total, currentTime) => total + currentTime, 0);
-  let totalBreakTime = workedTimes.map(time => time.break).reduce((total, currentTime) => total + currentTime, 0);
-
-  if(!isWorking && totalWorkedTime <= passTimeInStringToMinutes(config['work-time'])){
-    const lastWorkedTimeEnd = workedTimes.slice(-1)[0].worked.endInText;
-    const currentDate = new Date();
-    const lastWorkedTimeEndInMinutes = passTimeInStringToMinutes(lastWorkedTimeEnd);
-    const nowInMinutes = passTimeInStringToMinutes(`${currentDate.getHours()}:${currentDate.getMinutes()}`);
-    totalBreakTime += nowInMinutes - lastWorkedTimeEndInMinutes;
+  async initialize() {
+    this.#keepAlive();
+    this.#updateTradingWorksData();
   }
-  
-  const workInformations = {
-    workInformations: true,
-    informations: {
-      workedTimes,
-      totalWorkedTime, totalBreakTime,
-      tableRows, 
-      isWorking: isWorking,
-      balance: updateBalance(htmlBalance)
+
+  get configurations() {
+    try {
+      return JSON.parse(localStorage.getItem('tradingworks-plus-data'));
+    } catch (e) {
+      return null;
     }
   }
 
-  chrome.runtime.sendMessage(workInformations)
+  async #fetchUserPoints() {
+    try {
+      // ?CompanyId=<0000>&EmployeeId=<00000>&BaseDate=<YYYY-MM-DDT20%3A08%3A39.4527475>
+      const URL = `${this.TRADING_WORKS_POINTS_API}?CompanyId=${this.companyId}&EmployeeId=${this.employeeId}&BaseDate=${new Date().toISOString()}`;
+      const rawData = await fetch(URL, {method: 'GET', headers: {'User-Agent': 'insomnia/8.5.1'}});
 
-  setTimeout(updateWorkedHours, 60000);
+      return await rawData.json();
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
+  async #fetchTimeBank() {
+    // ?EmployeeId=<00000>&CompanyId=<0000>&ViewHistory=false
+    try {
+      const URL = `${this.TRADING_WORKS_TIME_BANK_API}?EmployeeId=${this.employeeId}&CompanyId=${this.companyId}&ViewHistory=false`;
+      const rawData = await fetch(URL, {method: 'GET', headers: {'User-Agent': 'insomnia/8.5.1'}});
+
+      return await rawData.json();
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
+  async #updateTradingWorksData() {
+    this.#setScreen('loading');
+
+    const config = this.configurations;
+    console.log(config)
+    if (!config) return setTimeout(async () => await this.#updateTradingWorksData(), 120000);
+
+    const userPoints = await this.#fetchUserPoints();
+    const userTimeBank = await this.#fetchTimeBank();
+
+    this.timeBank = userTimeBank.listResponse.map(el => el.compTime).reduce((acc, cur) => acc + cur, 0);
+    this.points = userPoints.listResponse;
+
+    chrome.runtime.sendMessage({
+      type: 'updateWorkInformation',
+      data: {
+        points: this.points,
+        timeBank: this.timeBank
+      }
+    });
+
+    this.#setScreen('home');
+
+    setTimeout(async () => await this.#updateTradingWorksData(), 60000);
+  }
+
+  #keepAlive() {
+    setInterval(() => chrome.runtime.sendMessage({ type: 'keepAlive', data: {} }), 1000);
+  }
+
+  #setScreen(screen) {
+    chrome.runtime.sendMessage({
+      type: 'changeScreen',
+      data: {
+        screen: screen
+      }
+    });
+  }
 }
 
-function updateBalance(html){
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-
-  return doc.querySelector('span#Body_Body_lblBalance').innerText;
-}
-
-function timeCrawler(workedHours){
-  return [...workedHours].map((workedHour, index) => {
-    const start = workedHour.querySelector('td:nth-child(2)').innerText;
-    const end = workedHour.querySelector('td:nth-child(3)').innerText;
-    
-    return {worked: { startInText: start, endInText: end, workedMinutes: passTimeInStringToMinutes(end) - passTimeInStringToMinutes(start) }, break: 0}
-  });
-}
-
-function calculatesBreaks(workedTimes){
-  return workedTimes.map((currentTime, index) => {
-    let lastTime = workedTimes[index - 1];
-    if(lastTime) currentTime.break = passTimeInStringToMinutes(currentTime.worked.startInText) - passTimeInStringToMinutes(lastTime.worked.endInText);
-    
-    return currentTime;
-  });
-}
-
-function passTimeInStringToMinutes(time){
-  let [hour, minute] = time.split(':').map(v => parseInt(v));
-  
-  if(isNaN(hour)) hour = (new Date).getHours();
-  if(isNaN(minute)) minute = (new Date).getMinutes();
-  
-  if(!minute) minute = 0;
-  
-  return minute + (hour * 60);
-}
-
-async function getUpdatedHTML(url){
-  setScreen('loading');
-  const html = await fetch(url)
-    .then(data => data.text())
-    .then(text => text);
-
-  return html;
-}
-
-async function setScreen(screen) {
-  await chrome.runtime.sendMessage({ changeScreen: true, screen: screen });
-}
+new TWOffscreen();

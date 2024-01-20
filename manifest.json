@@ -9,7 +9,7 @@
   },
   "manifest_version": 3,
   "permissions": ["storage", "notifications", "offscreen"],
-  "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*"],
+  "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*", "https://api-main.tworh.com.br/*"],
   "action": {
     "default_popup": "./popup.html",
     "default_title": "Tradingworks"
