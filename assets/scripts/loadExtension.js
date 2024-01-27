@@ -1,13 +1,17 @@
-async function loadWorkedHours(){
-  chrome.storage.onChanged.addListener((changes, namespace) => {
-    if (namespace !== 'local') return;
-    if (!changes['tradingworksPlusSharedData']) return;
-    
-    updateContent(changes['tradingworksPlusSharedData'].newValue);
-  });
-  
-  const informations = await chrome.storage.local.get('tradingworksPlusSharedData');
-  updateContent(informations['tradingworksPlusSharedData']);
+class LoadExtension {
+  constructor(popup) {
+    this.popup = popup;
+  }
 
-  setTimeout(loadWorkedHours, 60000);
+  async load() {
+    console.log('[TradingWorks+] - Load Extension 🏗️');
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+      if (namespace !== 'local') return;
+      if (!changes['tradingWorksPlusWorkInformation']) return;
+      
+      this.popup.updateContent(changes['tradingWorksPlusWorkInformation'].newValue);
+    });
+    
+    this.popup.updateContent((await chrome.storage.local.get('tradingWorksPlusWorkInformation'))?.tradingWorksPlusWorkInformation);
+  }
 }

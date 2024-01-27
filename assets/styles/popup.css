@@ -148,6 +148,10 @@ span#hours-balance-container{
   margin-left: .5rem;
 }
 
+span#current-year{
+  margin-right: .5rem;
+}
+
 span#current-date, span#estimated-output-hour, span#hours-balance-container{
   font-size: .65rem;
   color: var(--atlantis-900);
@@ -155,11 +159,11 @@ span#current-date, span#estimated-output-hour, span#hours-balance-container{
   font-style: italic;
 }
 
-span#hours-balance{
+/* span#hours-balance{
   filter: blur(2px);
 } span#hours-balance:hover{
   filter: blur(0px);
-}
+} */
 
 .message{
   text-align: center;

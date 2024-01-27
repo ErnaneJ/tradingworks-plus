@@ -1,145 +1,114 @@
-const port = chrome.runtime.connect({name: "extensionOpen"});
+class Popup {
+  constructor(){
+    this.information = undefined;
+  }
 
-function updateContent(data){
-  updateTableTimes(data);
-  updateTableTotals(data.totalWorkedTime, data.totalBreakTime, data.balance);
-  updateMsg(data);
-  showDate();
-  handleButtonConfig();
-}
+  updateContent(data){
+    this.information = PopupHelper.calculateInformation(data);
 
-function updateTableTimes(data){
-  if(data.isDefault) return;
+    if(this.information.points.length === 0) return this.#setScreen('not-started');
 
-  const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
-  const tableBodyTimes = document.getElementById('table-body-times');
+    this.#updateTableTimes();
+    this.#updateTableTotals();
+    this.#updatePopupMsg();
+    this.#updateCurrentBreakTime();
 
-  tableBodyTimes.innerHTML = data.tableRows.map((row, index) => {
-    return (`<div class="table--row">
-      <div class="table--item">${row[0]}</div>
-      <div class="table--item">${row[1]}</div>
-      <div class="table--item">${String(Math.floor(data.workedTimes[index].worked.workedMinutes/60)).padStart(2, '0')}h${String(data.workedTimes[index].worked.workedMinutes%60).padStart(2, '0')}m</div>
-    </div>` + ((row[2] != "" && (index !== (data.tableRows.length - 1))) ? `
-    <div class="table--row">
-      <div class="table--item break">
-        Pausa de ${String(Math.floor(data.workedTimes[index + 1]?.break/60)).padStart(2, '0')}h${String(data.workedTimes[index + 1]?.break%60).padStart(2, '0')}m
-      </div>
-    </div>` : ''))
-  }).join('');
+    this.#showDate();
+  }
 
-  if(!data.isWorking && data.totalWorkedTime < passTimeInStringToMinutes(config['work-time'])) {
-    const lastWorkedTimeEnd = data.workedTimes.slice(-1)[0].worked.endInText;
-    const currentDate = new Date();
-    const lastWorkedTimeEndInMinutes = passTimeInStringToMinutes(lastWorkedTimeEnd);
-    const nowInMinutes = passTimeInStringToMinutes(`${currentDate.getHours()}:${currentDate.getMinutes()}`);
-    const currentBreakTime = nowInMinutes - lastWorkedTimeEndInMinutes;
+  #updateTableTimes() {
+    if (!this.information) return;
+  
+    const tableBodyTimes = document.getElementById('table-body-times');
+    tableBodyTimes.innerHTML = this.information.points.map((point, index) => {
+      const start = PopupHelper.formatDate(point.startDate, "hh:min")
+      const end = PopupHelper.formatDate(point.endDate, "hh:min")
+      const duration = PopupHelper.formatBalance(point.duration);
+      const interval = point.interval ? PopupHelper.formatBalance(point.interval) : undefined;
+  
+      return (`<div class="table--row">
+        <div class="table--item">${start}</div>
+        <div class="table--item">${end}</div>
+        <div class="table--item">${duration}</div>
+      </div>` + (interval ? `
+      <div class="table--row">
+        <div class="table--item break">
+          Pausa de ${interval}
+        </div>
+      </div>` : ''));
+    }).join('');
+  }
 
-    const totalBreakTime = data.totalBreakTime + currentBreakTime;
-    const breakInformedTime = passTimeInStringToMinutes(config['break-time']);
+  #updateCurrentBreakTime(){
+    if(!this.information.isWorking || this.information.totalWorkedTime >= PopupHelper.passTimeInStringToHours(config['work-time'])) return;
+    
+    const tableBodyTimes = document.getElementById('table-body-times');
+    const config = JSON.parse(window.localStorage.getItem('tradingWorksSettings'));
+
+    const lastWorkedTimeEnd = this.information.points.slice(-1)[0].endDate;
+    const currentBreakTime = PopupHelper.calculateDiffDates(new Date(lastWorkedTimeEnd), new Date());
+    const breakInformedTime = PopupHelper.passTimeInStringToHours(config['break-time']);
+    const exceededBreakTime = currentBreakTime >= breakInformedTime;
 
     tableBodyTimes.innerHTML += `
       <div class="table--row">
-        <div class="table--item break" ${totalBreakTime >= breakInformedTime && 'style="color: red;'}">
-          Em pausa por ${String(Math.floor(currentBreakTime/60)).padStart(2, '0')}:${String(currentBreakTime%60).padStart(2, '0')} h
+        <div class="table--item break" ${exceededBreakTime && 'style="color: red;'}">
+          Em pausa por ${ PopupHelper.formatBalance(currentBreakTime) }
         </div>
       </div>
     `;
   }
-}
 
-function formatNumber(number){
-  return String(Math.floor(number)).padStart(2, '0');
-}
-
-function updateTableTotals(totalWorkedTime, totalBreakTime, balance){
-  const totalWorkedHours = document.getElementById('total-worked-hours');
-  const totalBreakHours = document.getElementById('total-break-hours');
-  const totalHoursBalance = document.getElementById('hours-balance');
-
-  totalWorkedHours.innerHTML = `${formatNumber(totalWorkedTime/60)}:${formatNumber(totalWorkedTime%60)} h`;
-  totalBreakHours.innerHTML = `${formatNumber(totalBreakTime/60)}:${formatNumber(totalBreakTime%60)} h`;
-  totalHoursBalance.innerHTML = balance;
-}
-
-function updateMsg(data){
-  const config = JSON.parse(window.localStorage.getItem('tradingworks-plus-data'));
-  checkConfig(config);
+  #updateTableTotals() {
+    const totalWorkedHours = document.getElementById('total-worked-hours');
+    const totalBreakHours = document.getElementById('total-break-hours');
+    const totalHoursBalance = document.getElementById('hours-balance');
   
-  const informedWorkTime = passTimeInStringToMinutes(config['work-time']);
-  const minutesToFinish = informedWorkTime - data.totalWorkedTime;
-  const secondsToFinish = minutesToFinish * 60;
-  const date = new Date();
-  const outputDate = date.setMinutes(date.getMinutes() + minutesToFinish);
-  const estimatedOutputHour = document.getElementById('estimated-output-hour');
-  const msg = document.getElementById('msg');
-  
-  if (minutesToFinish > 0) {
-    msg.innerHTML = `Faltam <strong>${formatNumber(minutesToFinish/60)} hora(s)</strong> e <strong>${minutesToFinish%60} minuto(s)</strong> para o fim do seu expediente de ${config['work-time']} horas. 🎉`;
-    estimatedOutputHour.innerHTML = `Estimativa de saída às ${formatDate(new Date(outputDate), 'hhhmin')}`;
-  }else if(minutesToFinish == 0 && secondsToFinish > 0){
-    msg.innerHTML = `Faltam <strong>menos de um minuto</strong> para o fim do seu expediente de ${config['work-time']} horas. 🎉`;
-    estimatedOutputHour.innerHTML = '';
-  }else if (data.isWorking){
-    const hours = parseInt((minutesToFinish * (-1))/60);
-    const minutes = parseInt((minutesToFinish * (-1))%60);
-    msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez ${hours > 0 ? `<strong>${formatNumber(hours)} hora(s)</strong>` : ''} ${hours > 0 && minutes > 0 ? 'e' : ''} ${minutes > 0 ? `<strong>${formatNumber(minutes)} minutos(s)</strong>` : ''} extra.`;
-    estimatedOutputHour.innerHTML = '';
-  } else{
-    const hours = parseInt((minutesToFinish * (-1))/60);
-    const minutes = parseInt((minutesToFinish * (-1))%60);
-    msg.innerHTML = "Que ótimo dia de trabalho. "
-    if(minutesToFinish <= 0) msg.innerHTML += `Você fez ${hours > 0 ? `<strong>${formatNumber(hours)} hora(s)</strong>` : ''} ${hours > 0 && minutes > 0 ? 'e' : ''} ${minutes > 0 ? `<strong>${formatNumber(minutes)} minutos(s)</strong>` : ''} extra hoje.`
-    msg.innerHTML += " Até mais! 👋";
-    estimatedOutputHour.innerHTML = '';
+    totalWorkedHours.innerHTML = PopupHelper.formatBalance(this.information.totalWorkedTime);
+    totalBreakHours.innerHTML = PopupHelper.formatBalance(this.information.totalBreakTime);
+    totalHoursBalance.innerHTML = PopupHelper.formatBalance(this.information.timeBank);
   }
-}
-
-function showDate(){
-  setInterval(() => {
-    const date = new Date();
-    const dateElement = document.getElementById('current-date');
-    dateElement.innerHTML = formatDate(date, 'dd de MM, hh:min:ss');
-  });
-}
-
-function formatDate(date, format) {
-  const map = {
-    mm: String(date.getMonth() + 1).padStart(2, '0'),
-    dd: String(date.getDate()).padStart(2, '0'),
-    aa: String(date.getFullYear().toString().slice(-2)).padStart(2, '0'),
-    aaaa: String(date.getFullYear()).padStart(2, '0'),
-    hh: String(date.getHours()).padStart(2, '0'),
-    min: String(date.getMinutes()).padStart(2, '0'),
-    ss: String(date.getSeconds()).padStart(2, '0'),
-    MM: date.toLocaleString('default', { month: 'long' })
+  
+  #updatePopupMsg() {
+    const config = JSON.parse(window.localStorage.getItem('tradingWorksSettings'));
+    
+    PopupHelper.checkConfig(config);
+  
+    const estimatedOutputHour = document.getElementById('estimated-output-hour');
+    const msg = document.getElementById('msg');
+  
+    const informedWorkTime = PopupHelper.passTimeInStringToHours(config['work-time']);
+    const timeToFinish = (informedWorkTime - this.information.totalWorkedTime);
+  
+    if (timeToFinish > 0 && this.information.isWorking) {
+      msg.innerHTML = `Faltam <strong>${PopupHelper.formatBalance(timeToFinish)}</strong> para o fim do seu expediente de ${PopupHelper.formatBalance(informedWorkTime)}. 🎉`;
+      estimatedOutputHour.innerHTML = `Estimativa de saída às ${PopupHelper.formatBalance(timeToFinish)}`;
+    } else if (this.information.isWorking){
+      msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez ${PopupHelper.formatBalance(timeToFinish * (-1))} extras.`;
+      estimatedOutputHour.innerHTML = '';
+    }else{
+      msg.innerHTML = "Que ótimo dia de trabalho! "
+      
+      if(timeToFinish <= 0) msg.innerHTML += `Você fez ${PopupHelper.formatBalance(timeToFinish * (-1))} extras hoje.`;
+      if(timeToFinish > 0) msg.innerHTML += `Você fez ${PopupHelper.formatBalance(timeToFinish)} a menos hoje.`;
+      
+      msg.innerHTML += " Até mais! 👋";
+      estimatedOutputHour.innerHTML = '';
+    }
+  }
+  
+  #showDate() {
+    const currentYear = document.getElementById('current-year');
+    currentYear.innerHTML = new Date().getFullYear();
+    
+    setInterval(() => {
+      const date = new Date();
+      const dateElement = document.getElementById('current-date');
+      dateElement.innerHTML = PopupHelper.formatDate(date, 'dd de MM, hh:min:ss');
+    });
   }
 
-  return format.replace(/mm|dd|aa|aaaa|MM|hh|min|ss/gi, matched => map[matched])
-}
-
-
-function openConfig(){
-  chrome.tabs.create({'url': chrome.runtime.getURL('./config/index.html')}, (tab) => { });
-}
-
-function checkConfig(config){
-  if(
-    !config               ||
-    !config['work-time']  ||
-    !config['break-time']
-  ){
-    openConfig();
-    window.close();
-  } 
-}
-
-function passTimeInStringToMinutes(time){
-  let [hour, minute] = time.split(':').map(v => parseInt(v));
-  
-  if(isNaN(hour)) hour = (new Date).getHours();
-  if(isNaN(minute)) minute = (new Date).getMinutes();
-  
-  if(!minute) minute = 0;
-  
-  return minute + (hour * 60);
+  #setScreen(screen){
+    window.tradingWorks.setScreen(screen);
+  }
 }

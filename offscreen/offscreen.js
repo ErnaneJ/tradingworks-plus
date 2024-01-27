@@ -9,8 +9,8 @@ class TWOffscreen {
     this.totalTimeWorked = 0.0;
     this.timeBank = 0.0;
 
-    this.companyId = "5135";
-    this.employeeId = "87497";
+    this.companyId = "0000";
+    this.employeeId = "00000";
 
     this.initialize();
   }
@@ -22,7 +22,7 @@ class TWOffscreen {
 
   get configurations() {
     try {
-      return JSON.parse(localStorage.getItem('tradingworks-plus-data'));
+      return JSON.parse(localStorage.getItem('tradingWorksSettings'));
     } catch (e) {
       return null;
     }
@@ -31,7 +31,9 @@ class TWOffscreen {
   async #fetchUserPoints() {
     try {
       // ?CompanyId=<0000>&EmployeeId=<00000>&BaseDate=<YYYY-MM-DDT20%3A08%3A39.4527475>
-      const URL = `${this.TRADING_WORKS_POINTS_API}?CompanyId=${this.companyId}&EmployeeId=${this.employeeId}&BaseDate=${new Date().toISOString()}`;
+      const currentDate = new Date();
+      const baseDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()-1}`;
+      const URL = `${this.TRADING_WORKS_POINTS_API}?CompanyId=${this.companyId}&EmployeeId=${this.employeeId}&BaseDate=${baseDate}`;
       const rawData = await fetch(URL, {method: 'GET', headers: {'User-Agent': 'insomnia/8.5.1'}});
 
       return await rawData.json();
@@ -58,7 +60,6 @@ class TWOffscreen {
     this.#setScreen('loading');
 
     const config = this.configurations;
-    console.log(config)
     if (!config) return setTimeout(async () => await this.#updateTradingWorksData(), 120000);
 
     const userPoints = await this.#fetchUserPoints();
@@ -75,7 +76,7 @@ class TWOffscreen {
       }
     });
 
-    this.#setScreen('home');
+    this.#setScreen('started');
 
     setTimeout(async () => await this.#updateTradingWorksData(), 60000);
   }
@@ -87,9 +88,7 @@ class TWOffscreen {
   #setScreen(screen) {
     chrome.runtime.sendMessage({
       type: 'changeScreen',
-      data: {
-        screen: screen
-      }
+      data: { screen: screen }
     });
   }
 }

@@ -14,7 +14,7 @@ class Events {
   }
 
   static async updateWorkInformation(data){
-    await chrome.storage.local.set({'tradingWorksPlusSharedData': data});
+    await chrome.storage.local.set({'tradingWorksPlusWorkInformation': data});
     Events.handleSentMessages(data);
   }
 
@@ -84,21 +84,31 @@ class Events {
   }
 }
 
-chrome.runtime.onStartup.addListener(Events.createOffscreen);
-chrome.runtime.onInstalled.addListener(Events.createOffscreen);
-chrome.runtime.onConnect.addListener(async (port) => {
-  await chrome.offscreen.closeDocument()
-  await Events.createOffscreen();
-});
-
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-  const events = {
-    debug: Events.debug,
-    keepAlive: Events.keepAlive,
-    updateSettings: Events.updateSettings,
-    updateWorkInformation: Events.updateWorkInformation,
-    changeScreen: Events.updateScreen,
+class Background {
+  constructor(){
+    this.chromeRuntimeOnMessage();
   };
 
-  await events[message.type]?.(message.data);
-});
+  chromeRuntimeOnMessage(){
+    chrome.runtime.onStartup.addListener(Events.createOffscreen);
+    chrome.runtime.onInstalled.addListener(Events.createOffscreen);
+    chrome.runtime.onConnect.addListener(async (port) => {
+      await chrome.offscreen.closeDocument()
+      await Events.createOffscreen();
+    });
+
+    chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+      const events = {
+        debug: Events.debug,
+        keepAlive: Events.keepAlive,
+        updateSettings: Events.updateSettings,
+        updateWorkInformation: Events.updateWorkInformation,
+        changeScreen: Events.updateScreen,
+      };
+
+      await events[message.type]?.(message.data);
+    });
+  }
+}
+
+new Background();

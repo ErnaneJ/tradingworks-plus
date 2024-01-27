@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function loadFormByData(){
   const form = document.querySelector('form');
-  const data = JSON.parse(localStorage.getItem('tradingworks-plus-data'));
+  const data = JSON.parse(localStorage.getItem('tradingWorksSettings'));
   if(data){
     form['work-time'].value = data['work-time'] || '';
     form['break-time'].value = data['break-time'] || '';
@@ -78,7 +78,7 @@ function handleSubmit(){
     const data = new FormData(event.target);
     const formatedData = Object.fromEntries(data.entries());
 
-    localStorage.setItem('tradingworks-plus-data', JSON.stringify(formatedData));
+    localStorage.setItem('tradingWorksSettings', JSON.stringify(formatedData));
     chrome.runtime.sendMessage({tradingworksPlusExtension: true, settings: JSON.stringify(formatedData)});
 
     notifications({

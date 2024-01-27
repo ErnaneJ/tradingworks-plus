@@ -8,7 +8,7 @@
     "48": "assets/favicon48.png"
   },
   "manifest_version": 3,
-  "permissions": ["storage", "notifications", "offscreen"],
+  "permissions": ["storage", "notifications", "offscreen", "webRequest", "<all_urls>"],
   "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*", "https://api-main.tworh.com.br/*"],
   "action": {
     "default_popup": "./popup.html",
