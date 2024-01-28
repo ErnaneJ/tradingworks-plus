@@ -14,7 +14,6 @@ class Application {
     this.#handleButtonConfig();
     this.#sendSettingsToBackgroundScript();
     this.#chromeRuntimeOnMessage();
-    this.#chromeWebRequestOnBeforeRequest();
   }
 
   #handleButtonConfig(){
@@ -26,7 +25,7 @@ class Application {
 
   #sendSettingsToBackgroundScript(){
     const settings = localStorage.getItem('tradingWorksSettings');
-    chrome.runtime.sendMessage({tradingworksPlusExtension: true, settings});
+    chrome.runtime.sendMessage({type: 'updateSettings', data: JSON.parse(settings)});
   }
 
   #chromeRuntimeOnMessage(){
@@ -35,12 +34,6 @@ class Application {
       
       this.setScreen(message.data.screen);
     });
-  }
-
-  #chromeWebRequestOnBeforeRequest(){
-    chrome.webRequest.onBeforeRequest.addListener((details) => {
-      console.log(details);
-    }, { urls: ["<all_urls>"] }, ["blocking"]);
   }
 
   setScreen(screen){
@@ -53,12 +46,10 @@ class Application {
     screens.forEach((screenType) => {
       const section = document.getElementById(screenType + '-screen');
       
-      section.style.display = 'flex';
-      section.style.opacity = 1;
+      section.style.display = 'none';
   
-      if(screenType !== screen){
-        section.style.opacity = 0;
-        section.style.display = 'none';
+      if(screenType === screen){
+        section.style.display = 'flex';
       }
     });
   }

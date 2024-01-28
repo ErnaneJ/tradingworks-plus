@@ -83,13 +83,18 @@ class Events {
     // await chrome.storage.local.set({'message-handle': msgHandle});
   }
 }
-
 class Background {
   constructor(){
+    console.log('[TradingWorks+] - Background 🏗️');
     this.chromeRuntimeOnMessage();
   };
 
+  keepAlive(){
+    setInterval(() => chrome.runtime.sendMessage({ type: 'keepAlive', data: {} }), 1000);
+  }
+
   chromeRuntimeOnMessage(){
+    console.log('[TradingWorks+] - Chrome Runtime On Message 🏗️');
     chrome.runtime.onStartup.addListener(Events.createOffscreen);
     chrome.runtime.onInstalled.addListener(Events.createOffscreen);
     chrome.runtime.onConnect.addListener(async (port) => {
@@ -106,7 +111,7 @@ class Background {
         changeScreen: Events.updateScreen,
       };
 
-      await events[message.type]?.(message.data);
+      return await events[message.type]?.(message.data);
     });
   }
 }

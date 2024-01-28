@@ -4,9 +4,10 @@ class Popup {
   }
 
   updateContent(data){
-    this.information = PopupHelper.calculateInformation(data);
+    console.log(data);
+    if(!data) return this.#setScreen('not-started');
 
-    if(this.information.points.length === 0) return this.#setScreen('not-started');
+    this.information = PopupHelper.calculateInformation(data);
 
     this.#updateTableTimes();
     this.#updateTableTotals();
@@ -79,8 +80,11 @@ class Popup {
   
     const informedWorkTime = PopupHelper.passTimeInStringToHours(config['work-time']);
     const timeToFinish = (informedWorkTime - this.information.totalWorkedTime);
-  
-    if (timeToFinish > 0 && this.information.isWorking) {
+
+    if(timeToFinish === informedWorkTime){
+      msg.innerHTML = 'Eai, vamos trabalhar hoje ou não? 🤔';
+      estimatedOutputHour.innerHTML = '';
+    }else if (timeToFinish > 0 && this.information.isWorking) {
       msg.innerHTML = `Faltam <strong>${PopupHelper.formatBalance(timeToFinish)}</strong> para o fim do seu expediente de ${PopupHelper.formatBalance(informedWorkTime)}. 🎉`;
       estimatedOutputHour.innerHTML = `Estimativa de saída às ${PopupHelper.formatBalance(timeToFinish)}`;
     } else if (this.information.isWorking){

@@ -8,7 +8,6 @@
   <title>Tradingworks+ | Configurações</title>
   <link rel="stylesheet" href="../assets/styles/root.css">
   <link rel="stylesheet" href="../assets/styles/config.css">
-  <script src="../assets/scripts/config.js"></script>
 </head>
 <body>
   <header>
@@ -17,63 +16,172 @@
   </header>
 
   <main>
-    <section class="container">
-      <h2 class="container--title">⚙️ Configurações</h2>
-      <form class="container--content">
-        <div class="container--content--row">
-          <div class="container--item">
-            <label for="work-time">⏳ Jornada de trabalho</label>
-            <input type="text" id="work-time" name="work-time" value="00:00" required>
-            <small>Ex.: 08:00 (8 horas de jornada trabalho)</small>
-          </div>
-          <div class="container--item">
-            <label for="break-time">⌛Período de intervalo</label>
-            <input type="text" id="break-time" name="break-time" value="00:00" required>
-            <small>Ex.: 00:15 (15 minutos de intervalo)</small>
-          </div>
-        </div>
-        <div class="container--content--row">
-          <div class="container--item">
-            <label for="whatsapp-number">📱 Número do Whatsapp</label>
-            <input type="text" id="whatsapp-number" name="whatsapp-number" pattern="[\d]+" placeholder="55 84 9999-9999">
-            <small>Ex.: 558499999999 (somente números)</small>
-          </div>
+    <section id="dashboard-screen" class="grid-container">
+      <div class="container" style="width: 100%;">
+        <h2 class="container--title">Olá, <spam id="tw-info-username">user</spam>! 👋🏼</h2>
 
+        <form class="container--content">
           <div class="container--content--row">
-            <div class="container--item checkbox-container">
-              <label for="allow-send-messages-whatsapp">Whatsapp</label>
-              <label class="toggle" for="allow-send-messages-whatsapp">
-                <input class="toggle--input"  name="allow-send-messages-whatsapp" type="checkbox" id="allow-send-messages-whatsapp" checked>
-                <div class="toggle--fill"></div>
-              </label>
+            <div class="container--item">
+              <label>🏢 Contratante</label>
+              <input id="tw-info-companyname" type="text" disabled value="-">
             </div>
-            <div class="container--item checkbox-container">
-              <label for="allow-send-messages-browser">Navegador</label>
-              <label class="toggle" for="allow-send-messages-browser">
-                <input class="toggle--input"  name="allow-send-messages-browser" type="checkbox" id="allow-send-messages-browser" checked>
-                <div class="toggle--fill"></div>
-              </label>
+            <div class="container--item">
+              <label>⏳ Intermediador</label>
+              <input id="tw-info-iss" type="text" disabled value="-">
             </div>
+            <div class="container--item">
+              <label>📧 E-mail</label>
+              <input id="tw-info-email" type="text" disabled value="-">
+            </div>
+          </div>
+          <div class="container--content--row">
+            <div class="container--item">
+              <label>💼 Regra de jornada registrada</label>
+              <input id="tw-info-payrollruletitle" type="text" disabled value="-">
+            </div>
+  
+            <div class="container--item">
+              <label>🆔 Empresa</label>
+              <input id="tw-info-companyid" type="text" disabled value="-">
+            </div>
+
+            <div class="container--item">
+              <label>🆔 Empregado</label>
+              <input id="tw-info-employeeid" type="text" disabled value="-">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="container grid-item">
+        <h2 class="container--title">⚙️ Configurações</h2>
+        <form id="settings-form" class="container--content">
+          <div class="container--content--row">
+            <div class="container--item">
+              <label for="work-time">⏳ Jornada de trabalho</label>
+              <input type="time" id="work-time" name="work-time" value="" min="04:00" max="08:00" required>
+              <small>Ex.: 08:00 (8 horas de jornada trabalho)</small>
+            </div>
+            <div class="container--item">
+              <label for="break-time">⌛Período de intervalo</label>
+              <input type="time" id="break-time" name="break-time" value="" min="00:00" max="02:00" required>
+              <small>Ex.: 00:15 (15 minutos de intervalo)</small>
+            </div>
+          </div>
+          <div class="container--content--row">
+            <div class="container--item">
+              <label for="whatsapp-number">📱 Número do Whatsapp</label>
+              <input type="tel" id="whatsapp-number" name="whatsapp-number" pattern="[\d]+" placeholder="558499999999">
+              <small>Ex.: 558499999999 (somente números)</small>
+            </div>
+  
+            <div class="container--content--row">
+              <div class="container--item checkbox-container">
+                <label for="allow-send-messages-whatsapp">Whatsapp</label>
+                <label class="toggle" for="allow-send-messages-whatsapp">
+                  <input class="toggle--input"  name="allow-send-messages-whatsapp" type="checkbox" id="allow-send-messages-whatsapp" checked>
+                  <div class="toggle--fill"></div>
+                </label>
+              </div>
+              <div class="container--item checkbox-container">
+                <label for="allow-send-messages-browser">Navegador</label>
+                <label class="toggle" for="allow-send-messages-browser">
+                  <input class="toggle--input"  name="allow-send-messages-browser" type="checkbox" id="allow-send-messages-browser" checked>
+                  <div class="toggle--fill"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="container--content--row" style="margin-top: 15px;">
+            <div class="container--item">
+              <button class="save-data" type="submit">💾 Salvar</button>
+            </div>
+          </div>
+          <div class="container--content--row" style="margin-top: -15px;">
+            <div class="container--item">
+              <button class="send-message" id="send-message">💬 Testar notificação</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="container grid-item charts-container">
+        <section id='dash-loading-screen'>
+          <div class="lds-ripple">
+            <div></div>
+            <div></div>
+          </div>
+          <span>Carregando..</span>
+        </section>
+
+        <h2 class="container--title">📊 Métricas</h2>
+
+        <div class="chart-arrow-left">
+          ⬅️
+        </div>
+
+        <div class="chart-container" data-chart="chart-overtime-per-month">
+          <canvas id="chart-overtime-per-month"></canvas>
+        </div>
+
+        <div class="chart-container hidden" data-chart="chart-bank-of-hours-per-release">
+          <canvas id="chart-bank-of-hours-per-release"></canvas>
+        </div>
+
+        <div class="chart-container hidden" data-chart="chart-days-absent-per-month">
+          <canvas id="chart-days-absent-per-month"></canvas>
+        </div>
+
+        <div class="chart-container hidden" data-chart="chart-hours-worked-per-month">
+          <canvas id="chart-hours-worked-per-month"></canvas>
+        </div>
+
+        <div class="chart-arrow-right">
+          ➡️
+        </div>
+        <div class="container-legend">
+          <small>
+            Use as setas do teclado para navegar entre os gráficos.
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section id="login-screen" class="container">
+      <h2 class="container--title">🔒 Entrar</h2>
+      <form id="login-form" class="container--content">
+        <div class="container--content--row">
+          <div class="container--item">
+            <label for="login">📫 Login</label>
+            <input type="email" id="login" name="login" required>
+            <small class="invalid-input hidden">🚨 Login inválido</small>
           </div>
         </div>
         <div class="container--content--row">
           <div class="container--item">
-            <button class="save-data" type="submit">💾 Salvar</button>
+            <label for="password">🔐 Senha</label>
+            <input type="password" id="password" name="password">
+            <small class="invalid-input hidden">🚨 Senha inválida</small>
           </div>
+        </div>
+        <div class="container--content--row">
           <div class="container--item">
-            <button class="send-message" id="send-message">💬 Testar notificação</button>
+            <button type="submit" id="login-button">🔓 Acessar</button>
           </div>
         </div>
       </form>
+      
     </section>
-
-    <p class="alert-info">* Para utilizar o <strong>TradingWorks+</strong> você precisa preencher as informações acima.</p>
   </main>
 
   <footer>
-    2023 | 
+    2024 | 
     <img src="../assets/icons/github-white.svg" width="16" height="16" alt="GitHub icon"> 
     <a href="https://github.com/ErnaneJ/tradingworks-plus">TradingWorks+</a> 
   </footer>
+
+  <script src="../assets/scripts/chart.js"></script>
+  <script src="../assets/scripts/config.js"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@ class PopupHelper {
     const totalBreakTime = points.reduce((acc, cur) => acc + (cur.interval ? cur.interval : 0), 0);
   
     return {
-      isWorking: !points.slice(-1)[0].endDate,
+      isWorking: points.length > 0 && !points.slice(-1)[0]?.endDate,
       timeBank: timeBank,
       points: points,
       totalWorkedTime: totalWorkedTime,
