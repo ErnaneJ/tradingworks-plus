@@ -24,8 +24,8 @@ class PopupHelper {
   
       return {
         startDate: start.createDate,
-        endDate: end.createDate,
-        duration: PopupHelper.calculateDiffDates(start.createDate, end.createDate),
+        endDate: end?.createDate,
+        duration: PopupHelper.calculateDiffDates(start.createDate, end?.createDate),
         interval: PopupHelper.calculateInterval(end, nextPoint)
       };
     }).filter(Boolean);
@@ -39,7 +39,9 @@ class PopupHelper {
 
   static calculateDiffDates(date1, date2) {
     try {
-      return (new Date(date2) - new Date(date1)) / 3.6e+6;
+      date1 = new Date(date1);
+      date2 = date2 ? new Date(date2) : new Date();
+      return (date2 - date1) / 3.6e+6;
     } catch (e) {
       return 0;
     }
