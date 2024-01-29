@@ -159,12 +159,6 @@ span#current-date, span#estimated-output-hour, span#hours-balance-container{
   font-style: italic;
 }
 
-/* span#hours-balance{
-  filter: blur(2px);
-} span#hours-balance:hover{
-  filter: blur(0px);
-} */
-
 .message{
   text-align: center;
   font-size: .65rem;
@@ -172,6 +166,7 @@ span#current-date, span#estimated-output-hour, span#hours-balance-container{
   background-color: var(--atlantis-300);
   padding: .5rem;
   border-radius: .5rem;
+  margin: .5rem 0;
 }
 
 footer{

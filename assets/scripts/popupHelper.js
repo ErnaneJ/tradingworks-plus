@@ -23,18 +23,18 @@ class PopupHelper {
       const nextPoint = array[index + 2];
   
       return {
-        startDate: start.createDate,
+        startDate: start?.createDate,
         endDate: end?.createDate,
-        duration: PopupHelper.calculateDiffDates(start.createDate, end?.createDate),
-        interval: PopupHelper.calculateInterval(end, nextPoint)
+        duration: PopupHelper.calculateDiffDates(start?.createDate, end?.createDate),
+        interval: PopupHelper.calculateInterval(end?.createDate, nextPoint?.createDate, points.length)
       };
     }).filter(Boolean);
   }
 
-  static calculateInterval(currentPoint, nextPoint){
-    if(!nextPoint) return;
+  static calculateInterval(currentPointDate, nextPointDate, pointsLength){
+    if(!nextPointDate) return;
 
-    return PopupHelper.calculateDiffDates(currentPoint.createDate, nextPoint.createDate)
+    return PopupHelper.calculateDiffDates(currentPointDate, nextPointDate ? nextPointDate : new Date())
   }
 
   static calculateDiffDates(date1, date2) {

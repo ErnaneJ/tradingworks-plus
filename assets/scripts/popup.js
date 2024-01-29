@@ -42,10 +42,13 @@ class Popup {
   }
 
   #updateCurrentBreakTime(){
-    if(!this.information.isWorking || this.information.totalWorkedTime >= PopupHelper.passTimeInStringToHours(config['work-time'])) return;
+    const config = JSON.parse(window.localStorage.getItem('tradingWorksSettings'));
+
+    const workTimeSettings = PopupHelper.passTimeInStringToHours(config['work-time']);
+    
+    if(this.information.isWorking || this.information.totalWorkedTime >= workTimeSettings) return;
     
     const tableBodyTimes = document.getElementById('table-body-times');
-    const config = JSON.parse(window.localStorage.getItem('tradingWorksSettings'));
 
     const lastWorkedTimeEnd = this.information.points.slice(-1)[0].endDate;
     const currentBreakTime = PopupHelper.calculateDiffDates(new Date(lastWorkedTimeEnd), new Date());
@@ -87,7 +90,11 @@ class Popup {
       estimatedOutputHour.innerHTML = '';
     }else if (timeToFinish > 0 && this.information.isWorking) {
       msg.innerHTML = `Faltam <strong>${PopupHelper.formatBalance(timeToFinish)}</strong> para o fim do seu expediente de ${PopupHelper.formatBalance(informedWorkTime)}. 🎉`;
-      estimatedOutputHour.innerHTML = `Estimativa de saída às ${PopupHelper.formatBalance(timeToFinish)}`;
+      
+      const currentDate = new Date();
+      const strTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`;
+      const currentHour = PopupHelper.passTimeInStringToHours(strTime)
+      estimatedOutputHour.innerHTML = `Estimativa de saída às ${PopupHelper.formatBalance(timeToFinish + currentHour)}`;
     } else if (this.information.isWorking){
       msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez ${PopupHelper.formatBalance(timeToFinish * (-1))} extras.`;
       estimatedOutputHour.innerHTML = '';
@@ -106,11 +113,9 @@ class Popup {
     const currentYear = document.getElementById('current-year');
     currentYear.innerHTML = new Date().getFullYear();
     
-    setInterval(() => {
-      const date = new Date();
-      const dateElement = document.getElementById('current-date');
-      dateElement.innerHTML = PopupHelper.formatDate(date, 'dd de MM, hh:min:ss');
-    });
+    const date = new Date();
+    const dateElement = document.getElementById('current-date');
+    dateElement.innerHTML = PopupHelper.formatDate(date, 'dd de MM, hh:min:ss');
   }
 
   #setScreen(screen){

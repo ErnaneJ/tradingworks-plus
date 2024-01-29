@@ -157,7 +157,6 @@ class TWOffscreen {
 
     const user = this.user;
 
-    console.log(user);
     if (!user){
       this.#setScreen('not-started');
       return null;
