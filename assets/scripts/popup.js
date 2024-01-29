@@ -4,10 +4,11 @@ class Popup {
   }
 
   updateContent(data){
-    console.log(data);
     if(!data) return this.#setScreen('not-started');
 
     this.information = PopupHelper.calculateInformation(data);
+
+    localStorage.setItem('tradingWorksPlusCalculatedData', JSON.stringify(this.information));
 
     this.#updateTableTimes();
     this.#updateTableTotals();

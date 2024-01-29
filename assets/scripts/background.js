@@ -1,3 +1,6 @@
+class BackgroundMessages {
+
+}
 class Events {
   constructor(){}
 
@@ -15,7 +18,6 @@ class Events {
 
   static async updateWorkInformation(data){
     await chrome.storage.local.set({'tradingWorksPlusWorkInformation': data});
-    Events.handleSentMessages(data);
   }
 
   static async updateScreen(data){
@@ -32,57 +34,29 @@ class Events {
     });
   }
 
-  static async handleSentMessages(data){
-    // const config = JSON.parse((await chrome.storage.local.get('settings') || {}).settings);
-
-    // if(!config) return;
-
-    // const minutesToFinish = passTimeInStringToMinutes(config['work-time']) - data.totalWorkedTime;
-    // const breakTimeParsed = passTimeInStringToMinutes(config['break-time']);
-
-    // if(data.totalWorkedTime <= 10) sendMsg(config, "🤖 *TW+:* Aee! Pronto para mais um dia de trabalho? Vamos nessa! Não se preocupa que eu estou de olho no ponto. 😎", "msg-0");
-
-    // if(breakTimeParsed === data.totalBreakTime) sendMsg(config, "🤖 *TW+:* Intervalo finalizado, hora de voltar! 🚀", "msg-1");
-
-    // if(minutesToFinish === 60) sendMsg(config, "🤖 *TW+:* Opa! Faltam apenas 1 hora para o fim do expediente. 🎉", "msg-2");
-    // if(minutesToFinish === 15) sendMsg(config, "🤖 *TW+:* Fica ligeiro. Faltam apenas 15 minutos para o fim do expediente. ⌛", "msg-3");
-    // if(minutesToFinish === 1)  sendMsg(config, "🤖 *TW+:* Faltam apenas 1 minuto, se prepara... ⌚", "msg-4");
-    // if(minutesToFinish === 0)  sendMsg(config, "🤖 *TW+:* Fim do dia! Não esquece de bater o ponto! Até mais. 👋", "msg-5");
+  static chromeNotify(data){
+    chrome.notifications.create(data.id, {
+      type: 'basic',
+      iconUrl: "../favicon48.png",
+      title: data.title,
+      message: data.message,
+    });
   }
 
-  static async sendMsg(config, msg, idMsg){
-    // let msgHandle = (await chrome.storage.local.get('message-handle'))['message-handle'] || {};
-    // const currentDate = getCurrentUTCDate();
-    // if(msgHandle[idMsg] === currentDate)  return; // message already sent
-  
-    // if(config && config['allow-send-messages-browser'] === 'on'){
-    //   chrome.notifications.create(
-    //     `trading-works-plus-msg-${new Date().getTime()}`, {
-    //       type: "basic",
-    //       iconUrl: "../favicon48.png",
-    //       title: "TradingWorks+",
-    //       message: msg.replaceAll('*', ''),
-    //     }, () => { }
-    //   );
-    // }
-  
-    // if(config && config['allow-send-messages-whatsapp'] === 'on'){    
-    //   const options = {
-    //     method: 'POST',
-    //     headers: {'Content-Type': 'application/json'},
-    //     body: `{"number":"${config['whatsapp-number']}","message":"${msg}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
-    //   };
-      
-    //   fetch('https://buddy.ernane.dev/api/v1/send-message/', options)
-    //     .then(response => response.json())
-    //     .then(response => console.log(response))
-    //     .catch(err => console.log('Erro ao enviar mensagem! 😢', err));
-    // }
-  
-    // if(msgHandle) msgHandle[idMsg] = currentDate;
-    // await chrome.storage.local.set({'message-handle': msgHandle});
+  static whatsNotify(data){
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: `{"number":"${data.number}","message":"${data.message}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
+    };
+    
+    fetch('https://buddy.ernane.dev/api/v1/send-message/', options)
+      .then(response => response.json())
+      .then(response => {})
+      .catch(err => console.log('Erro ao enviar mensagem! 😢', err));
   }
 }
+
 class Background {
   constructor(){
     console.log('[TradingWorks+] - Background 🏗️');
@@ -95,24 +69,31 @@ class Background {
 
   chromeRuntimeOnMessage(){
     console.log('[TradingWorks+] - Chrome Runtime On Message 🏗️');
-    chrome.runtime.onStartup.addListener(Events.createOffscreen);
-    chrome.runtime.onInstalled.addListener(Events.createOffscreen);
-    chrome.runtime.onConnect.addListener(async (port) => {
-      await chrome.offscreen.closeDocument()
-      await Events.createOffscreen();
-    });
 
-    chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-      const events = {
-        debug: Events.debug,
-        keepAlive: Events.keepAlive,
-        updateSettings: Events.updateSettings,
-        updateWorkInformation: Events.updateWorkInformation,
-        changeScreen: Events.updateScreen,
-      };
-
-      return await events[message.type]?.(message.data);
-    });
+    try{
+      chrome.runtime.onStartup.addListener(Events.createOffscreen);
+      chrome.runtime.onInstalled.addListener(Events.createOffscreen);
+      chrome.runtime.onConnect.addListener((port) => {
+        chrome.offscreen.closeDocument()
+        Events.createOffscreen();
+      });
+  
+      chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+        const events = {
+          debug: Events.debug,
+          keepAlive: Events.keepAlive,
+          updateSettings: Events.updateSettings,
+          updateWorkInformation: Events.updateWorkInformation,
+          changeScreen: Events.updateScreen,
+          chromeNotify: Events.chromeNotify,
+          whatsNotify: Events.whatsNotify,
+        };
+  
+        return events[message.type]?.(message.data);
+      });
+    }catch(e){
+      console.log(e);
+    }
   }
 }
 
