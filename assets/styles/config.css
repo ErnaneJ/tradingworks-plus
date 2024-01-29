@@ -368,3 +368,7 @@ footer a{
 canvas{
   background-color: var(--atlantis-50);
 }
+
+form.invalid input:required{
+  border: 2px solid #ff6a6a !important;
+}

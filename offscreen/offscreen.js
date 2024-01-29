@@ -149,6 +149,12 @@ class TWOffscreen {
 
     const user = this.user;
 
+    console.log(user);
+    if (!user){
+      this.#setScreen('not-started');
+      return null;
+    };
+
     const userPoints = await this.#fetchUserPoints(user.employeeid, user.companyid);
     const userTimeBank = await this.#fetchTimeBank(user.employeeid, user.companyid);
 

@@ -45,12 +45,6 @@ class DashboardHelper {
     const allowSendMessageWhatsapp = document.querySelector('#allow-send-messages-whatsapp')?.checked;
     const allowSendMessageBrowser = document.querySelector('#allow-send-messages-browser')?.checked;
   
-    const optionsMessage = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: `{"number":"${number}","message":"${messages.whats}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
-    };
-  
     if(!allowSendMessageBrowser && !allowSendMessageWhatsapp) alert('Você precisa habilitar ao menos uma opção de envio de mensagem. 🚨')
   
     if(allowSendMessageBrowser) await chrome.notifications.create(
@@ -63,6 +57,14 @@ class DashboardHelper {
     );
   
     if(allowSendMessageWhatsapp) {
+      if(!number) return alert('Você precisa informar um número de WhatsApp para receber mensagens. 🚨');
+
+      const optionsMessage = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: `{"number":"${number}","message":"${messages.whats}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
+      };
+
       fetch('https://buddy.ernane.dev/api/v1/send-message/', optionsMessage)
         .then(response => response.json()).then(response => {})
         .catch(err => alert('Houve um erro ao enviar mensagem no WhatsApp, verifique as informações e tente novamente. 😢', err));
@@ -123,6 +125,12 @@ class DashboardForms {
 
         const button = document.querySelector('button[type="submit"]');
         button.innerHTML = 'Sucesso! 🎉';
+        form.classList.remove('invalid');
+
+        DashboardHelper.notify({
+          browser: 'Configurações salvas com sucesso. 🚀',
+          whats: '🤖 *TW+:* Configurações salvas com sucesso. 🚀'
+        });
     
         setTimeout(() => {
           button.innerHTML = '💾 Salvar';
@@ -171,7 +179,7 @@ class DashboardLoader {
     const form = document.querySelector('#settings-form');
     const settings = JSON.parse(localStorage.getItem('tradingWorksSettings'));
 
-    if(!settings) return;
+    if(!settings) return form.classList.add('invalid');;
 
     form['work-time'].value = settings['work-time'] || '';
     form['break-time'].value = settings['break-time'] || '';
