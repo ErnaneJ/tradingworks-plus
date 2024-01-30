@@ -4,12 +4,11 @@ class LoadExtension {
   }
 
   async load() {
-    console.log('[TradingWorks+] - Load Extension 🏗️');
-    
-    setInterval(async () => {
-      this.popup.updateContent(
-        (await chrome.storage.local.get('tradingWorksPlusWorkInformation'))?.tradingWorksPlusWorkInformation
-      );
-    }, 1000);
+    console.log('[TradingWorks+] - Update Extension 🏗️');
+
+    const { tradingWorksPlusWorkInformation } = await chrome.storage.local.get('tradingWorksPlusWorkInformation');
+    this.popup.updateContent(tradingWorksPlusWorkInformation);
+
+    setTimeout(() => this.load(), 1000);
   }
 }

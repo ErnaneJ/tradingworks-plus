@@ -1,6 +1,6 @@
 {
   "name": "Tradingworks+",
-  "version": "1.1.4",
+  "version": "2.0.0",
   "description": "Extension to facilitate the usability of the TradingWorks platform for managing points between work shifts.",
   "icons": { 
     "16": "assets/favicon16.png",
@@ -8,7 +8,7 @@
     "48": "assets/favicon48.png"
   },
   "manifest_version": 3,
-  "permissions": ["storage", "notifications", "offscreen"],
+  "permissions": ["storage", "notifications", "offscreen", "scripting"],
   "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*", "https://api-main.tworh.com.br/*", "https://api-infra.tworh.com.br/", "https://cdn.jsdelivr.net/*"],
   "action": {
     "default_popup": "./popup.html",

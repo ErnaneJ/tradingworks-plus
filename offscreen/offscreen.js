@@ -27,14 +27,14 @@ class TWOffscreenNotifications {
     const workTimeToFinish = Math.floor(workTimeSettings - realWorkTime);
     const breakTimeToFinish = Math.floor(breakTimeSettings - realBreakTime);
 
-    console.log({
-      workTimeSettings,
-      breakTimeSettings,
-      realWorkTime,
-      realBreakTime,
-      workTimeToFinish,
-      breakTimeToFinish
-    })
+    // console.log({
+    //   workTimeSettings,
+    //   breakTimeSettings,
+    //   realWorkTime,
+    //   realBreakTime,
+    //   workTimeToFinish,
+    //   breakTimeToFinish
+    // })
 
     if(realWorkTime >= 1) TWOffscreenNotifications.notify(config, "🤖 *TW+:* Sensacional! Vamos começar? 🚀", "msg-0");
     if(realBreakTime >= 1) TWOffscreenNotifications.notify(config, "🤖 *TW+:* Intervalo iniciado, aproveite! 🚀", "msg-1");
@@ -102,6 +102,15 @@ class TWOffscreen {
 
   constructor() {
     this.#updateTradingWorksData();
+  
+    setInterval(() => {
+      console.log('[TradingWorks+] - Keep Alive 🏗️ - Offscreen');
+      TWOffscreenNotifications.handleSentMessages();
+      chrome.runtime.sendMessage({
+        type: 'keepAlive',
+        data: {}
+      });
+    }, 1000);
   }
 
   get configurations() {
@@ -175,7 +184,11 @@ class TWOffscreen {
     const timeBank = userTimeBank.listResponse.map(el => el.compTime).reduce((acc, cur) => acc + cur, 0);
     const points = userPoints.listResponse;
 
-    TWOffscreenNotifications.handleSentMessages();
+    // points.pop();
+    // points.pop();
+    // points.pop();
+    // points.pop();
+
     chrome.runtime.sendMessage({
       type: 'updateWorkInformation',
       data: {

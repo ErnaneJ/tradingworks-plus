@@ -50,7 +50,10 @@ class Popup {
     
     const tableBodyTimes = document.getElementById('table-body-times');
 
-    const lastWorkedTimeEnd = this.information.points.slice(-1)[0].endDate;
+    const lastWorkedTimeEnd = this.information.points.slice(-1)[0]?.endDate;
+
+    if(!lastWorkedTimeEnd) return;
+
     const currentBreakTime = PopupHelper.calculateDiffDates(new Date(lastWorkedTimeEnd), new Date());
     const breakInformedTime = PopupHelper.passTimeInStringToHours(config['break-time']);
     const exceededBreakTime = currentBreakTime >= breakInformedTime;
