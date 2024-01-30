@@ -6,8 +6,7 @@ class LoadExtension {
   async load() {
     console.log('[TradingWorks+] - Update Extension 🏗️');
 
-    const { tradingWorksPlusWorkInformation } = await chrome.storage.local.get('tradingWorksPlusWorkInformation');
-    this.popup.updateContent(tradingWorksPlusWorkInformation);
+    this.popup.updateContent();
 
     setTimeout(() => this.load(), 1000);
   }

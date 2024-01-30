@@ -1,61 +1,13 @@
 class PopupHelper {
-  static calculateInformation(data){
-    const points = PopupHelper.calculatePoints(data.points);
-    const timeBank = data.timeBank;
-    const totalWorkedTime = points.reduce((acc, cur) => acc + cur.duration, 0);
-    const totalBreakTime = points.reduce((acc, cur) => acc + (cur.interval ? cur.interval : 0), 0);
-  
-    return {
-      isWorking: points.length > 0 && !points.slice(-1)[0]?.endDate,
-      timeBank: timeBank,
-      points: points,
-      totalWorkedTime: totalWorkedTime,
-      totalBreakTime: totalBreakTime,
-    }
-  }
-
-  static calculatePoints(points) {
-    return points.map((point, index, array) => {
-      if (index % 2 !== 0) return;
-  
-      const start = point;
-      const end = array[index + 1];
-      const nextPoint = array[index + 2];
-  
-      return {
-        startDate: start?.createDate,
-        endDate: end?.createDate,
-        duration: PopupHelper.calculateDiffDates(start?.createDate, end?.createDate),
-        interval: PopupHelper.calculateInterval(end?.createDate, nextPoint?.createDate, points.length)
-      };
-    }).filter(Boolean);
-  }
-
-  static calculateInterval(currentPointDate, nextPointDate, pointsLength){
-    if(!nextPointDate) return;
-
-    return PopupHelper.calculateDiffDates(currentPointDate, nextPointDate ? nextPointDate : new Date())
-  }
-
-  static calculateDiffDates(date1, date2) {
-    try {
-      date1 = new Date(date1);
-      date2 = date2 ? new Date(date2) : new Date();
-      return (date2 - date1) / 3.6e+6;
-    } catch (e) {
-      return 0;
-    }
-  }
-
   static formatBalance(balance) {
-    const balanceHours = String(Math.floor(balance)).padStart(2, '0');
-    const balanceMinutes = String(Math.round((balance % 1) * 60)).padStart(2, '0');
+    const balanceHours = String(Math.round(balance)).padStart(2, '0');
+    const balanceMinutes = String(Math.abs(Math.round((balance % 1) * 60))).padStart(2, '0');
     return `${balanceHours}h${balanceMinutes}m`;
   }
 
   static formatDate(date, format) {
     if (!date) return '-:-';
-    if (typeof date === 'string') date = new Date(date);
+    if (typeof date !== 'object') date = new Date(date);
     const map = {
       mm: String(date.getMonth() + 1).padStart(2, '0'),
       dd: String(date.getDate()).padStart(2, '0'),

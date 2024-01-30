@@ -96,6 +96,11 @@ main{
   padding: .30rem;
 }
 
+.table--item.manual{
+  color: var(--alert-manual-point);
+  font-weight: bold;
+}
+
 .table--body{
   display: flex;
   align-items: center;

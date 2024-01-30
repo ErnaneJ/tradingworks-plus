@@ -3,12 +3,12 @@ class Popup {
     this.information = undefined;
   }
 
-  updateContent(data){
+  updateContent(){
+    const data = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData'));
+
     if(!data) return this.#setScreen('not-started');
 
-    this.information = PopupHelper.calculateInformation(data);
-
-    localStorage.setItem('tradingWorksPlusCalculatedData', JSON.stringify(this.information));
+    this.information = data;
 
     this.#updateTableTimes();
     this.#updateTableTotals();
@@ -29,8 +29,8 @@ class Popup {
       const interval = point.interval ? PopupHelper.formatBalance(point.interval) : undefined;
   
       return (`<div class="table--row">
-        <div class="table--item">${start}</div>
-        <div class="table--item">${end}</div>
+        <div class="table--item ${point.manualStartDate && 'manual'}">${start}</div>
+        <div class="table--item ${point.manualEndDate && 'manual'}">${end}</div>
         <div class="table--item">${duration}</div>
       </div>` + (interval ? `
       <div class="table--row">
@@ -42,26 +42,14 @@ class Popup {
   }
 
   #updateCurrentBreakTime(){
-    const config = JSON.parse(window.localStorage.getItem('tradingWorksSettings'));
-
-    const workTimeSettings = PopupHelper.passTimeInStringToHours(config['work-time']);
-    
-    if(this.information.isWorking || this.information.totalWorkedTime >= workTimeSettings) return;
+    if(!this.information.exceededCurrentBreakTime) return;
     
     const tableBodyTimes = document.getElementById('table-body-times');
 
-    const lastWorkedTimeEnd = this.information.points.slice(-1)[0]?.endDate;
-
-    if(!lastWorkedTimeEnd) return;
-
-    const currentBreakTime = PopupHelper.calculateDiffDates(new Date(lastWorkedTimeEnd), new Date());
-    const breakInformedTime = PopupHelper.passTimeInStringToHours(config['break-time']);
-    const exceededBreakTime = currentBreakTime >= breakInformedTime;
-
     tableBodyTimes.innerHTML += `
       <div class="table--row">
-        <div class="table--item break" ${exceededBreakTime && 'style="color: red;'}">
-          Em pausa por ${ PopupHelper.formatBalance(currentBreakTime) }
+        <div class="table--item break" ${this.information.exceededCurrentBreakTime && 'style="color: red;'}">
+          Em pausa por ${ PopupHelper.formatBalance(this.information.currentBreakTime) }
         </div>
       </div>
     `;
@@ -95,9 +83,9 @@ class Popup {
       msg.innerHTML = `Faltam <strong>${PopupHelper.formatBalance(timeToFinish)}</strong> para o fim do seu expediente de ${PopupHelper.formatBalance(informedWorkTime)}. 🎉`;
       
       const currentDate = new Date();
-      const strTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`;
-      const currentHour = PopupHelper.passTimeInStringToHours(strTime)
-      estimatedOutputHour.innerHTML = `Estimativa de saída às ${PopupHelper.formatBalance(timeToFinish + currentHour)}`;
+      const estimatedOutputDate = currentDate.setHours(currentDate.getHours() + Math.floor(timeToFinish), currentDate.getMinutes() + (timeToFinish % 1) * 60);
+      
+      estimatedOutputHour.innerHTML = `Estimativa de saída às ${PopupHelper.formatDate(estimatedOutputDate, "hh:min")}`;
     } else if (this.information.isWorking){
       msg.innerHTML = `Se preparando para as férias? 🏖️ Você ja fez ${PopupHelper.formatBalance(timeToFinish * (-1))} extras.`;
       estimatedOutputHour.innerHTML = '';
