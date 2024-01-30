@@ -42,14 +42,11 @@ class Events {
     try {
       if (await chrome.offscreen.hasDocument?.()) return;
     
-      offscreenDocument = chrome.offscreen.createDocument({
+      await chrome.offscreen.createDocument({
         url: './offscreen/index.html',
         reasons: ['LOCAL_STORAGE'],
         justification: 'keep service worker running',
       });
-
-      await offscreenDocument;
-      offscreenDocument = null;
     } catch (error) {
       console.error("Erro ao usar a API Offscreen:", error);
     }
