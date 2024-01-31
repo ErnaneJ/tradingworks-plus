@@ -72,6 +72,7 @@ class DashboardHelper {
   }
 }
 class DashboardForms {
+  
   static submitLogin(){
     const loginForm = document.querySelector('#login-form');
     const inputLogin = document.querySelector('#login');
@@ -152,6 +153,45 @@ class DashboardForms {
       });
     });
   }
+
+  static handleTimeInputs(){
+    let hoursInputs = document.querySelectorAll("#work-time, #break-time")
+  
+    const format = event => {
+      let value = event.target.value
+    
+      value = value.replace(/[a-zA-Z\:]/g, '');
+      value = value.padStart(4, '0');
+  
+      if (event.key === 'Backspace') {
+        event.preventDefault();
+        value = value.substring(0, value.length);
+        value = value.padStart(4, '0');
+      } else if("1234567890".includes(event.key)){
+        value = value.substring(1);
+        value = value.padEnd(4, '0');
+      } else{
+        event.preventDefault();
+      }
+  
+      event.target.value = value.replace(/(\d{2})(\d{2})/, '$1:$2');
+  
+      const hours = parseInt(event.target.value.split(':')[0]);
+      const minutes = parseInt(event.target.value.split(':')[1]);
+  
+      if(hours > 23 || minutes > 59) {
+        document.querySelector('form').classList.add('invalid');
+        event.target.style.outline = '2px solid #db4444';
+      }else{
+        document.querySelector('form').classList.remove('invalid');
+        event.target.style.outline = 'initial';
+      }
+    }
+  
+    hoursInputs.forEach((input) => {
+      input.addEventListener('keyup', format);
+    });
+  }  
 }
 class DashboardLoader {
   static loadTWInfo(){
@@ -490,6 +530,7 @@ window.addEventListener('DOMContentLoaded', () => {
   DashboardForms.submitLogin();
   DashboardForms.submitSettings();
   DashboardForms.submitSendMessage();
+  DashboardForms.handleTimeInputs();
 
   DashboardLoader.loadSettings();
 });
