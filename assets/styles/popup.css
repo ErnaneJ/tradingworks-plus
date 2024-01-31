@@ -96,6 +96,11 @@ main{
   padding: .30rem;
 }
 
+.table--item.manual{
+  color: var(--alert-manual-point);
+  font-weight: bold;
+}
+
 .table--body{
   display: flex;
   align-items: center;
@@ -148,17 +153,15 @@ span#hours-balance-container{
   margin-left: .5rem;
 }
 
+span#current-year{
+  margin-right: .5rem;
+}
+
 span#current-date, span#estimated-output-hour, span#hours-balance-container{
   font-size: .65rem;
   color: var(--atlantis-900);
   font-weight: bold;
   font-style: italic;
-}
-
-span#hours-balance{
-  filter: blur(2px);
-} span#hours-balance:hover{
-  filter: blur(0px);
 }
 
 .message{
@@ -168,6 +171,7 @@ span#hours-balance{
   background-color: var(--atlantis-300);
   padding: .5rem;
   border-radius: .5rem;
+  margin: .5rem 0;
 }
 
 footer{
