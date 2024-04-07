@@ -17,7 +17,7 @@
 <br/>
 
 <div align="center">
-  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v1.0.0-brightgreen?logo=github">
+  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v2.0.0-brightgreen?logo=github">
 </div>
 
 <br/>
