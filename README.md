@@ -28,7 +28,7 @@
 <br/>
 
 <p align="center">
-  <img alt="Application preview image" src="./docs/imgs/prev.png" width="100%">
+  <img alt="Application preview image" src="./docs/imgs/prevv2-0-0.png" width="100%">
 </p>
 
 

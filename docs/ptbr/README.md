@@ -29,7 +29,7 @@
 <br/>
 
 <p align="center">
-  <img alt="Imagem de preview da aplicação" src="../imgs/prev.png" width="100%">
+  <img alt="Imagem de preview da aplicação" src="../imgs/prevv2-0-0.png" width="100%">
 </p>
 
 ## 🚀 Tecnologias
