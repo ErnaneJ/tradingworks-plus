@@ -1,6 +1,6 @@
 # Privacy Policy
 
-> Last Updated: July 27, 2023
+> Last Updated: April 07, 2024
 
 Thank you for choosing to use the **TradingWorks+** extension. This privacy policy aims to inform you about how we collect, use, and protect the information provided by the user during the use of our browser extension.
 

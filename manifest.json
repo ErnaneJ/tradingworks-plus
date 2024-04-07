@@ -1,21 +1,25 @@
 {
   "name": "Tradingworks+",
-  "version": "1.1.4",
-  "description": "Extension to facilitate the usability of the TradingWorks platform for managing points between work shifts.",
+  "version": "2.0.0",
+  "description": "This extension was developed to simplify the use of the TradingWorks platform to manage points between work shifts. It offers specific functionalities, such as instant check of points, visualization of the total time worked during the journey, quick consultation of the time bank balance, comparison of times with the current one, notifications at specific times, work metrics and much more",
   "icons": { 
     "16": "assets/favicon16.png",
     "32": "assets/favicon32.png",
     "48": "assets/favicon48.png"
   },
   "manifest_version": 3,
-  "permissions": ["storage", "notifications", "offscreen"],
-  "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*"],
+  "author": "Ernane Ferreira",
+  "permissions": ["storage", "notifications", "offscreen", "scripting"],
+  "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*", "https://api-main.tworh.com.br/*", "https://api-infra.tworh.com.br/", "https://cdn.jsdelivr.net/*"],
   "action": {
     "default_popup": "./popup.html",
-    "default_title": "Tradingworks"
+    "default_title": "Tradingworks+"
   },
   "background": {
     "service_worker": "./assets/scripts/background.js",
     "type": "module"
+  },
+  "privacy": {
+    "policy": "https://ernanej.github.io/tradingworks-plus/home/privacy_policy/ptbr/"
   }
 }

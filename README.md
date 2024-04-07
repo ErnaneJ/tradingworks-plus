@@ -16,7 +16,7 @@
 <br/>
 
 <div align="center">
-  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v1.1.4-brightgreen?logo=github">
+  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v2.0.0-brightgreen?logo=github">
 </div>
 
 <br/>
@@ -70,7 +70,9 @@ _Note: All information is captured directly from the [TradingWorks.net](https://
 
 ### 🧩 Installing from the extension store
 
-Unfortunately it is still not possible to obtain the extension through the official store. The wish is that in the future it becomes possible. Below are listed other ways to install the extension.
+Basta seguir o processo de instalação padrão, semelhante ao de qualquer outra extensão no Chrome. Para continuar, clique no link da extensão fornecido abaixo e instale-a prontamente.
+
+[Link da Extensão Tradingworks+](https://chromewebstore.google.com/detail/tradingworks+/gekmgdfmjoccmkagkbcboidgknlolihl).
 
 ### 📦 Installation by downloading packages
 
@@ -124,7 +126,7 @@ Go [here](https://github.com/ErnaneJ/tradingworks-plus/releases) to view availab
 ## 🆙 Support
 
 This Extension has been tested and proven to work in the following browsers:
-  - **Google Chrome**: v111.0.5563.146	(2023-03-28)
+  - **Google Chrome**: v111.0.5563.146	(2024-04-07)
   - **Edge**: v111.0.1661.54 (2023-03-24)
 
 ## 📃 Privacy Policy
@@ -156,5 +158,5 @@ _One of the future goals for this extension is to publish it on the official Goo
 ---
 
 <div align="center">
-  2023 | <b>TradingWorks+</b>
+  2024 | <b>TradingWorks+</b>
 </div>

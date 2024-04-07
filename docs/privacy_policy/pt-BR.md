@@ -1,6 +1,6 @@
 # Política de Privacidade
 
-> Última atualização: 27 de Julho de 2023
+> Última atualização: 07 de Abril de 2024
 
 Agradecemos por escolher utilizar a extensão **TradingWorks+**. Esta política de privacidade visa informar sobre como coletamos, usamos e protegemos as informações fornecidas pelo usuário durante o uso da nossa extensão do navegador.
 

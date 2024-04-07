@@ -17,7 +17,7 @@
 <br/>
 
 <div align="center">
-  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v1.0.0-brightgreen?logo=github">
+  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v2.0.0-brightgreen?logo=github">
 </div>
 
 <br/>
@@ -124,7 +124,7 @@ Acesse [aqui](https://github.com/ErnaneJ/tradingworks-plus/releases) para vizual
 ## 🆙 Suporte
 
 Essa Extensão já foi testada e comprovada funcionamento nos seguintes navegadores:
-  - **Google Chrome**: v111.0.5563.146	(28/03/2023)
+  - **Google Chrome**: v111.0.5563.146	(07/04/2024)
   - **Edge**: v111.0.1661.54 (24/03/2023)
 
 ## 📃 Política de Privacidade
@@ -156,5 +156,5 @@ _Um dos objetivos futuros para essa extensão é publica-la na loja oficial do G
 ---
 
 <div align="center">
-  2023 | <b>TradingWorks+</b>
+  2024 | <b>TradingWorks+</b>
 </div>

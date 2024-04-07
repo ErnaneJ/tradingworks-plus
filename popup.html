@@ -7,25 +7,34 @@
   <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
   <title>Tradingworks+</title>
   <script src="./assets/scripts/popup.js" ></script>
+  <script src="./assets/scripts/popupHelper.js" ></script>
   <script src="./assets/scripts/loadExtension.js" ></script>
+  <script src="./assets/scripts/application.js" ></script>
+
   <link rel="stylesheet" href="./assets/styles/root.css">
   <link rel="stylesheet" href="./assets/styles/popup.css">
 </head>
 <body>
   <header>
     <div class="header--logo">
-      <img src="./assets/favicon32.png" alt="logo tradingworks" width="25" height="25">
-      <a href="https://app.tradingworks.net/" target="_blank">
+      <img src="./assets/favicon32.png" alt="logo TradingWorks" width="25" height="25">
+      <a href="https://app.tworh.com.br/" target="_blank">
         <h1 class="header--title">TradingWorks+</h1>
       </a>
     </div>
-    <button class="header--btn-config" id="button-config">
-      <img src="./assets/icons/gear-solid.svg" width="18" height="18" alt="gear icon">
-    </button>
+    <div>
+      <label class="toggle" for="extension-status">
+        <input class="toggle--input" name="extension-status" type="checkbox" id="extension-status" checked="">
+        <div class="toggle--fill"></div>
+      </label>
+      <button class="header--btn-config" id="button-config">
+        <img src="./assets/icons/gear-solid.svg" width="18" height="18" alt="gear icon">
+      </button>
+    </div>
   </header>
 
   <main>
-    <section id='loading-screen' style="display: none;">
+    <section id='loading-screen'>
       <div class="lds-ripple">
         <div></div>
         <div></div>
@@ -33,14 +42,13 @@
       <span>Carregando..</span>
     </section>
 
-    <section id='not-signed-in-screen' style="display: none;">
-      <p>Para usar o <strong>TradingWorks+</strong> você precisa estar logado no <strong>TradingWorks</strong>. Clique no botão abaixo para continuar.</p>
-      <a href="https://app.tradingworks.net/" target="_blank">Entrar</a>
+    <section id='not-started-screen' style="display: none;">
+      <p>Acesse o <strong>dashboard</strong> na engrenagem acima para iniciarmos! 💚</p>
+      <!-- <a href="https://app.tradingworks.net/" target="_blank">Acessar</a> -->
     </section>
 
-    <section id='not-started-screen' style="display: none;">
-      <p>Nenhuma jornada identificada. Acesse o <strong>TradingWorks</strong> com o botão abaixo para iniciarmos.</p>
-      <a href="https://app.tradingworks.net/" target="_blank">Acessar</a>
+    <section id='disabled-screen' style="display: none;">
+      <p>Você me desabilitou! 😢💚</p>
     </section>
 
     <section id='started-screen' style="display: none;">
@@ -71,14 +79,13 @@
       </div>
 
       <span id="hours-balance-container">Saldo no banco de Horas: <span id="hours-balance">00:00 h</span></span>
-  
+      <p class="message" id="msg">Eai, vamos trabalhar hoje ou não? 🤔</p>
       <span id="estimated-output-hour"></span>
-      <p class="message" id="msg"> Que tal iniciarmos mais um dia de trabalho?! 💼 </p>
     </section>
   </main>
 
   <footer>
-    2023 | 
+    <span id="current-year">2024</span> | 
     <img src="../assets/icons/github-green.svg" width="16" height="16" alt="GitHub icon"> 
     <a target="_blank" href="https://github.com/ErnaneJ/tradingworks-plus">TradingWorks+</a> 
   </footer>
