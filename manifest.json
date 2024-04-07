@@ -18,8 +18,5 @@
   "background": {
     "service_worker": "./assets/scripts/background.js",
     "type": "module"
-  },
-  "privacy": {
-    "policy": "https://ernanej.github.io/tradingworks-plus/home/privacy_policy/ptbr/"
   }
 }
