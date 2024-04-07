@@ -41,6 +41,7 @@ header{
   font-size: 1.5rem;
   height: 2rem;
   width: 2rem;
+  margin-left: .5rem;
 }
 
 main{
@@ -231,6 +232,46 @@ footer a{
 .lds-ripple div:nth-child(2) {
   animation-delay: -0.5s;
 }
+
+.toggle {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.toggle--input {
+  display: none;
+}
+
+.toggle--fill {
+  position: relative;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  border-radius: var(--toggle-border-radius);
+  background: var(--atlantis-200);
+  transition: background-color ease-in-out 0.2s;
+}
+
+.toggle--fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--toggle-height);
+  width: var(--toggle-height);
+  background: var(--atlantis-50);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  border-radius: var(--toggle-border-radius);
+  transition: transform 0.2s;
+}
+
+.toggle--input:checked ~ .toggle--fill {
+  background: var(--atlantis-500);
+}
+
+.toggle--input:checked ~ .toggle--fill::after {
+  transform: translateX(var(--toggle-height));
+}
+
 @keyframes lds-ripple {
   0% {
     top: 36px;
@@ -262,7 +303,7 @@ footer a{
   }
 }
 
-#not-signed-in-screen, #not-started-screen{
+#not-signed-in-screen, #disabled-screen, #not-started-screen{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -270,18 +311,18 @@ footer a{
   min-height: 100px;
 }
 
-#not-signed-in-screen p, #not-started-screen p {
+#not-signed-in-screen p, #not-started-screen p, #disabled-screen p {
   text-align: center;
   color: var(--atlantis-700);
   font-size: .85rem;
 }
 
-#not-signed-in-screen strongm #not-started-screen strong {
+#not-signed-in-screen strong, #not-started-screen strong, #disabled-screen strong {
   color: var(--atlantis-600);
   font-weight: bold;
 }
 
-#not-signed-in-screen a, #not-started-screen a {
+#not-signed-in-screen a, #not-started-screen a, #disabled-screen a {
   color: var(--atlantis-600);
   text-decoration: none;
   font-weight: bold;

@@ -12,6 +12,7 @@ class Application {
 
   initialize(){
     this.#handleButtonConfig();
+    this.#handleButtonExtensionStatus();
     this.#sendSettingsToBackgroundScript();
     this.#chromeRuntimeOnMessage();
   }
@@ -23,6 +24,19 @@ class Application {
     buttonConfig.addEventListener('click', PopupHelper.openConfig);
   }
 
+  #handleButtonExtensionStatus(){
+    const extensionStatusInput = document.getElementById('extension-status');
+    if(!extensionStatusInput) return;
+
+    const active = JSON.parse(localStorage.getItem('tradingWorksPlusStatusExtension'));
+    extensionStatusInput.checked = active;
+
+    extensionStatusInput.addEventListener('change', (e) => {
+      this.setScreen(e.target.checked ? 'loading' : 'disabled');
+      PopupHelper.changeExtensionStatus(e);
+    });
+  }
+
   #sendSettingsToBackgroundScript(){
     const settings = localStorage.getItem('tradingWorksSettings');
     chrome.runtime.sendMessage({type: 'updateSettings', data: JSON.parse(settings)});
@@ -30,6 +44,7 @@ class Application {
 
   #chromeRuntimeOnMessage(){
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      console.log(message)
       if (message.type !== "changeScreen") return;
       
       this.setScreen(message.data.screen);
@@ -40,7 +55,8 @@ class Application {
     const screens = [
       'loading', // Information are being loaded
       'started', // User is signed in and working
-      'not-started' // User is signed in but not working
+      'not-started', // User is signed in but not working
+      'disabled' // Extension is disabled
     ];
     
     screens.forEach((screenType) => {

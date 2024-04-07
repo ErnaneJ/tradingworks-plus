@@ -37,6 +37,10 @@ class PopupHelper {
     chrome.tabs.create({ 'url': chrome.runtime.getURL('./config/index.html') }, (tab) => { });
   }
 
+  static changeExtensionStatus(event){
+    localStorage.setItem('tradingWorksPlusStatusExtension', event.target.checked);
+  }
+
   static checkConfig(config) {
     if (config && config['work-time'] && config['break-time']) return;
     PopupHelper.openConfig();

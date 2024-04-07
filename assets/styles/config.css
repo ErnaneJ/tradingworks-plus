@@ -99,6 +99,8 @@ main{
 }
 
 .grid-container{
+  max-width: 1080px;
+  min-width: 640px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -328,6 +330,33 @@ footer a{
   opacity: 1;
   border-radius: 50%;
   animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.hello-hand{
+  animation: wave-animation 2.5s infinite; transform-origin: 70% 70%; display: inline-block;
+}
+
+@keyframes wave-animation {
+    0% { transform: rotate( 0.0deg) }
+   10% { transform: rotate(14.0deg) }
+   20% { transform: rotate(-8.0deg) }
+   30% { transform: rotate(14.0deg) }
+   40% { transform: rotate(-4.0deg) }
+   50% { transform: rotate(10.0deg) }
+   60% { transform: rotate( 0.0deg) }
+  100% { transform: rotate( 0.0deg) }
+}
+
+@keyframes acenar {
+  0% {
+    transform: rotate(0deg); /* Rotação inicial */
+  }
+  50% {
+    transform: rotate(30deg); /* Rotação no meio da animação */
+  }
+  100% {
+    transform: rotate(0deg); /* Rotação final */
+  }
 }
 
 .lds-ripple div:nth-child(2) {

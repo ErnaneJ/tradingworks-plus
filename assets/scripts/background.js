@@ -34,7 +34,13 @@ class Events {
 
   static async updateScreen(data){
     console.log('[TradingWorks+] - UpdateScreen received 🏗️');
-    await chrome.runtime.sendMessage({ setScreen: true, screen: data.screen });
+    try{
+      await chrome.runtime.sendMessage({ setScreen: true, screen: data.screen });
+      console.log('[TradingWorks+] - ⚠ Popup is open. Message to update the screen sent.')
+    }catch(e){
+      // console.log(e);
+      console.log('[TradingWorks+] - ⚠ Popup is not open.')
+    }
   }
 
   static async createOffscreen(){
@@ -95,6 +101,7 @@ class Background {
         console.log('[TradingWorks+] - Chrome Runtime On Connect 🏗️');
         await chrome.offscreen.closeDocument()
         await Events.createOffscreen();
+        console.log("opa")
       });
   
       chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {

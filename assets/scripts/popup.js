@@ -4,9 +4,16 @@ class Popup {
   }
 
   updateContent(){
-    const data = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData'));
+    this.#setScreen('loading');
+    const active = JSON.parse(localStorage.getItem('tradingWorksPlusStatusExtension'));
+    
+    if(!active) return this.#setScreen('disabled');
+    if(active) this.#setScreen('started');
 
+    const data = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData'));
     if(!data) return this.#setScreen('not-started');
+
+    this.#setScreen('started');
 
     this.information = data;
 
@@ -110,6 +117,10 @@ class Popup {
   }
 
   #setScreen(screen){
-    window.tradingWorks.setScreen(screen);
+    try {
+      window.tradingWorks.setScreen(screen);
+    }catch(e){
+      console.log('Error setting screen', e);
+    }
   }
 }

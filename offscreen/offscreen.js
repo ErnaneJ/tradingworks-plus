@@ -112,14 +112,14 @@ class TWOffscreenNotifications {
     const workTimeToFinish = Math.floor(workTimeSettings - realWorkTime);
     const breakTimeToFinish = Math.floor(breakTimeSettings - realBreakTime);
 
-    console.table({
-      workTimeSettings,
-      breakTimeSettings,
-      realWorkTime,
-      realBreakTime,
-      workTimeToFinish,
-      breakTimeToFinish
-    })
+    // console.table({
+    //   workTimeSettings,
+    //   breakTimeSettings,
+    //   realWorkTime,
+    //   realBreakTime,
+    //   workTimeToFinish,
+    //   breakTimeToFinish
+    // })
 
     if(realWorkTime >= 1) TWOffscreenNotifications.notify(config, "🤖 *TW+:* Sensacional! Vamos começar? 🚀", "msg-0");
     if(realBreakTime >= 1) TWOffscreenNotifications.notify(config, "🤖 *TW+:* Intervalo iniciado, aproveite! 🚀", "msg-1");
@@ -237,6 +237,12 @@ class TWOffscreen {
   }
 
   async #updateTradingWorksData() {
+    const active = JSON.parse(localStorage.getItem('tradingWorksPlusStatusExtension'));
+    if (!active){
+      this.#setScreen('disabled');
+      return setTimeout(async () => await this.#updateTradingWorksData(), 60000);
+    }
+    
     this.#setScreen('loading');
 
     const user = this.user;
