@@ -1,7 +1,7 @@
 {
   "name": "Tradingworks+",
   "version": "2.0.0",
-  "description": "Esta extensão foi desenvolvida para simplificar o uso da plataforma TradingWorks no gerenciamento de pontos entre turnos de trabalho. Oferece funcionalidades específicas, como verificação instantânea dos pontos, visualização do tempo total trabalhado durante a jornada, rápida consulta do saldo do banco de horas, comparação dos horários com o atual, notificações em momentos específicos, métricas de trabalho e muito mais.",
+  "description": "This extension was developed to simplify the use of the TradingWorks platform to manage points between work shifts. It offers specific functionalities, such as instant check of points, visualization of the total time worked during the journey, quick consultation of the time bank balance, comparison of times with the current one, notifications at specific times, work metrics and much more",
   "icons": { 
     "16": "assets/favicon16.png",
     "32": "assets/favicon32.png",
