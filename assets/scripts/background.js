@@ -101,7 +101,6 @@ class Background {
         console.log('[TradingWorks+] - Chrome Runtime On Connect 🏗️');
         await chrome.offscreen.closeDocument()
         await Events.createOffscreen();
-        console.log("opa")
       });
   
       chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {

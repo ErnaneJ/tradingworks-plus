@@ -9,7 +9,7 @@
   },
   "manifest_version": 3,
   "author": "Ernane Ferreira",
-  "permissions": ["storage", "notifications", "offscreen", "scripting"],
+  "permissions": ["storage", "notifications", "offscreen"],
   "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*", "https://api-main.tworh.com.br/*", "https://api-infra.tworh.com.br/", "https://cdn.jsdelivr.net/*"],
   "action": {
     "default_popup": "./popup.html",

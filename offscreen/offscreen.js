@@ -216,7 +216,7 @@ class TWOffscreen {
 
       return await rawData.json();
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       return null;
     }
   }
@@ -231,12 +231,13 @@ class TWOffscreen {
 
       return await rawData.json();
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       return null;
     }
   }
 
   async #updateTradingWorksData() {
+    console.log('[TradingWorks+] - Offscreen Update Data 🔄');
     const active = JSON.parse(localStorage.getItem('tradingWorksPlusStatusExtension'));
     if (!active){
       this.#setScreen('disabled');

@@ -100,7 +100,7 @@ class DashboardForms {
 
         DashboardHelper.decideScreen();
       }catch(err){
-        console.log(err);
+        // console.log(err);
 
         Array.from(loginForm.querySelectorAll('.invalid-input')).forEach(alert => {
           alert.classList.remove('hidden');
