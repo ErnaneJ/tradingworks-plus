@@ -99,7 +99,6 @@ class Background {
       });
       chrome.runtime.onConnect.addListener(async (port) => {
         console.log('[TradingWorks+] - Chrome Runtime On Connect 🏗️');
-        await chrome.offscreen.closeDocument()
         await Events.createOffscreen();
       });
   
