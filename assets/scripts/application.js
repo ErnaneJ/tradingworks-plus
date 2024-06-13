@@ -56,6 +56,7 @@ class Application {
       'loading', // Information are being loaded
       'started', // User is signed in and working
       'not-started', // User is signed in but not working
+      'not-logged', // User is not signed in
       'disabled' // Extension is disabled
     ];
     

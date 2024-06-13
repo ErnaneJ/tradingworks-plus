@@ -303,7 +303,7 @@ footer a{
   }
 }
 
-#not-signed-in-screen, #disabled-screen, #not-started-screen{
+#not-signed-in-screen, #disabled-screen, #not-started-screen, #not-logged-screen{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -311,18 +311,18 @@ footer a{
   min-height: 100px;
 }
 
-#not-signed-in-screen p, #not-started-screen p, #disabled-screen p {
+#not-signed-in-screen p, #not-started-screen p, #disabled-screen p, #not-logged-screen p {
   text-align: center;
   color: var(--atlantis-700);
   font-size: .85rem;
 }
 
-#not-signed-in-screen strong, #not-started-screen strong, #disabled-screen strong {
+#not-signed-in-screen strong, #not-started-screen strong, #disabled-screen strong, #not-logged-screen strong {
   color: var(--atlantis-600);
   font-weight: bold;
 }
 
-#not-signed-in-screen a, #not-started-screen a, #disabled-screen a {
+#not-signed-in-screen a, #not-started-screen a, #disabled-screen a, #not-logged-screen a {
   color: var(--atlantis-600);
   text-decoration: none;
   font-weight: bold;

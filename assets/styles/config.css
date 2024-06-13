@@ -35,6 +35,7 @@ main{
 }
 
 .container{
+  position: relative;
   background-color: var(--atlantis-50);
   padding: 1rem 2rem;
   border-radius: 1rem;
@@ -104,6 +105,7 @@ main{
   width: 100%;
   height: 100%;
   display: flex;
+  justify-content:center;
   flex-wrap: wrap;
   gap: .5rem;
 }
@@ -176,10 +178,11 @@ main{
   padding-bottom: .25rem;
 }
 
-.disabled{
+input[disabled], .disabled{
   opacity: .7;
+  cursor: not-allowed;
 }
-.disabled *{
+input[disabled], .disabled *{
   pointer-events: none;
 }
 
@@ -221,6 +224,16 @@ main{
 .hidden{ display: none !important; }
 .hidden-opacity{ opacity: 0; }
 
+.tw-info-avatar{
+  position: absolute;
+  border-radius: 50%;
+  top: 12px;
+  right: 28px;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--atlantis-200);
+}
+
 footer{
   display: flex;
   align-items: center;
@@ -229,7 +242,7 @@ footer{
   width: 100%;
   font-size: .85rem;
   color: var(--atlantis-300);
-  margin-bottom: 1rem;
+  margin: .75rem 0 .5rem 0;
 }
 
 footer img {
@@ -243,13 +256,10 @@ footer a{
   margin-left: .25rem;
 }
 
-.chart-container{
-  max-width: 100%;
-  min-height: 275px;
-}
-
 .charts-container{
+  width: 100%;
   position: relative;
+  height: calc(100vh / 3);
 }
 
 .charts-container .chart-arrow-left{
@@ -265,7 +275,7 @@ footer a{
   justify-content: center;
   cursor: pointer;
   font-size: 1.5rem;
-  transition: all ease-in-out .2s;
+  transition: all ease-in-out .1s;
   scale: 1;
 }
 
@@ -286,7 +296,7 @@ footer a{
   justify-content: center;
   cursor: pointer;
   font-size: 1.5rem;
-  transition: all ease-in-out .2s;
+  transition: all ease .1s;
   scale: 1;
 }
 
@@ -299,6 +309,8 @@ footer a{
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-top: .35rem;
+  opacity: .65;
 }
 
 #dash-loading-screen {
@@ -400,4 +412,100 @@ canvas{
 
 form.invalid input:required{
   border: 2px solid #ff6a6a !important;
+}
+
+.table-container {
+  width: 100%;
+  padding: 0 .25rem 0 0;
+  height: calc((100vh - 100px - 70px - 30px) / 2);
+  overflow-x: auto;
+  border-radius: 0.25rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .75rem;
+  background-color: var(--atlantis-50);
+  border-radius: 0.5rem;
+}
+
+thead {
+  background-color: var(--atlantis-500);
+  color: var(--atlantis-100);
+}
+
+thead th {
+  text-align: center;
+  font-weight: bold;
+  padding: .35rem 0;
+} 
+
+tbody tr:nth-child(even) {
+  background-color: var(--atlantis-200);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: var(--atlantis-50);
+}
+
+tbody td {
+  width: calc(100% / 5);
+  text-align: center;
+  border-bottom: 1px solid var(--atlantis-300);
+  padding: .25rem 0;
+}
+
+tbody td span {
+  background-color: var(--atlantis-400);
+  color: var(--atlantis-900);
+  padding: 0 .25rem;
+  border-radius: .25rem;
+  font-size: .65rem;
+  width: 35px;
+  display: inline-block;
+}
+
+tfoot {
+  background-color: var(--atlantis-600);
+  color: var(--atlantis-50);
+}
+
+tfoot td {
+  padding: 0.75rem;
+  font-weight: bold;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  thead {
+    display: none;
+  }
+
+  tbody, tfoot {
+    display: block;
+    width: 100%;
+  }
+
+  tbody tr, tfoot tr {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom: 1px solid var(--atlantis-300);
+  }
+
+  tbody td, tfoot td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  tbody td::before, tfoot td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    width: 50%;
+    flex-basis: 50%;
+  }
 }

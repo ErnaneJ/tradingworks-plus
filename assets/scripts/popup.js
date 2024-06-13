@@ -1,6 +1,7 @@
 class Popup {
   constructor(){
     this.information = undefined;
+    this.settings = undefined;
   }
 
   updateContent(){
@@ -10,12 +11,14 @@ class Popup {
     if(!active) return this.#setScreen('disabled');
     if(active) this.#setScreen('started');
 
-    const data = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData'));
-    if(!data) return this.#setScreen('not-started');
+    this.settings = JSON.parse(localStorage.getItem('tradingWorksSettings'));
+    if(!this.settings) return this.#setScreen('not-started');
+
+    this.information = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData'));
+    if(!this.information) return this.#setScreen('not-started');
+    if(!this.information?.points) return this.#setScreen('not-logged');
 
     this.#setScreen('started');
-
-    this.information = data;
 
     this.#updateTableTimes();
     this.#updateTableTotals();
@@ -27,6 +30,7 @@ class Popup {
 
   #updateTableTimes() {
     if (!this.information) return;
+    if(!this.information.points) return;
   
     const tableBodyTimes = document.getElementById('table-body-times');
     tableBodyTimes.innerHTML = this.information.points.map((point, index) => {
