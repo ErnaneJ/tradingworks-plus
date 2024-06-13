@@ -45,7 +45,7 @@ header{
 }
 
 main{
-  padding: .5rem;
+  padding: .2rem .5rem;
   width: 100%;
   flex: 1;
   gap: .5rem;
@@ -53,7 +53,6 @@ main{
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
-  padding-bottom: 1rem;
 }
 
 .table{
@@ -95,6 +94,7 @@ main{
 
 .table--item{
   padding: .30rem;
+  font-weight: bold;
 }
 
 .table--item.manual{
@@ -165,6 +165,17 @@ span#current-date, span#estimated-output-hour, span#hours-balance-container{
   font-style: italic;
 }
 
+span#estimated-output-hour{
+  margin-bottom: .5rem;
+}
+
+span#last-update{
+  font-size: .65rem;
+  color: var(--atlantis-600);
+  font-style: italic;
+  margin: .0rem;
+}
+
 .message{
   text-align: center;
   font-size: .65rem;
@@ -214,6 +225,7 @@ footer a{
   flex-direction: column;
   min-height: 100px;
   font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
 .lds-ripple {

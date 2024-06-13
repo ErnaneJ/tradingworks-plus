@@ -1,14 +1,4 @@
 class DashboardHelper {
-  static parseJwt(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-  
-    return JSON.parse(jsonPayload);
-  }
-
   static allowSendMessageToggle(){
     const toggle = document.querySelector('#allow-send-messages-whatsapp');
     toggle.addEventListener('change', e => {
@@ -54,44 +44,6 @@ class DashboardHelper {
   }
 }
 class DashboardForms {
-  
-  static submitLogin(){
-    const loginForm = document.querySelector('#login-form');
-    const inputLogin = document.querySelector('#login');
-    const inputPassword = document.querySelector('#password');
-
-    loginForm.addEventListener('submit', async event => {
-      event.preventDefault();
-
-      try{
-        const request = await fetch("https://api-infra.tworh.com.br/api/auth/login", {
-          "method": "POST",
-          "headers": {
-            "accept": "application/json",
-            "content-type": "application/json;charset=UTF-8"
-          },
-          "referrerPolicy": "no-referrer",
-          "body": `{\"username\":\"${inputLogin.value}\",\"password\":\"${inputPassword.value}\",\"rememberMe\":true}`
-        });
-    
-        const response = await request.json();
-        const token = response.listResponse[0].userToken;
-        const user = DashboardHelper.parseJwt(token);
-
-        localStorage.setItem('tradingWorksUser', JSON.stringify({...user, userToken: token}));
-      }catch(err){
-        // console.log(err);
-
-        Array.from(loginForm.querySelectorAll('.invalid-input')).forEach(alert => {
-          alert.classList.remove('hidden');
-          setTimeout(() => {
-            alert.classList.add('hidden');
-          }, 3000);
-        });
-      }
-    });
-  }
-
   static submitSettings(){
     const form = document.querySelector('#settings-form');
     form.addEventListener('submit', (event) => {
@@ -117,6 +69,7 @@ class DashboardForms {
     
         setTimeout(() => {
           button.innerHTML = '💾 Salvar';
+          window.location.reload();
         }, 2000);
       }catch(e){
         console.log(e);
@@ -134,6 +87,8 @@ class DashboardForms {
         whats: '🤖 *TW+:* Olá!👋 Esse é um teste de notificação do Tradingworks+ no Whatsapp. Por aqui está tudo certo! 🚀'
       });
     });
+
+
   }
 
   static handleTimeInputs(){
@@ -181,16 +136,25 @@ class DashboardLoader {
     const shortName = document.getElementById("tw-info-shortName");
     const userNameInput = document.getElementById("tw-info-username");
     const userAvatar = document.getElementById("tw-info-avatar");
+    const lastUpdate = document.getElementById("last-update");
 
     const settings = JSON.parse(localStorage.getItem('tradingWorksSettings'));
     if(!settings) return;
 
-    console.log(settings)
+    if(settings.userName){
+      shortName.innerText = settings.userName.split(' ')[0];
+      userNameInput.value = settings.userName;
+    }
 
-    shortName.innerText = settings.userName.split(' ')[0];
-    userNameInput.value = settings.userName;
-    companyNameInput.value = settings.employ;
+    if(settings.employ) companyNameInput.value = settings.employ;
+
     if(settings.userImage) userAvatar.src = settings.userImage;
+
+    if(settings.lastUpdate) {
+      lastUpdate.innerText = `Última sincronização em ${new Date(settings.lastUpdate).toLocaleString('pt-BR')}`;
+    }else{
+      lastUpdate.innerText = 'Não sincronizado. Verifique sua sessão no TradingWorks.';
+    }
   }
 
   static loadSettings(){
@@ -222,10 +186,15 @@ class DashboardLoadData {
 
     this.loadTable();
     this.loadCharts();
-    this.loadChartsIteration();
   }
 
   loadTable(){
+    if(!this.settings) return;
+    if(!this.settings.currentMonthAppointments) return;
+    
+    const tableContainer = document.getElementById('table-appointments');
+    tableContainer.classList.remove('hidden');
+
     const currentMonthAppointments = this.settings.currentMonthAppointments;
     if(!currentMonthAppointments) return;
 
@@ -277,40 +246,19 @@ class DashboardLoadData {
     });
   }
 
-  async captureInformation(){
-    const user = JSON.parse(localStorage.getItem('tradingWorksUser'));
-    
-    if(!user) return;
-    
-    const [rawBankTimeData, rawTimeCardData] = await Promise.all([fetch(`https://api-main.tworh.com.br/api/CompTimeEvent/list?EmployeeId=${user.employeeid}&CompanyId=${user.companyid}&ViewHistory=false`, {
-      "method": "GET",
-      "headers": {
-        "accept": "application/json, text/plain, */*",
-        "authorization": `Bearer ${user.token}`,
-        "content-type": "application/json",
-      }
-    }), fetch(`https://api-main.tworh.com.br/api/Timecard/list?EmployeeId=${user.employeeid}&CompanyId=${user.companyid}`, {
-      "method": "GET",
-      "headers": {
-        "accept": "application/json, text/plain, */*",
-        "authorization": `Bearer ${user.token}`,
-        "content-type": "application/json",
-      }
-    })]);
-
-    const [bankTimeData, timeCardData] = await Promise.all([rawBankTimeData.json(), rawTimeCardData.json()]);
-
-    this.timeCardData = timeCardData.listResponse;
-    this.bankHoursData = bankTimeData.listResponse;
-  }
-
   async loadCharts(){
-    await this.captureInformation();
+    if(!this.settings) return;
+    if(!this.settings.currentMonthAppointments) return;
+
+    const chartContainers = document.getElementById('charts-container');
+    chartContainers.classList.remove('hidden');
 
     this.#chartNumberOfPointsPerDay();
     this.#chartHoursOfBreakPerDay();
     this.#chartHoursWorkedPerDay();
     this.#chartTotalHoursWorked();
+
+    this.loadChartsIteration();
   }
 
   #showChart(){
@@ -581,7 +529,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   DashboardHelper.allowSendMessageToggle();
   
-  // DashboardForms.submitLogin();
   DashboardForms.submitSettings();
   DashboardForms.submitSendMessage();
   DashboardForms.handleTimeInputs();

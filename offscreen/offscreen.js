@@ -59,10 +59,9 @@ class OffscreenHelper {
       return {
         startDate: start,
         endDate: end,
-        manualStartDate: false, // @TODO
-        manualEndDate: false, // @TODO
         duration: point.compTime/60 || 0,
-        interval: array[index + 1] ? OffscreenHelper.calculateInterval(end, nextPointStart, points.length) : 0  
+        interval: array[index + 1] ? OffscreenHelper.calculateInterval(end, nextPointStart, points.length) : 0,
+        ...point
       };
     }).filter(Boolean);
   }
@@ -209,7 +208,10 @@ class TWOffscreen {
 
       let cells = table.getElementsByTagName('td');
       let textContent = '';
+      let colors = [];
       for (let cell of cells) {
+        let icon = cell.querySelector('i');
+        if(icon) colors.push(icon?.style.color || '');
         textContent += cell.textContent + ' ';
       }
 
@@ -230,12 +232,19 @@ class TWOffscreen {
 
         points.push({
           start: rawPoints[i],
+          startColor: null,
           end: rawPoints[i + 1],
+          endColor: null,
           compTime: compTime,
           compTimeString: rawPoints[i + 2]
         });
       }
-      
+
+      points.forEach((point, index) => {
+        if(point.start) point.startColor = colors[index * 2];
+        if(point.end) point.endColor = colors[(index * 2) + 1];
+      });
+
       return points;
     } catch (e) {
       // console.log(e);
@@ -335,7 +344,7 @@ class TWOffscreen {
 
     const extraSettings = await this.#fetchExtraSettings();
     const currentSettings = JSON.parse(localStorage.getItem('tradingWorksSettings')) || {};
-    const settings = {...currentSettings, ...extraSettings};
+    const settings = {...currentSettings, ...extraSettings, lastUpdate: new Date()};
 
     localStorage.setItem('tradingWorksSettings', JSON.stringify(settings));
 
@@ -347,7 +356,7 @@ class TWOffscreen {
 
     localStorage.setItem('tradingWorksPlusCalculatedData', JSON.stringify(data));
 
-    setTimeout(async () => await this.#updateTradingWorksData(), 60000);
+    setTimeout(async () => await this.#updateTradingWorksData(), 30000);
   }
 
   #setScreen(screen) {

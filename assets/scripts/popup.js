@@ -40,8 +40,8 @@ class Popup {
       const interval = point.interval ? PopupHelper.formatBalance(point.interval) : undefined;
   
       return (`<div class="table--row">
-        <div class="table--item ${point.manualStartDate && 'manual'}">${start}</div>
-        <div class="table--item ${point.manualEndDate && 'manual'}">${end}</div>
+        <div style="color: ${point.startColor}" class="table--item">${start}</div>
+        <div style="color: ${point.endColor}" class="table--item">${end}</div>
         <div class="table--item">${duration}</div>
       </div>` + (interval ? `
       <div class="table--row">
@@ -118,6 +118,10 @@ class Popup {
     const date = new Date();
     const dateElement = document.getElementById('current-date');
     dateElement.innerHTML = PopupHelper.formatDate(date, 'dd de MM, hh:min:ss');
+
+    const lastUpdate = document.getElementById('last-update');
+    console.log(this.information.lastUpdate);
+    lastUpdate.innerHTML = PopupHelper.formatDate(this.settings.lastUpdate, 'Última sincronização em dd de MM às hh:min:ss');
   }
 
   #setScreen(screen){

@@ -44,7 +44,6 @@ class Application {
 
   #chromeRuntimeOnMessage(){
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      console.log(message)
       if (message.type !== "changeScreen") return;
       
       this.setScreen(message.data.screen);

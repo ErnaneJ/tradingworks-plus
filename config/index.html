@@ -16,21 +16,22 @@
   </header>
 
   <main>
+    <span id="last-update">Última atualização em 00 de junho às 00:00:00</span>
     <section id="dashboard-screen" class="grid-container">
       <div class="container grid-item">
-        <h2 class="container--title">Olá, <spam id="tw-info-shortName">user</spam>! <span class="hello-hand">👋🏼</span></h2>
-        <img src="https://dummyimage.com/256x256/7c9020/fff&text=tw" alt="user avatar" id="tw-info-avatar" class="tw-info-avatar">
+        <h2 class="container--title">Olá, <spam id="tw-info-shortName">Colaborador</spam>! <span class="hello-hand">👋🏼</span></h2>
+        <img src="https://dummyimage.com/256x256/7c9020/fff&text=T" alt="user avatar" id="tw-info-avatar" class="tw-info-avatar">
 
         <form id="settings-form" class="container--content">
           <div class="container--content--row">
             <div class="container--item">
               <label for="tw-info-username">👤 Colaborador</label>
-              <input disabled type="text" id="tw-info-username" name="tw-info-username">
+              <input disabled type="text" id="tw-info-username" name="tw-info-username" value="-">
             </div>
 
             <div class="container--item">
               <label for="tw-info-companyname">💼 Empresa</label>
-              <input disabled type="text" id="tw-info-companyname" name="tw-info-companyname">
+              <input disabled type="text" id="tw-info-companyname" name="tw-info-companyname" value="-">
             </div>  
           </div>
           <div class="container--content--row">
@@ -82,7 +83,7 @@
         </form>
       </div>
 
-      <div class="container grid-item">
+      <div id="table-appointments" class="container grid-item hidden">
         <h2 class="container--title">🚀 Apontamentos <span data-content="current-month"></span></h2>
 
         <div class="chart-container table-container">
@@ -101,7 +102,7 @@
         </div>
       </div>
 
-      <div class="container charts-container">
+      <div id="charts-container" class="container charts-container hidden">
         <h2 class="container--title">📊 Gráficos <span data-content="current-month"></span></h2>
 
         <div class="chart-arrow-left">
@@ -139,7 +140,7 @@
   <footer>
     2024 | 
     <img src="../assets/icons/github-white.svg" width="16" height="16" alt="GitHub icon"> 
-    <a href="https://github.com/ErnaneJ/tradingworks-plus">TradingWorks+</a> 
+    <a target="_blank" href="https://github.com/ErnaneJ/tradingworks-plus">TradingWorks+</a> 
   </footer>
 
   <script src="../assets/scripts/chart.js"></script>
