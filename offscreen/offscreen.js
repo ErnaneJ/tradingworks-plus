@@ -39,19 +39,29 @@ class OffscreenHelper {
 
   static calculatePoints(points) {
     return points.map((point, index, array) => {
-      if (index % 2 !== 0) return;
-  
-      const start = point;
-      const end = array[index + 1];
-      const nextPoint = array[index + 2];
+      const start = new Date();
+      start.setHours(Number(point.start.split(':')[0]));
+      start.setMinutes(Number(point.start.split(':')[1]));
+
+      let end = null;
+      if(point.end){
+        end = new Date();
+        end.setHours(Number(point.end.split(':')[0]));
+        end.setMinutes(Number(point.end.split(':')[1]));
+      }else{
+        point.compTime = OffscreenHelper.calculateInterval(start, new Date(), points.length) * 60;
+      }
+
+      const nextPointStart = new Date();
+      nextPointStart.setHours(Number(array[index + 1]?.start.split(':')[0]));
+      nextPointStart.setMinutes(Number(array[index + 1]?.start.split(':')[1]));
   
       return {
-        startDate: start?.eventDateTime,
-        endDate: end?.eventDateTime,
-        manualStartDate: !!(start?.workerReason),
-        manualEndDate: !!(end?.workerReason),
-        duration: OffscreenHelper.calculateDiffDates(start?.eventDateTime, end?.eventDateTime),
-        interval: OffscreenHelper.calculateInterval(end?.eventDateTime, nextPoint?.eventDateTime, points.length)
+        startDate: start,
+        endDate: end,
+        duration: point.compTime/60 || 0,
+        interval: array[index + 1] ? OffscreenHelper.calculateInterval(end, nextPointStart, points.length) : 0,
+        ...point
       };
     }).filter(Boolean);
   }
@@ -181,59 +191,139 @@ class TWOffscreenNotifications {
   }
 }
 class TWOffscreen {
-  TRADING_WORKS_POINTS_API = 'https://api-main.tworh.com.br/api/attendanceregister/list';
-  TRADING_WORKS_TIME_BANK_API = 'https://api-main.tworh.com.br/api/CompTimeEvent/list';
-
   constructor() {
     this.#updateTradingWorksData();
   }
 
-  get configurations() {
+  async #fetchUserPoints() {
     try {
-      return JSON.parse(localStorage.getItem('tradingWorksSettings'));
-    } catch (e) {
-      return null;
-    }
-  }
+      const request = fetch("https://app.tradingworks.net/Attendances/ClockInOut.aspx");
+      const rawHtml = await request.then(res => res.text());
 
-  get user(){
-    try{
-      return JSON.parse(localStorage.getItem('tradingWorksUser'));
-    }catch(e){
-      return null;
-    }
-  }
+      const parser = new DOMParser();
+      const document = parser.parseFromString(rawHtml, 'text/html');
 
-  async #fetchUserPoints(employeeid, companyid) {
-    if (!employeeid || !companyid) return null;
+      const table = document.querySelector('.container table');
+      if(!table) return null;
 
-    try {
-      // ?CompanyId=<0000>&EmployeeId=<00000>&BaseDate=<YYYY-MM-DDT20%3A08%3A39.4527475>
-      const currentDate = new Date();
-      const baseDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
-      const URL = `${this.TRADING_WORKS_POINTS_API}?CompanyId=${companyid}&EmployeeId=${employeeid}&BaseDate=${baseDate}`;
-      const rawData = await fetch(URL, {method: 'GET'});
+      let cells = table.getElementsByTagName('td');
+      let textContent = '';
+      let colors = [];
+      for (let cell of cells) {
+        let icon = cell.querySelector('i');
+        if(icon) colors.push(icon?.style.color || '');
+        textContent += cell.textContent + ' ';
+      }
 
-      return await rawData.json();
+      const rawPoints = textContent.match(/\b\d{2}:\d{2}\b/g);
+      const points = [];
+
+      // rawPoints.pop();
+      // rawPoints.pop();
+      // rawPoints.pop();
+      // rawPoints.pop();
+      
+      for (let i = 0; i < rawPoints.length; i += 3) {
+        let compTime = 0;
+        if(rawPoints[i + 2]){
+          const [compTimeHours, compTimeMinutes] = rawPoints[i + 2].split(':').map(Number);
+          compTime = compTimeHours * 60 + compTimeMinutes;
+        }
+
+        points.push({
+          start: rawPoints[i],
+          startColor: null,
+          end: rawPoints[i + 1],
+          endColor: null,
+          compTime: compTime,
+          compTimeString: rawPoints[i + 2]
+        });
+      }
+
+      points.forEach((point, index) => {
+        if(point.start) point.startColor = colors[index * 2];
+        if(point.end) point.endColor = colors[(index * 2) + 1];
+      });
+
+      return points;
     } catch (e) {
       // console.log(e);
       return null;
     }
   }
 
-  async #fetchTimeBank(employeeid, companyid) {
-    if (!employeeid || !companyid) return null;
-
-    // ?EmployeeId=<00000>&CompanyId=<0000>&ViewHistory=false
+  async #fetchTimeBank() {
     try {
-      const URL = `${this.TRADING_WORKS_TIME_BANK_API}?EmployeeId=${employeeid}&CompanyId=${companyid}&ViewHistory=false`;
-      const rawData = await fetch(URL, {method: 'GET'});
+      const request = fetch("https://app.tradingworks.net/Payroll/MyTimeCards.aspx");
+      const rawHtml = await request.then(res => res.text());
 
-      return await rawData.json();
+      const parser = new DOMParser();
+      const document = parser.parseFromString(rawHtml, 'text/html');
+
+      const bodyBalance = document.getElementById('Body_Body_lblBalance');
+      if(!bodyBalance) return null;
+
+      const bh = bodyBalance.innerText.match(/\b\d{2}:\d{2}\b/g);
+      if(!bh[0]) return null;
+
+      const [hours, minutes] = bh[0].split(':').map(Number);
+
+      return (hours * 60 + minutes) * (bodyBalance.innerText.includes('-') ? -1 : 1);
     } catch (e) {
       // console.log(e);
       return null;
     }
+  }
+
+  async #fetchExtraSettings(){
+    const extraSettings = {};
+
+    const getCurrentMonthAppointments = async () => {
+      const request = fetch("https://app.tradingworks.net/Attendances/ListAttendances.aspx");
+      const rawHtml = await request.then(res => res.text());
+
+      
+      const parser = new DOMParser();
+      const document = parser.parseFromString(rawHtml, 'text/html');
+
+      const table = document.querySelector('table[data-filename="TWO - Apontamentos"]');
+      const headers = [];
+      const data = [];
+
+      const headerElements = table.querySelectorAll('thead th');
+      headerElements.forEach(header => {
+        headers.push(header.textContent.trim().replace(/\s/g, '_').toLowerCase());
+      });
+
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const rowData = {};
+        cells.forEach((cell, index) => {
+          rowData[headers[index]] = cell.textContent.trim();
+        });
+        data.push(rowData);
+      });
+
+      return data;
+    }
+    try {
+      const request = fetch("https://app.tradingworks.net/Attendances/ClockInOut.aspx");
+      const rawHtml = await request.then(res => res.text());
+
+      const parser = new DOMParser();
+      const document = parser.parseFromString(rawHtml, 'text/html');
+
+      extraSettings['employ'] = document.getElementById('Body_lnkCompanyAlias').innerText;
+      extraSettings['userName'] = document.getElementById('Body_Body_lblFullName').innerText;
+      extraSettings['userImage'] = document.getElementById('Body_Body_imgAvatar').src;
+      extraSettings['currentMonthAppointments'] = await getCurrentMonthAppointments();
+    } catch (e) {
+      // console.log(e);
+      return extraSettings;
+    }
+
+    return extraSettings;
   }
 
   async #updateTradingWorksData() {
@@ -243,40 +333,30 @@ class TWOffscreen {
       this.#setScreen('disabled');
       return setTimeout(async () => await this.#updateTradingWorksData(), 60000);
     }
-    
-    this.#setScreen('loading');
 
-    const user = this.user;
+    const userPoints = await this.#fetchUserPoints();
+    const userTimeBank = await this.#fetchTimeBank();
 
-    if (!user){
-      this.#setScreen('not-started');
-      return null;
-    };
+    if(!userPoints){
+      localStorage.setItem('tradingWorksPlusCalculatedData', JSON.stringify({}));
+      return setTimeout(async () => await this.#updateTradingWorksData(), 1000);
+    }
 
-    const userPoints = await this.#fetchUserPoints(user.employeeid, user.companyid);
-    const userTimeBank = await this.#fetchTimeBank(user.employeeid, user.companyid);
+    const extraSettings = await this.#fetchExtraSettings();
+    const currentSettings = JSON.parse(localStorage.getItem('tradingWorksSettings')) || {};
+    const settings = {...currentSettings, ...extraSettings, lastUpdate: new Date()};
 
-    if (!userPoints || !userTimeBank){
-      this.#setScreen('not-started');
-      return null;
-    };
+    localStorage.setItem('tradingWorksSettings', JSON.stringify(settings));
 
-    this.#setScreen('started');
-
-    const timeBank = userTimeBank.listResponse.map(el => el.compTime).reduce((acc, cur) => acc + cur, 0);
-    const points = userPoints.listResponse;
-
-    // points.pop();
-    // points.pop();
-    // points.pop();
-    // points.pop();
+    const timeBank = userTimeBank/60;
+    const points = userPoints;
 
     const data = OffscreenHelper.calculateInformation({ points, timeBank });
     TWOffscreenNotifications.handleSentMessages(data);
 
     localStorage.setItem('tradingWorksPlusCalculatedData', JSON.stringify(data));
 
-    setTimeout(async () => await this.#updateTradingWorksData(), 60000);
+    setTimeout(async () => await this.#updateTradingWorksData(), 30000);
   }
 
   #setScreen(screen) {

@@ -1,6 +1,7 @@
 class Popup {
   constructor(){
     this.information = undefined;
+    this.settings = undefined;
   }
 
   updateContent(){
@@ -10,12 +11,14 @@ class Popup {
     if(!active) return this.#setScreen('disabled');
     if(active) this.#setScreen('started');
 
-    const data = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData'));
-    if(!data) return this.#setScreen('not-started');
+    this.settings = JSON.parse(localStorage.getItem('tradingWorksSettings'));
+    if(!this.settings) return this.#setScreen('not-started');
+
+    this.information = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData'));
+    if(!this.information) return this.#setScreen('not-started');
+    if(!this.information?.points) return this.#setScreen('not-logged');
 
     this.#setScreen('started');
-
-    this.information = data;
 
     this.#updateTableTimes();
     this.#updateTableTotals();
@@ -27,6 +30,7 @@ class Popup {
 
   #updateTableTimes() {
     if (!this.information) return;
+    if(!this.information.points) return;
   
     const tableBodyTimes = document.getElementById('table-body-times');
     tableBodyTimes.innerHTML = this.information.points.map((point, index) => {
@@ -36,8 +40,8 @@ class Popup {
       const interval = point.interval ? PopupHelper.formatBalance(point.interval) : undefined;
   
       return (`<div class="table--row">
-        <div class="table--item ${point.manualStartDate && 'manual'}">${start}</div>
-        <div class="table--item ${point.manualEndDate && 'manual'}">${end}</div>
+        <div style="color: ${point.startColor}" class="table--item">${start}</div>
+        <div style="color: ${point.endColor}" class="table--item">${end}</div>
         <div class="table--item">${duration}</div>
       </div>` + (interval ? `
       <div class="table--row">
@@ -114,6 +118,9 @@ class Popup {
     const date = new Date();
     const dateElement = document.getElementById('current-date');
     dateElement.innerHTML = PopupHelper.formatDate(date, 'dd de MM, hh:min:ss');
+
+    const lastUpdate = document.getElementById('last-update');
+    lastUpdate.innerHTML = PopupHelper.formatDate(this.settings.lastUpdate, 'Última sincronização em dd de MM às hh:min:ss');
   }
 
   #setScreen(screen){

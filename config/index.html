@@ -16,47 +16,24 @@
   </header>
 
   <main>
+    <span id="last-update">Última atualização em 00 de junho às 00:00:00</span>
     <section id="dashboard-screen" class="grid-container">
-      <div class="container" style="width: 100%;">
-        <h2 class="container--title">Olá, <spam id="tw-info-username">user</spam>! <span class="hello-hand">👋🏼</span></h2>
-
-        <form class="container--content">
-          <div class="container--content--row">
-            <div class="container--item">
-              <label>🏢 Contratante</label>
-              <input id="tw-info-companyname" type="text" disabled value="-">
-            </div>
-            <div class="container--item">
-              <label>⏳ Intermediador</label>
-              <input id="tw-info-iss" type="text" disabled value="-">
-            </div>
-            <div class="container--item">
-              <label>📧 E-mail</label>
-              <input id="tw-info-email" type="text" disabled value="-">
-            </div>
-          </div>
-          <div class="container--content--row">
-            <div class="container--item">
-              <label>💼 Regra de jornada registrada</label>
-              <input id="tw-info-payrollruletitle" type="text" disabled value="-">
-            </div>
-  
-            <div class="container--item">
-              <label>🆔 Empresa</label>
-              <input id="tw-info-companyid" type="text" disabled value="-">
-            </div>
-
-            <div class="container--item">
-              <label>🆔 Empregado</label>
-              <input id="tw-info-employeeid" type="text" disabled value="-">
-            </div>
-          </div>
-        </form>
-      </div>
-
       <div class="container grid-item">
-        <h2 class="container--title">⚙️ Configurações</h2>
+        <h2 class="container--title">Olá, <spam id="tw-info-shortName">Colaborador</spam>! <span class="hello-hand">👋🏼</span></h2>
+        <img src="https://dummyimage.com/256x256/7c9020/fff&text=T" alt="user avatar" id="tw-info-avatar" class="tw-info-avatar">
+
         <form id="settings-form" class="container--content">
+          <div class="container--content--row">
+            <div class="container--item">
+              <label for="tw-info-username">👤 Colaborador</label>
+              <input disabled type="text" id="tw-info-username" name="tw-info-username" value="-">
+            </div>
+
+            <div class="container--item">
+              <label for="tw-info-companyname">💼 Empresa</label>
+              <input disabled type="text" id="tw-info-companyname" name="tw-info-companyname" value="-">
+            </div>  
+          </div>
           <div class="container--content--row">
             <div class="container--item">
               <label for="work-time">⏳ Jornada de trabalho</label>
@@ -106,35 +83,46 @@
         </form>
       </div>
 
-      <div class="container grid-item charts-container">
-        <section id='dash-loading-screen'>
-          <div class="lds-ripple">
-            <div></div>
-            <div></div>
-          </div>
-          <span>Carregando..</span>
-        </section>
+      <div id="table-appointments" class="container grid-item hidden">
+        <h2 class="container--title">🚀 Apontamentos <span data-content="current-month"></span></h2>
 
-        <h2 class="container--title">📊 Métricas</h2>
+        <div class="chart-container table-container">
+          <table id="table-appointments">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Jornada</th>
+                <th>Em Pausa</th>
+                <th>Trabalhando</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="charts-container" class="container charts-container hidden">
+        <h2 class="container--title">📊 Gráficos <span data-content="current-month"></span></h2>
 
         <div class="chart-arrow-left">
           ⬅️
         </div>
 
-        <div class="chart-container" data-chart="chart-overtime-per-month">
-          <canvas id="chart-overtime-per-month"></canvas>
+        <div class="chart-container" data-chart="number-of-points-per-day">
+          <canvas id="number-of-points-per-day"></canvas>
         </div>
 
-        <div class="chart-container hidden" data-chart="chart-bank-of-hours-per-release">
-          <canvas id="chart-bank-of-hours-per-release"></canvas>
+        <div class="chart-container hidden" data-chart="hours-of-break-per-day">
+          <canvas id="hours-of-break-per-day"></canvas>
         </div>
 
-        <div class="chart-container hidden" data-chart="chart-days-absent-per-month">
-          <canvas id="chart-days-absent-per-month"></canvas>
+        <div class="chart-container hidden" data-chart="hours-worked-per-day">
+          <canvas id="hours-worked-per-day"></canvas>
         </div>
 
-        <div class="chart-container hidden" data-chart="chart-hours-worked-per-month">
-          <canvas id="chart-hours-worked-per-month"></canvas>
+        <div class="chart-container hidden" data-chart="total-hours-worked">
+          <canvas id="total-hours-worked"></canvas>
         </div>
 
         <div class="chart-arrow-right">
@@ -142,43 +130,17 @@
         </div>
         <div class="container-legend">
           <small>
-            Use as setas do teclado para navegar entre os gráficos.
+            ℹ️ Use as setas do teclado para navegar entre as telas.
           </small>
         </div>
       </div>
-    </section>
-
-    <section id="login-screen" class="container">
-      <h2 class="container--title">🔒 Entrar</h2>
-      <form id="login-form" class="container--content">
-        <div class="container--content--row">
-          <div class="container--item">
-            <label for="login">📫 Login</label>
-            <input type="email" id="login" name="login" required>
-            <small class="invalid-input hidden">🚨 Login inválido</small>
-          </div>
-        </div>
-        <div class="container--content--row">
-          <div class="container--item">
-            <label for="password">🔐 Senha</label>
-            <input type="password" id="password" name="password">
-            <small class="invalid-input hidden">🚨 Senha inválida</small>
-          </div>
-        </div>
-        <div class="container--content--row">
-          <div class="container--item">
-            <button type="submit" id="login-button">🔓 Acessar</button>
-          </div>
-        </div>
-      </form>
-      
     </section>
   </main>
 
   <footer>
     2024 | 
     <img src="../assets/icons/github-white.svg" width="16" height="16" alt="GitHub icon"> 
-    <a href="https://github.com/ErnaneJ/tradingworks-plus">TradingWorks+</a> 
+    <a target="_blank" href="https://github.com/ErnaneJ/tradingworks-plus">TradingWorks+</a> 
   </footer>
 
   <script src="../assets/scripts/chart.js"></script>

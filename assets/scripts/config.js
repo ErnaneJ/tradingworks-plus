@@ -1,32 +1,4 @@
 class DashboardHelper {
-  static decideScreen(){
-    const loginScreen = document.querySelector('#login-screen');
-    const configScreen = document.querySelector('#dashboard-screen');
-    
-    const user = JSON.parse(localStorage.getItem('tradingWorksUser'));
-  
-    if(user){
-      loginScreen.classList.add('hidden');
-      configScreen.classList.remove('hidden');
-
-      DashboardLoader.loadTWInfo();
-      new DashboardCharts();
-    }else{
-      loginScreen.classList.remove('hidden');
-      configScreen.classList.add('hidden');
-    }
-  }
-
-  static parseJwt(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-  
-    return JSON.parse(jsonPayload);
-  }
-
   static allowSendMessageToggle(){
     const toggle = document.querySelector('#allow-send-messages-whatsapp');
     toggle.addEventListener('change', e => {
@@ -72,46 +44,6 @@ class DashboardHelper {
   }
 }
 class DashboardForms {
-  
-  static submitLogin(){
-    const loginForm = document.querySelector('#login-form');
-    const inputLogin = document.querySelector('#login');
-    const inputPassword = document.querySelector('#password');
-
-    loginForm.addEventListener('submit', async event => {
-      event.preventDefault();
-
-      try{
-        const request = await fetch("https://api-infra.tworh.com.br/api/auth/login", {
-          "method": "POST",
-          "headers": {
-            "accept": "application/json",
-            "content-type": "application/json;charset=UTF-8"
-          },
-          "referrerPolicy": "no-referrer",
-          "body": `{\"username\":\"${inputLogin.value}\",\"password\":\"${inputPassword.value}\",\"rememberMe\":true}`
-        });
-    
-        const response = await request.json();
-        const token = response.listResponse[0].userToken;
-        const user = DashboardHelper.parseJwt(token);
-
-        localStorage.setItem('tradingWorksUser', JSON.stringify({...user, userToken: token}));
-
-        DashboardHelper.decideScreen();
-      }catch(err){
-        // console.log(err);
-
-        Array.from(loginForm.querySelectorAll('.invalid-input')).forEach(alert => {
-          alert.classList.remove('hidden');
-          setTimeout(() => {
-            alert.classList.add('hidden');
-          }, 3000);
-        });
-      }
-    });
-  }
-
   static submitSettings(){
     const form = document.querySelector('#settings-form');
     form.addEventListener('submit', (event) => {
@@ -121,8 +53,10 @@ class DashboardForms {
         const formData = new FormData(event.target);
         const formattedFormData = Object.fromEntries(formData.entries());
 
-        localStorage.setItem('tradingWorksSettings', JSON.stringify(formattedFormData));
-        chrome.runtime.sendMessage({type: 'updateSettings', data: formattedFormData});
+        const currentSettings = JSON.parse(localStorage.getItem('tradingWorksSettings')) || {};
+        const settings = {...currentSettings, ...formattedFormData};
+        localStorage.setItem('tradingWorksSettings', JSON.stringify(settings));
+        chrome.runtime.sendMessage({type: 'updateSettings', data: settings});
 
         const button = document.querySelector('button[type="submit"]');
         button.innerHTML = 'Sucesso! 🎉';
@@ -135,6 +69,7 @@ class DashboardForms {
     
         setTimeout(() => {
           button.innerHTML = '💾 Salvar';
+          window.location.reload();
         }, 2000);
       }catch(e){
         console.log(e);
@@ -152,6 +87,8 @@ class DashboardForms {
         whats: '🤖 *TW+:* Olá!👋 Esse é um teste de notificação do Tradingworks+ no Whatsapp. Por aqui está tudo certo! 🚀'
       });
     });
+
+
   }
 
   static handleTimeInputs(){
@@ -196,23 +133,28 @@ class DashboardForms {
 class DashboardLoader {
   static loadTWInfo(){
     const companyNameInput = document.getElementById("tw-info-companyname");
-    const issInput = document.getElementById("tw-info-iss");
-    const emailInput = document.getElementById("tw-info-email");
-    const payRollRuleTitleInput = document.getElementById("tw-info-payrollruletitle");
-    const companyIdInput = document.getElementById("tw-info-companyid");
-    const employeeIdInput = document.getElementById("tw-info-employeeid");
-    const userName = document.getElementById("tw-info-username");
+    const shortName = document.getElementById("tw-info-shortName");
+    const userNameInput = document.getElementById("tw-info-username");
+    const userAvatar = document.getElementById("tw-info-avatar");
+    const lastUpdate = document.getElementById("last-update");
 
-    const user = JSON.parse(localStorage.getItem('tradingWorksUser'));
-    if(!user) return;
+    const settings = JSON.parse(localStorage.getItem('tradingWorksSettings'));
+    if(!settings) return;
 
-    companyNameInput.value = user.companyname;
-    issInput.value = user.iss;
-    emailInput.value = user.email;
-    payRollRuleTitleInput.value = user.payrollruletitle;
-    companyIdInput.value = user.companyid;
-    employeeIdInput.value = user.employeeid;
-    userName.innerText = user.nickname;
+    if(settings.userName){
+      shortName.innerText = settings.userName.split(' ')[0];
+      userNameInput.value = settings.userName;
+    }
+
+    if(settings.employ) companyNameInput.value = settings.employ;
+
+    if(settings.userImage) userAvatar.src = settings.userImage;
+
+    if(settings.lastUpdate) {
+      lastUpdate.innerText = `Última sincronização em ${new Date(settings.lastUpdate).toLocaleString('pt-BR')}`;
+    }else{
+      lastUpdate.innerText = 'Não sincronizado. Verifique sua sessão no TradingWorks.';
+    }
   }
 
   static loadSettings(){
@@ -237,14 +179,44 @@ class DashboardLoader {
     }
   }
 }
-class DashboardCharts {
+class DashboardLoadData {
   constructor(){
-    this.timeCardData = null;
-    this.bankHoursData = null;
+    this.settings = JSON.parse(localStorage.getItem('tradingWorksSettings')) || {};
     this.currentGraphShowing = 0;
 
+    this.loadTable();
     this.loadCharts();
-    this.loadChartsIteration();
+  }
+
+  loadTable(){
+    if(!this.settings) return;
+    if(!this.settings.currentMonthAppointments) return;
+    
+    const tableContainer = document.getElementById('table-appointments');
+    tableContainer.classList.remove('hidden');
+
+    const currentMonthAppointments = this.settings.currentMonthAppointments;
+    if(!currentMonthAppointments) return;
+
+    const table = document.querySelector('#table-appointments');
+    const tbody = table.querySelector('tbody');
+
+    currentMonthAppointments.reverse().forEach(appointment => {
+      const tr = document.createElement('tr');
+      
+      const jornada = appointment.jornada != '' ? appointment.jornada.split('  ').map(h => `<span>${h.trim()}</span>`).join('\n') : '-';
+
+      tr.innerHTML  = `<td>${appointment.data || '-'}</td>`;            // Data
+      tr.innerHTML += `<td>${jornada}</td>`;                            // Pontos
+      tr.innerHTML += `<td>${appointment.horas_em_pausas || '-'}</td>`; // Em Pausa
+      tr.innerHTML += `<td>${appointment["horas_trab."] || '-'}</td>`;  // Trabalhando
+      tr.innerHTML += `<td>${appointment.horas_totais || '-'}</td>`;    // Total
+
+      tbody.appendChild(tr);
+    });
+
+    const currentMonth = document.querySelectorAll('span[data-content="current-month"]');
+    currentMonth.forEach(span => span.innerText = '- ' + new Date().toLocaleString('pt-BR', { month: 'long', year: 'numeric' }));
   }
 
   loadChartsIteration(){
@@ -274,260 +246,289 @@ class DashboardCharts {
     });
   }
 
-  async captureInformation(){
-    const user = JSON.parse(localStorage.getItem('tradingWorksUser'));
-    
-    if(!user) return;
-    
-    const [rawBankTimeData, rawTimeCardData] = await Promise.all([fetch(`https://api-main.tworh.com.br/api/CompTimeEvent/list?EmployeeId=${user.employeeid}&CompanyId=${user.companyid}&ViewHistory=false`, {
-      "method": "GET",
-      "headers": {
-        "accept": "application/json, text/plain, */*",
-        "authorization": `Bearer ${user.token}`,
-        "content-type": "application/json",
-      }
-    }), fetch(`https://api-main.tworh.com.br/api/Timecard/list?EmployeeId=${user.employeeid}&CompanyId=${user.companyid}`, {
-      "method": "GET",
-      "headers": {
-        "accept": "application/json, text/plain, */*",
-        "authorization": `Bearer ${user.token}`,
-        "content-type": "application/json",
-      }
-    })]);
-
-    const [bankTimeData, timeCardData] = await Promise.all([rawBankTimeData.json(), rawTimeCardData.json()]);
-
-    this.timeCardData = timeCardData.listResponse;
-    this.bankHoursData = bankTimeData.listResponse;
-  }
-
   async loadCharts(){
-    await this.captureInformation();
+    if(!this.settings) return;
+    if(!this.settings.currentMonthAppointments) return;
 
-    this.#chartBankOfHoursPerRelease();
-    this.#chartDaysAbsentPerMonth();
-    this.#chartHoursWorkedPerMonth();
-    this.#chartOvertimePerMonth();
+    const chartContainers = document.getElementById('charts-container');
+    chartContainers.classList.remove('hidden');
 
-    this.#removeLoading();
-  }
+    this.#chartNumberOfPointsPerDay();
+    this.#chartHoursOfBreakPerDay();
+    this.#chartHoursWorkedPerDay();
+    this.#chartTotalHoursWorked();
 
-  #removeLoading(){
-    const loading = document.querySelector('#dash-loading-screen');
-    loading.classList.add('hidden');
+    this.loadChartsIteration();
   }
 
   #showChart(){
-    const chartBankOfHoursPerRelease = document.querySelector("[data-chart='chart-bank-of-hours-per-release']");
-    const chartDaysAbsentPerMonth = document.querySelector("[data-chart='chart-days-absent-per-month']");
-    const chartHoursWorkedPerMonth = document.querySelector("[data-chart='chart-hours-worked-per-month']");
-    const chartOvertimePerMonth = document.querySelector("[data-chart='chart-overtime-per-month']");
+    const numberOfPointsPerDay = document.querySelector("[data-chart='number-of-points-per-day']");
+    const hoursOfBreakPerDay = document.querySelector("[data-chart='hours-of-break-per-day']");
+    const hoursWorkedPerDay = document.querySelector("[data-chart='hours-worked-per-day']");
+    const totalHoursWorked = document.querySelector("[data-chart='total-hours-worked']");
 
-    const charts = [chartBankOfHoursPerRelease, chartDaysAbsentPerMonth, chartHoursWorkedPerMonth, chartOvertimePerMonth];
+    const charts = [numberOfPointsPerDay, hoursOfBreakPerDay, hoursWorkedPerDay, totalHoursWorked];
 
     charts.forEach(chart => chart.classList.add('hidden'));
 
     charts[this.currentGraphShowing % charts.length].classList.remove('hidden');
   }
 
-  #chartBankOfHoursPerRelease(){
-    const chart = document.getElementById('chart-bank-of-hours-per-release');
-
+  #chartNumberOfPointsPerDay(){
+    const containerHeight = document.querySelector('.chart-container').offsetHeight;
+    const chart = document.getElementById('number-of-points-per-day');
     if(!chart) return;
 
-    const bankHoursData = this.bankHoursData.sort((a, b) => {
-      const dateA = new Date(a.baseDate);
-      const dateB = new Date(b.baseDate);
-
-      return dateA - dateB;
-    });
-
-    const groupedData = {};
-
-    bankHoursData.forEach((entry, i) => {
-      const createdDate = new Date(entry.baseDate);
-      const monthYear = createdDate.toLocaleString('pt-BR', { month: 'numeric', year: 'numeric' });
-  
-      if (!groupedData[monthYear]) groupedData[monthYear] = 0;
-  
-      groupedData[monthYear] += entry.compTime;
-    });
-
-    const labels = Object.keys(groupedData);
-    const data = Object.values(groupedData);
+    const labels = this.settings.currentMonthAppointments.map(item => item.data)
+    const data = this.settings.currentMonthAppointments.map(item => item.jornada.split('  ').filter(Boolean).length)
 
     new Chart(chart, {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Saldo do Banco de Horas por mês/lançamento',
+          label: 'Pontos registrados por Dia',
           data: data,
           borderWidth: 1,
           backgroundColor: '#A7BF31' 
         }]
       },
       options: {
-        responsive:true,
+        responsive: true,
         maintainAspectRatio: false,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return `${value} ponto${value != 1 ? 's' : ''}`;
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.raw;
+
+                return `${value} ponto${value != 1 ? 's' : ''} ${value % 2 === 0 ? '✅' : '❌'}`;
+              }
+            }
           }
         }
       }
     });
+
+    chart.style.height = `${containerHeight - 150}px`
+    chart.style.width = '100%';
   }
 
-  #chartDaysAbsentPerMonth(){
-    const chart = document.getElementById('chart-days-absent-per-month');
-
+  #chartHoursOfBreakPerDay(){
+    const containerHeight = document.querySelector('.chart-container').offsetHeight;
+    const chart = document.getElementById('hours-of-break-per-day');
     if(!chart) return;
 
-    const timeCardData = this.timeCardData.sort((a, b) => {
-      const dateA = new Date(a.toDate);
-      const dateB = new Date(b.toDate);
-
-      return dateA - dateB;
+    const labels = this.settings.currentMonthAppointments.map(item => item.data)
+    const data = this.settings.currentMonthAppointments.map(item => {
+      const [hours, minutes] = item.horas_em_pausas.split(':');
+      return parseFloat(hours) * 60 + parseFloat(minutes);
     });
 
-    const groupedData = {};
-
-    timeCardData.forEach((entry, i) => {
-      const createdDate = new Date(entry.toDate);
-      const monthYear = createdDate.toLocaleString('pt-BR', { month: 'numeric', year: 'numeric' });
-  
-      if (!groupedData[monthYear]) groupedData[monthYear] = 0;
-  
-      groupedData[monthYear] += entry.absentDays;
-    });
-
-    const labels = Object.keys(groupedData);
-    const data = Object.values(groupedData);
-    
     new Chart(chart, {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Dias Ausentes por Mês',
+          label: 'Tempo de intervalo por Dia',
           data: data,
           borderWidth: 1,
           backgroundColor: '#A7BF31' 
         }]
       },
       options: {
-        responsive:true,
+        responsive: true,
         maintainAspectRatio: false,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                const hours = Math.floor(value / 60);
+                const minutes = value % 60;
+
+                let text = '';
+                if(hours > 0) text += `${hours}h `;
+                if(minutes > 0) text += `${minutes}min`;
+
+                return text;
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.raw;
+                const hours = Math.floor(value / 60);
+                const minutes = value % 60;
+                
+                let text = '';
+                if(hours > 0) text += `${hours}h `;
+                if(minutes > 0) text += `${minutes}min`;
+
+                return text;
+              }
+            }
           }
         }
       }
     });
+
+    chart.style.height = `${containerHeight - 150}px`
+    chart.style.width = '100%';
   }
 
-  #chartHoursWorkedPerMonth(){
-    const chart = document.getElementById('chart-hours-worked-per-month');
+  #chartHoursWorkedPerDay(){
+    const containerHeight = document.querySelector('.chart-container').offsetHeight;
+    const chart = document.getElementById('hours-worked-per-day');
+    if(!chart) return;
 
-    const timeCardData = this.timeCardData.sort((a, b) => {
-      const dateA = new Date(a.toDate);
-      const dateB = new Date(b.toDate);
-
-      return dateA - dateB;
+    const labels = this.settings.currentMonthAppointments.map(item => item.data)
+    const data = this.settings.currentMonthAppointments.map(item => {
+      const [hours, minutes] = item['horas_trab.'].split(':');
+      return parseFloat(hours) * 60 + parseFloat(minutes);
     });
 
-    const groupedData = {};
-
-    timeCardData.forEach((entry, i) => {
-      const createdDate = new Date(entry.toDate);
-      const monthYear = createdDate.toLocaleString('pt-BR', { month: 'numeric', year: 'numeric' });
-  
-      if (!groupedData[monthYear]) groupedData[monthYear] = 0;
-  
-      groupedData[monthYear] += entry.workedHours;
-    });
-
-    const labels = Object.keys(groupedData);
-    const data = Object.values(groupedData);
-    
     new Chart(chart, {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Horas trabalhadas por Mês',
+          label: 'Horas trabalhadas por Dia',
           data: data,
           borderWidth: 1,
           backgroundColor: '#A7BF31' 
         }]
       },
       options: {
-        responsive:true,
+        responsive: true,
         maintainAspectRatio: false,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                const hours = Math.floor(value / 60);
+                const minutes = value % 60;
+
+                let text = '';
+                if(hours > 0) text += `${hours}h `;
+                if(minutes > 0) text += `${minutes}min`;
+
+                return text;
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.raw;
+                const hours = Math.floor(value / 60);
+                const minutes = value % 60;
+                
+                let text = '';
+                if(hours > 0) text += `${hours}h `;
+                if(minutes > 0) text += `${minutes}min`;
+
+                return text;
+              }
+            }
           }
         }
       }
     });
+
+    chart.style.height = `${containerHeight - 150}px`
+    chart.style.width = '100%';
   }
 
-  #chartOvertimePerMonth(){
-    const chart = document.getElementById('chart-overtime-per-month');
+  #chartTotalHoursWorked(){
+    const containerHeight = document.querySelector('.chart-container').offsetHeight;
+    const chart = document.getElementById('total-hours-worked');
+    if(!chart) return;
 
-    const timeCardData = this.timeCardData.sort((a, b) => {
-      const dateA = new Date(a.toDate);
-      const dateB = new Date(b.toDate);
-
-      return dateA - dateB;
+    const labels = this.settings.currentMonthAppointments.map(item => item.data)
+    const data = this.settings.currentMonthAppointments.map(item => {
+      const [hours, minutes] = item.horas_totais.split(':');
+      return parseFloat(hours) * 60 + parseFloat(minutes);
     });
 
-    const groupedData = {};
-
-    timeCardData.forEach((entry, i) => {
-      const createdDate = new Date(entry.toDate);
-      const monthYear = createdDate.toLocaleString('pt-BR', { month: 'numeric', year: 'numeric' });
-  
-      if (!groupedData[monthYear]) groupedData[monthYear] = 0;
-  
-      groupedData[monthYear] += entry.overtimeHours;
-    });
-
-    const labels = Object.keys(groupedData);
-    const data = Object.values(groupedData);
-    
     new Chart(chart, {
       type: 'bar',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Horas extras acumuladas por Mês',
+          label: 'Tempo de Jornada por Dia',
           data: data,
           borderWidth: 1,
           backgroundColor: '#A7BF31' 
         }]
       },
       options: {
-        responsive:true,
+        responsive: true,
         maintainAspectRatio: false,
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                const hours = Math.floor(value / 60);
+                const minutes = value % 60;
+
+                let text = '';
+                if(hours > 0) text += `${hours}h `;
+                if(minutes > 0) text += `${minutes}min`;
+
+                return text;
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.raw;
+                const hours = Math.floor(value / 60);
+                const minutes = value % 60;
+                
+                let text = '';
+                if(hours > 0) text += `${hours}h `;
+                if(minutes > 0) text += `${minutes}min`;
+
+                return text;
+              }
+            }
           }
         }
       }
     });
+
+    chart.style.height = `${containerHeight - 150}px`
+    chart.style.width = '100%';
   }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  DashboardHelper.decideScreen();
+  DashboardLoader.loadTWInfo();
+  new DashboardLoadData();
+
   DashboardHelper.allowSendMessageToggle();
   
-  DashboardForms.submitLogin();
   DashboardForms.submitSettings();
   DashboardForms.submitSendMessage();
   DashboardForms.handleTimeInputs();

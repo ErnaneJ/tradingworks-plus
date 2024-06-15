@@ -44,7 +44,6 @@ class Application {
 
   #chromeRuntimeOnMessage(){
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      console.log(message)
       if (message.type !== "changeScreen") return;
       
       this.setScreen(message.data.screen);
@@ -56,6 +55,7 @@ class Application {
       'loading', // Information are being loaded
       'started', // User is signed in and working
       'not-started', // User is signed in but not working
+      'not-logged', // User is not signed in
       'disabled' // Extension is disabled
     ];
     
