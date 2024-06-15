@@ -120,7 +120,6 @@ class Popup {
     dateElement.innerHTML = PopupHelper.formatDate(date, 'dd de MM, hh:min:ss');
 
     const lastUpdate = document.getElementById('last-update');
-    console.log(this.information.lastUpdate);
     lastUpdate.innerHTML = PopupHelper.formatDate(this.settings.lastUpdate, 'Última sincronização em dd de MM às hh:min:ss');
   }
 
