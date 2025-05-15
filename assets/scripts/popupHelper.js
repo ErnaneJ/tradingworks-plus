@@ -1,8 +1,11 @@
 class PopupHelper {
   static formatBalance(balance) {
-    const balanceHours = String(Math.trunc(balance)).padStart(2, '0');
+    const balanceHours = String(Math.abs(Math.trunc(balance))).padStart(2, '0');
     const balanceMinutes = String(Math.abs(Math.round((balance % 1) * 60))).padStart(2, '0');
-    return `${balanceHours}h${balanceMinutes}m`;
+    let formatString = '';
+    if (balance < 0) formatString = '-';
+    formatString += balanceHours + 'h' + balanceMinutes + 'm';
+    return formatString;
   }
 
   static formatDate(date, format) {
