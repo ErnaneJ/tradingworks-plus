@@ -29,6 +29,7 @@ header{
 
 .header--logo a{
   text-decoration: none;
+  position: relative;
   color: inherit;
 }
 
@@ -190,6 +191,7 @@ footer{
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.1rem;
   padding: .5rem;
   width: 100%;
   border-top: 1px solid var(--atlantis-300);
@@ -204,6 +206,12 @@ footer a{
   text-decoration: none;
   font-weight: bold;
   margin-left: .25rem;
+}
+
+footer span#version, footer span[data-current-year]{
+  display: block;
+  font-size: .75rem;
+  color: var(--atlantis-600);
 }
 
 #started-screen{

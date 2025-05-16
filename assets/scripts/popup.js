@@ -25,7 +25,7 @@ class Popup {
     this.#updatePopupMsg();
     this.#updateCurrentBreakTime();
 
-    this.#showDate();
+    this.#showDateAndVersion();
   }
 
   #updateTableTimes() {
@@ -111,10 +111,10 @@ class Popup {
     }
   }
   
-  #showDate() {
-    const currentYear = document.getElementById('current-year');
-    currentYear.innerHTML = new Date().getFullYear();
-    
+  #showDateAndVersion() {    
+    const version = chrome.runtime.getManifest().version;
+    document.getElementById('version').textContent = `v${version}`;
+
     const date = new Date();
     const dateElement = document.getElementById('current-date');
     dateElement.innerHTML = PopupHelper.formatDate(date, 'dd de MM, hh:min:ss');
