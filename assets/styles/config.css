@@ -157,7 +157,7 @@ main{
 
 .container--item.checkbox-container{
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: start;
   gap: .5rem;
   width: 100%;
