@@ -1,45 +1,29 @@
 class DashboardHelper {
-  static allowSendMessageToggle(){
-    const toggle = document.querySelector('#allow-send-messages-whatsapp');
-    toggle.addEventListener('change', e => {
-      const number = document.querySelector('#whatsapp-number');
-  
-      [number].forEach(input => {
-        input.classList.toggle('disabled');
-        input.disabled = !input.disabled;
-      });
-    });
-  }
-
   static async notify(messages){
-    const number = document.querySelector('#whatsapp-number').value;
+    console.log('[TradingWorks+] - Trying to send notification 🚀');
     
-    const allowSendMessageWhatsapp = document.querySelector('#allow-send-messages-whatsapp')?.checked;
     const allowSendMessageBrowser = document.querySelector('#allow-send-messages-browser')?.checked;
   
-    if(!allowSendMessageBrowser && !allowSendMessageWhatsapp) alert('Você precisa habilitar ao menos uma opção de envio de mensagem. 🚨')
+    if(!allowSendMessageBrowser) {
+      console.warn('[TradingWorks+] - Notifications are disabled ⚠️');
+      alert('Você precisa habilitar ao menos uma opção de envio de mensagem. 🚨');
+      return;
+    }
   
-    if(allowSendMessageBrowser) await chrome.notifications.create(
-      `trading-works-plus-msg-${new Date().getTime()}`, {
-        type: "basic",
-        iconUrl: "/assets/favicon48.png",
-        title: "TradingWorks+",
-        message: messages.browser,
-      }, () => { }
-    );
-  
-    if(allowSendMessageWhatsapp) {
-      if(!number) return alert('Você precisa informar um número de WhatsApp para receber mensagens. 🚨');
-
-      const optionsMessage = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: `{"number":"${number}","message":"${messages.whats}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
-      };
-
-      fetch('https://buddy.ernane.dev/api/v1/send-message/', optionsMessage)
-        .then(response => response.json()).then(response => {})
-        .catch(err => alert('Houve um erro ao enviar mensagem no WhatsApp, verifique as informações e tente novamente. 😢', err));
+    try {
+      console.log('[TradingWorks+] - Sending notification message to background 📨');
+      await chrome.runtime.sendMessage({
+        type: 'chromeNotify',
+        data: {
+          id: `trading-works-plus-msg-${new Date().getTime()}`,
+          title: "TradingWorks+",
+          message: messages.browser || "Teste de notificação",
+        }
+      });
+      console.log('[TradingWorks+] - Message sent successfully ✅');
+    } catch(e) {
+      console.error('[TradingWorks+] - Error sending notification ❌:', e);
+      alert('Erro ao enviar notificação. Verifique se as permissões de notificação estão habilitadas.');
     }
   }
 }
@@ -63,8 +47,7 @@ class DashboardForms {
         form.classList.remove('invalid');
 
         DashboardHelper.notify({
-          browser: 'Configurações salvas com sucesso. 🚀',
-          whats: '🤖 *TW+:* Configurações salvas com sucesso. 🚀'
+          browser: 'Configurações salvas com sucesso. 🚀'
         });
     
         setTimeout(() => {
@@ -84,7 +67,6 @@ class DashboardForms {
       
       DashboardHelper.notify({
         browser: 'Olá!👋 Teste de notificações do TradingWorks+ no navegador. Por aqui está tudo certo. 🤗',
-        whats: '🤖 *TW+:* Olá!👋 Esse é um teste de notificação do Tradingworks+ no Whatsapp. Por aqui está tudo certo! 🚀'
       });
     });
 
@@ -165,18 +147,8 @@ class DashboardLoader {
 
     form['work-time'].value = settings['work-time'] || '';
     form['break-time'].value = settings['break-time'] || '';
-    form['whatsapp-number'].value = settings['whatsapp-number'] || '';
-    form['allow-send-messages-whatsapp'].checked = settings['allow-send-messages-whatsapp'] === 'on';
     form['allow-send-messages-browser'].checked = settings['allow-send-messages-browser'] === 'on';
 
-    if(settings['allow-send-messages-whatsapp'] !== 'on'){
-      const number = document.querySelector('#whatsapp-number');
-
-      [number].forEach(input => {
-        input.classList.add('disabled');
-        input.disabled = true;
-      });
-    }
   }
 }
 class DashboardLoadData {
@@ -526,8 +498,6 @@ class DashboardLoadData {
 window.addEventListener('DOMContentLoaded', () => {
   DashboardLoader.loadTWInfo();
   new DashboardLoadData();
-
-  DashboardHelper.allowSendMessageToggle();
   
   DashboardForms.submitSettings();
   DashboardForms.submitSendMessage();

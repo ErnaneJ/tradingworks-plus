@@ -22,7 +22,7 @@ Thank you for choosing to use the **TradingWorks+** extension. This privacy poli
 
 3.1 Third Parties: We emphasize that NO information provided by the user will be shared, sold, or disclosed to third parties. All collected information is strictly used to provide the features and services of the extension on the user's own device.
 
-3.2 Messaging Service: The **TradingWorks+** extension may make a request to a messaging service for WhatsApp chats, provided that the messaging system is also enabled. This request will be made solely with the phone number previously provided by the user, without sharing other WhatsApp-related information.
+3.2 Messaging Service: The **TradingWorks+** extension does not use any external messaging service.
 
 ## Security Measures
 

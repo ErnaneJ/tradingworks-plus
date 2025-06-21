@@ -177,16 +177,6 @@ class TWOffscreenNotifications {
       });
     }
   
-    if(config && config['allow-send-messages-whatsapp'] === 'on'){    
-      chrome.runtime.sendMessage({
-        type: 'whatsNotify',
-        data: {
-          number: config['whatsapp-number'],
-          message: msg
-        }
-      });
-    }
-
     localStorage.setItem('two-messages', JSON.stringify(msgsData)); 
   }
 }

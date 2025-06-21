@@ -61,8 +61,7 @@ In order to make life easier for the user, this extension has the following feat
   - Elapsed time of extra journey, when the pre-defined time has already been finalized.
 - Notifications
   - Background execution of a journey monitor that captures this information every X time and notifies the user in specific cases through the [https://www.callmebot.com/](callmebot.com) API.
-    - Notifications on Whatsapp
-    - Browser Notifications
+    - Notifications on browser
 
 _Note: All information is captured directly from the [TradingWorks.net](https://app.tradingworks.net/) platform to ensure the accuracy of the calculations. It only needs to identify user session cookies in the browser to obtain the necessary access to enter the platform with the collaborator's profile and capture the information._
 
