@@ -11,6 +11,7 @@
   "author": "Ernane Ferreira",
   "permissions": ["storage", "notifications", "offscreen"],
   "host_permissions": ["https://app.tradingworks.net/*", "https://buddy.ernane.dev/*"],
+  "optional_host_permissions": ["*://*/*"],
   "action": {
     "default_popup": "./popup.html",
     "default_title": "Tradingworks+"

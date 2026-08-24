@@ -190,6 +190,80 @@ class TWOffscreenNotifications {
     localStorage.setItem('two-messages', JSON.stringify(msgsData)); 
   }
 }
+class TWOffscreenWebhooks {
+  static DAILY_EVENTS = ['work-time-completed', 'break-time-exceeded'];
+
+  static dispatch(previousData, currentData, config){
+    if(!config) return;
+    if(config['allow-webhook'] !== 'on') return;
+    if(!config['webhook-url']) return;
+
+    const events = TWOffscreenWebhooks.detectEvents(previousData, currentData, config);
+
+    events.forEach(eventName => {
+      if(config[`webhook-on-${eventName}`] !== 'on') return;
+      if(!TWOffscreenWebhooks.markAsDispatched(eventName)) return;
+
+      console.log(`[TradingWorks+] - Offscreen Webhook Dispatch 🏗️ - ${eventName}`);
+
+      chrome.runtime.sendMessage({
+        type: 'webhookNotify',
+        data: {
+          url: config['webhook-url'],
+          payload: {
+            event: eventName,
+            occurredAt: new Date().toISOString(),
+            isWorking: currentData.isWorking,
+            timeBank: currentData.timeBank,
+            totalWorkedTime: currentData.totalWorkedTime,
+            totalBreakTime: currentData.totalBreakTime,
+            points: currentData.points
+          }
+        }
+      });
+    });
+  }
+
+  static detectEvents(previousData, currentData, config){
+    const events = [];
+    const previousPoints = previousData?.points;
+    const currentPoints = currentData.points || [];
+
+    if(Array.isArray(previousPoints)){
+      const previousLastPoint = previousPoints[previousPoints.length - 1];
+      const currentLastPoint = currentPoints[currentPoints.length - 1];
+
+      if(currentPoints.length > previousPoints.length){
+        events.push('clock-in');
+      }else if(currentPoints.length === previousPoints.length && currentLastPoint){
+        if(!previousLastPoint?.endDate && currentLastPoint.endDate) events.push('clock-out');
+      }
+    }
+
+    const workTimeSettings = Math.floor(OffscreenHelper.passTimeInStringToMinutes(config['work-time']));
+    const breakTimeSettings = Math.floor(OffscreenHelper.passTimeInStringToMinutes(config['break-time']));
+
+    if(Math.floor(currentData.totalWorkedTime * 60) >= workTimeSettings) events.push('work-time-completed');
+    if(Math.floor(currentData.totalBreakTime * 60) >= breakTimeSettings) events.push('break-time-exceeded');
+
+    return events;
+  }
+
+  static markAsDispatched(eventName){
+    if(!TWOffscreenWebhooks.DAILY_EVENTS.includes(eventName)) return true;
+
+    let dispatched = JSON.parse(localStorage.getItem('two-webhooks') || '{}');
+    const currentDate = new Date().toLocaleString('pt-BR', { day: 'numeric', month: 'numeric', year: 'numeric' });
+
+    if(dispatched.date !== currentDate) dispatched = { date: currentDate, events: [] };
+    if(dispatched.events.includes(eventName)) return false;
+
+    dispatched.events.push(eventName);
+    localStorage.setItem('two-webhooks', JSON.stringify(dispatched));
+
+    return true;
+  }
+}
 class TWOffscreen {
   constructor() {
     this.#updateTradingWorksData();
@@ -351,8 +425,10 @@ class TWOffscreen {
     const timeBank = userTimeBank/60;
     const points = userPoints;
 
+    const previousData = JSON.parse(localStorage.getItem('tradingWorksPlusCalculatedData') || '{}');
     const data = OffscreenHelper.calculateInformation({ points, timeBank });
     TWOffscreenNotifications.handleSentMessages(data);
+    TWOffscreenWebhooks.dispatch(previousData, data, settings);
 
     localStorage.setItem('tradingWorksPlusCalculatedData', JSON.stringify(data));
 
