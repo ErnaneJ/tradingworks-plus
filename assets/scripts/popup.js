@@ -1,4 +1,6 @@
 class Popup {
+  static PAYBACK_SIMULATION_LIMIT_IN_MINUTES = 240;
+
   constructor(){
     this.information = undefined;
     this.settings = undefined;
@@ -24,6 +26,7 @@ class Popup {
     this.#updateTableTotals();
     this.#updatePopupMsg();
     this.#updateCurrentBreakTime();
+    this.#updateExitSimulator();
 
     this.#showDateAndVersion();
   }
@@ -111,6 +114,57 @@ class Popup {
     }
   }
   
+  #updateExitSimulator() {
+    const simulator = document.getElementById('exit-simulator');
+    if (!simulator) return;
+
+    const config = JSON.parse(window.localStorage.getItem('tradingWorksSettings'));
+    const simulationLimits = this.#calculateSimulationLimits(config);
+
+    if (!simulationLimits) {
+      simulator.style.display = 'none';
+      return;
+    }
+
+    simulator.style.display = 'block';
+
+    const { remainingMinutes, bankMinutes, maximumMinutes, isPayingBack } = simulationLimits;
+
+    const rangeInput = document.getElementById('simulator-minutes');
+    rangeInput.max = maximumMinutes;
+    if (Number(rangeInput.value) > maximumMinutes) rangeInput.value = maximumMinutes;
+    rangeInput.oninput = () => this.#updateExitSimulator();
+
+    const selectedMinutes = Number(rangeInput.value);
+    const signedMinutes = isPayingBack ? selectedMinutes : -selectedMinutes;
+
+    const simulatedExit = new Date();
+    simulatedExit.setMinutes(simulatedExit.getMinutes() + remainingMinutes + signedMinutes);
+
+    document.getElementById('simulator-legend').textContent = isPayingBack ? 'Repor no banco' : 'Consumir do banco';
+    document.getElementById('simulator-amount').textContent = PopupHelper.formatBalance(selectedMinutes / 60);
+    document.getElementById('simulator-exit').innerHTML = `Saída às <strong>${PopupHelper.formatDate(simulatedExit, 'hh:min')}</strong>`;
+    document.getElementById('simulator-bank').innerHTML = `Banco em <strong>${PopupHelper.formatBalance((bankMinutes + signedMinutes) / 60)}</strong>`;
+  }
+
+  #calculateSimulationLimits(config) {
+    if (!config || !config['work-time']) return null;
+    if (!this.information.isWorking) return null;
+
+    const informedWorkTime = PopupHelper.passTimeInStringToHours(config['work-time']);
+    const remainingMinutes = Math.max(Math.round((informedWorkTime - this.information.totalWorkedTime) * 60), 0);
+    const bankMinutes = Math.round(this.information.timeBank * 60);
+    const isPayingBack = bankMinutes < 0;
+
+    const maximumMinutes = isPayingBack
+      ? Math.min(Math.abs(bankMinutes), Popup.PAYBACK_SIMULATION_LIMIT_IN_MINUTES)
+      : Math.min(bankMinutes, remainingMinutes);
+
+    if (maximumMinutes <= 0) return null;
+
+    return { remainingMinutes, bankMinutes, maximumMinutes, isPayingBack };
+  }
+
   #showDateAndVersion() {    
     const version = chrome.runtime.getManifest().version;
     document.getElementById('version').textContent = `v${version}`;

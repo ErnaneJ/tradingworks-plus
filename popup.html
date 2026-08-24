@@ -87,6 +87,22 @@
       <span id="hours-balance-container">Saldo no banco de Horas: <span id="hours-balance">00:00 h</span></span>
       <p class="message" id="msg">Eai, vamos trabalhar hoje ou não? 🤔</p>
       <span id="estimated-output-hour"></span>
+
+      <details class="simulator" id="exit-simulator" style="display: none;">
+        <summary class="simulator--summary">🧮 Simular saída</summary>
+
+        <label class="simulator--field" for="simulator-minutes">
+          <span id="simulator-legend">Consumir do banco</span>
+          <output class="simulator--amount" id="simulator-amount">00h00m</output>
+        </label>
+
+        <input class="simulator--range" type="range" id="simulator-minutes" min="0" max="0" step="1" value="0">
+
+        <div class="simulator--result">
+          <span id="simulator-exit">-</span>
+          <span id="simulator-bank">-</span>
+        </div>
+      </details>
     </section>
   </main>
 
