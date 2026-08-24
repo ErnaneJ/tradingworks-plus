@@ -70,6 +70,56 @@
               </div>
             </div>
           </div>
+          <div class="container--content--row">
+            <div class="container--item">
+              <label for="webhook-url">🔗 Webhook</label>
+              <input type="url" id="webhook-url" name="webhook-url" placeholder="https://exemplo.com/webhook/tradingworks">
+              <small>Recebe um POST com JSON a cada evento marcado abaixo.</small>
+            </div>
+
+            <div class="container--item checkbox-container">
+              <label for="allow-webhook">Ativo</label>
+              <label class="toggle" for="allow-webhook">
+                <input class="toggle--input" name="allow-webhook" type="checkbox" id="allow-webhook">
+                <div class="toggle--fill"></div>
+              </label>
+            </div>
+          </div>
+
+          <div class="container--content--row webhook-events">
+            <div class="container--item checkbox-container">
+              <label for="webhook-on-clock-in">Entrada</label>
+              <label class="toggle" for="webhook-on-clock-in">
+                <input class="toggle--input" name="webhook-on-clock-in" type="checkbox" id="webhook-on-clock-in">
+                <div class="toggle--fill"></div>
+              </label>
+            </div>
+
+            <div class="container--item checkbox-container">
+              <label for="webhook-on-clock-out">Saída</label>
+              <label class="toggle" for="webhook-on-clock-out">
+                <input class="toggle--input" name="webhook-on-clock-out" type="checkbox" id="webhook-on-clock-out">
+                <div class="toggle--fill"></div>
+              </label>
+            </div>
+
+            <div class="container--item checkbox-container">
+              <label for="webhook-on-work-time-completed">Fim do expediente</label>
+              <label class="toggle" for="webhook-on-work-time-completed">
+                <input class="toggle--input" name="webhook-on-work-time-completed" type="checkbox" id="webhook-on-work-time-completed">
+                <div class="toggle--fill"></div>
+              </label>
+            </div>
+
+            <div class="container--item checkbox-container">
+              <label for="webhook-on-break-time-exceeded">Intervalo excedido</label>
+              <label class="toggle" for="webhook-on-break-time-exceeded">
+                <input class="toggle--input" name="webhook-on-break-time-exceeded" type="checkbox" id="webhook-on-break-time-exceeded">
+                <div class="toggle--fill"></div>
+              </label>
+            </div>
+          </div>
+
           <div class="container--content--row" style="margin-top: 15px;">
             <div class="container--item">
               <button class="save-data" type="submit">💾 Salvar</button>
@@ -78,6 +128,10 @@
           <div class="container--content--row" style="margin-top: -15px;">
             <div class="container--item">
               <button class="send-message" id="send-message">💬 Testar notificação</button>
+            </div>
+
+            <div class="container--item">
+              <button class="send-message" id="send-webhook">🔗 Testar webhook</button>
             </div>
           </div>
         </form>

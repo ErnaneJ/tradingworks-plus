@@ -11,6 +11,39 @@ class DashboardHelper {
     });
   }
 
+  static webhookToggle(){
+    const toggle = document.querySelector('#allow-webhook');
+    toggle.addEventListener('change', DashboardHelper.updateWebhookFieldsState);
+  }
+
+  static updateWebhookFieldsState(){
+    const enabled = document.querySelector('#allow-webhook').checked;
+    const fields = document.querySelectorAll('#webhook-url, .webhook-events .toggle--input');
+
+    fields.forEach(field => {
+      field.classList.toggle('disabled', !enabled);
+      field.disabled = !enabled;
+    });
+  }
+
+  static requestWebhookPermission(url){
+    try {
+      return chrome.permissions.request({ origins: [`${new URL(url).origin}/*`] });
+    } catch (error) {
+      return Promise.resolve(false);
+    }
+  }
+
+  static async sendWebhook(url, payload){
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    return response.status;
+  }
+
   static async notify(messages){
     const number = document.querySelector('#whatsapp-number').value;
     
@@ -53,10 +86,16 @@ class DashboardForms {
         const formData = new FormData(event.target);
         const formattedFormData = Object.fromEntries(formData.entries());
 
+        DashboardForms.applyWebhookToggles(formattedFormData);
+
         const currentSettings = JSON.parse(localStorage.getItem('tradingWorksSettings')) || {};
         const settings = {...currentSettings, ...formattedFormData};
         localStorage.setItem('tradingWorksSettings', JSON.stringify(settings));
         chrome.runtime.sendMessage({type: 'updateSettings', data: settings});
+
+        const webhookPermission = settings['allow-webhook'] === 'on' && settings['webhook-url']
+          ? DashboardHelper.requestWebhookPermission(settings['webhook-url'])
+          : Promise.resolve(true);
 
         const button = document.querySelector('button[type="submit"]');
         button.innerHTML = 'Sucesso! 🎉';
@@ -67,10 +106,14 @@ class DashboardForms {
           whats: '🤖 *TW+:* Configurações salvas com sucesso. 🚀'
         });
     
-        setTimeout(() => {
-          button.innerHTML = '💾 Salvar';
-          window.location.reload();
-        }, 2000);
+        webhookPermission.then(granted => {
+          if(!granted) alert('Permissão negada para o endereço do webhook. Os disparos ficarão bloqueados até você autorizar. 🚨');
+
+          setTimeout(() => {
+            button.innerHTML = '💾 Salvar';
+            window.location.reload();
+          }, 2000);
+        });
       }catch(e){
         console.log(e);
       }
@@ -89,6 +132,44 @@ class DashboardForms {
     });
 
 
+  }
+
+  static applyWebhookToggles(formattedFormData){
+    const webhookToggleNames = [
+      'allow-webhook',
+      'webhook-on-clock-in',
+      'webhook-on-clock-out',
+      'webhook-on-work-time-completed',
+      'webhook-on-break-time-exceeded'
+    ];
+
+    webhookToggleNames.forEach(name => {
+      formattedFormData[name] = document.querySelector(`#${name}`).checked ? 'on' : 'off';
+    });
+  }
+
+  static submitTestWebhook(){
+    const button = document.querySelector('button#send-webhook');
+    button.addEventListener('click', async event => {
+      event.preventDefault();
+
+      const url = document.querySelector('#webhook-url').value;
+      if(!url) return alert('Você precisa informar o endereço do webhook. 🚨');
+
+      const granted = await DashboardHelper.requestWebhookPermission(url);
+      if(!granted) return alert('Permissão negada para o endereço do webhook. 🚨');
+
+      try {
+        const status = await DashboardHelper.sendWebhook(url, {
+          event: 'test',
+          occurredAt: new Date().toISOString()
+        });
+
+        alert(`Webhook disparado! O destino respondeu com o status ${status}. 🚀`);
+      } catch (error) {
+        alert('Houve um erro ao disparar o webhook, verifique o endereço e tente novamente. 😢');
+      }
+    });
   }
 
   static handleTimeInputs(){
@@ -177,6 +258,24 @@ class DashboardLoader {
         input.disabled = true;
       });
     }
+
+    DashboardLoader.loadWebhookSettings(form, settings);
+  }
+
+  static loadWebhookSettings(form, settings){
+    form['webhook-url'].value = settings['webhook-url'] || '';
+
+    [
+      'allow-webhook',
+      'webhook-on-clock-in',
+      'webhook-on-clock-out',
+      'webhook-on-work-time-completed',
+      'webhook-on-break-time-exceeded'
+    ].forEach(name => {
+      form[name].checked = settings[name] === 'on';
+    });
+
+    DashboardHelper.updateWebhookFieldsState();
   }
 }
 class DashboardLoadData {
@@ -528,9 +627,11 @@ window.addEventListener('DOMContentLoaded', () => {
   new DashboardLoadData();
 
   DashboardHelper.allowSendMessageToggle();
-  
+  DashboardHelper.webhookToggle();
+
   DashboardForms.submitSettings();
   DashboardForms.submitSendMessage();
+  DashboardForms.submitTestWebhook();
   DashboardForms.handleTimeInputs();
 
   DashboardLoader.loadSettings();

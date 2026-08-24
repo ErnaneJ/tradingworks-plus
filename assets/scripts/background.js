@@ -72,6 +72,20 @@ class Events {
     });
   }
 
+  static async webhookNotify(data){
+    console.log('[TradingWorks+] - Webhook Notify received 🏗️');
+
+    try {
+      await fetch(data.url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data.payload)
+      });
+    } catch (error) {
+      console.log('Erro ao disparar o webhook! 😢', error);
+    }
+  }
+
   static whatsNotify(data){
     console.log('[TradingWorks+] - Whats Notify received 🏗️');
     const options = {
@@ -115,6 +129,7 @@ class Background {
           changeScreen: Events.updateScreen,
           chromeNotify: Events.chromeNotify,
           whatsNotify: Events.whatsNotify,
+          webhookNotify: Events.webhookNotify,
         };
 
         return events[message.type]?.(message.data);
