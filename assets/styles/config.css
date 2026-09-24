@@ -81,7 +81,7 @@ main{
   font-size: .80rem;
 }
 
-.container--item input[type="tel"], .container--item input[type="text"], .container--item input[type="password"], .container--item input[type="email"], .container--item input[type="time"]{	
+.container--item input[type="url"], .container--item input[type="tel"], .container--item input[type="text"], .container--item input[type="password"], .container--item input[type="email"], .container--item input[type="time"]{	
   border: none;
   background-color: var(--atlantis-200);
   padding: .5rem;
@@ -515,4 +515,13 @@ tfoot td {
     width: 50%;
     flex-basis: 50%;
   }
+}
+
+.webhook-events{
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.webhook-events .container--item{
+  width: auto;
 }
