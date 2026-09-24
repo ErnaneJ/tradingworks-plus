@@ -352,3 +352,54 @@ footer span#version, footer span[data-current-year]{
   margin-top: 1rem;
   font-size: 1rem;
 }
+.simulator{
+  width: 100%;
+  background-color: var(--atlantis-100);
+  border: 1px solid var(--atlantis-300);
+  border-radius: .5rem;
+  padding: .35rem .5rem;
+}
+
+.simulator--summary{
+  font-size: .65rem;
+  font-weight: bold;
+  font-style: italic;
+  color: var(--atlantis-900);
+  cursor: pointer;
+  list-style: none;
+}
+
+.simulator--summary::-webkit-details-marker{
+  display: none;
+}
+
+.simulator--field{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: .35rem;
+  font-size: .6rem;
+  color: var(--atlantis-800);
+}
+
+.simulator--amount{
+  font-size: .65rem;
+  font-weight: bold;
+  color: var(--atlantis-900);
+}
+
+.simulator--range{
+  width: 100%;
+  accent-color: var(--atlantis-600);
+  margin: .15rem 0 .35rem;
+}
+
+.simulator--result{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .35rem;
+  font-size: .6rem;
+  font-style: italic;
+  color: var(--atlantis-900);
+}
