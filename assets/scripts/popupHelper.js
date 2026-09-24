@@ -1,10 +1,16 @@
 class PopupHelper {
   static formatBalance(balance) {
-    const balanceHours = String(Math.abs(Math.trunc(balance))).padStart(2, '0');
-    const balanceMinutes = String(Math.abs(Math.round((balance % 1) * 60))).padStart(2, '0');
+    let balanceHours = Math.abs(Math.trunc(balance));
+    let balanceMinutes = Math.abs(Math.round((balance % 1) * 60));
+
+    if (balanceMinutes === 60) {
+      balanceHours += 1;
+      balanceMinutes = 0;
+    }
+
     let formatString = '';
     if (balance < 0) formatString = '-';
-    formatString += balanceHours + 'h' + balanceMinutes + 'm';
+    formatString += String(balanceHours).padStart(2, '0') + 'h' + String(balanceMinutes).padStart(2, '0') + 'm';
     return formatString;
   }
 
