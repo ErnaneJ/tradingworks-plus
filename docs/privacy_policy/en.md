@@ -6,7 +6,7 @@ Thank you for choosing to use the **TradingWorks+** extension. This privacy poli
 
 ## Information Collected:
 
-1.1 User-Provided Data: To use the **TradingWorks+** extension, it is necessary for the user to provide some information, including but not limited to, WhatsApp phone number to receive notifications, break time, and work shift duration. All data manipulations occur exclusively on the client-side, on their own machine.
+1.1 User-Provided Data: To use the **TradingWorks+** extension, it is necessary for the user to provide some information, including but not limited to, break time and work shift duration. All data manipulations occur exclusively on the client-side, on their own machine.
 
 1.2 Usage Data: Our extension may collect usage data, such as interactions with the extension, activity history, and user preferences. These data are used to improve the user experience and enhance our services.
 
@@ -14,7 +14,7 @@ Thank you for choosing to use the **TradingWorks+** extension. This privacy poli
 
 2.1 Personalization: The information provided by the user and usage data may be used to personalize the user experience and provide relevant information related to the time tracking system of [TradingWorks](https://app.tradingworks.net/).
 
-2.2 Notifications: If the user chooses to receive notifications, we will use the provided phone number to send relevant notifications about the time tracking system, either through the browser or WhatsApp.
+2.2 Notifications: The **TradingWorks+** extension uses the collected data to send notifications through the operating system, via the browser.
 
 2.3 Service Improvement: The information collected, in an aggregated and anonymous form, may be used for analysis and improvement of our services, always aiming to enhance the functionality and usability of the extension.
 
