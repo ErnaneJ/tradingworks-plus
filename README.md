@@ -22,7 +22,7 @@
 <br/>
 
 <p align="center">
-  <a href="https://github.com/ErnaneJ/tradingworks-plus/blob/master/docs/ptbr">PT-BR</a>
+  <a href="https://github.com/ErnaneJ/tradingworks-plus/blob/main/docs/ptbr">PT-BR</a>
 </p>
 
 <br/>
