@@ -64,27 +64,19 @@ class Events {
 
   static async chromeNotify(data){
     console.log('[TradingWorks+] - Chrome Notify received 🏗️');
-    await chrome.notifications.create(data.id, {
-      type: 'basic',
-      iconUrl: "../favicon48.png",
-      title: data.title,
-      message: data.message,
-    });
+    try {
+      await chrome.notifications.create(data.id, {
+        type: 'basic',
+        iconUrl: "/assets/favicon48.png",
+        title: data.title,
+        message: data.message,
+      });
+      console.log('[TradingWorks+] - Notification created successfully ✅');
+    } catch (error) {
+      console.error('[TradingWorks+] - Error creating notification ❌:', error);
+    }
   }
 
-  static whatsNotify(data){
-    console.log('[TradingWorks+] - Whats Notify received 🏗️');
-    const options = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: `{"number":"${data.number}","message":"${data.message}","token":"3967f4a6-3cd3-4ded-b08e-3fcbf3dbf6a9"}`
-    };
-    
-    fetch('https://buddy.ernane.dev/api/v1/send-message/', options)
-      .then(response => response.json())
-      .then(response => {})
-      .catch(err => console.log('Erro ao enviar mensagem! 😢', err));
-  }
 }
 
 class Background {
@@ -114,7 +106,6 @@ class Background {
           updateWorkInformation: Events.updateWorkInformation,
           changeScreen: Events.updateScreen,
           chromeNotify: Events.chromeNotify,
-          whatsNotify: Events.whatsNotify,
         };
 
         return events[message.type]?.(message.data);

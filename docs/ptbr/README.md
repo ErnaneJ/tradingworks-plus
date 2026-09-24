@@ -61,7 +61,6 @@ Com o intuito de facilitar a vida do usuário, essa extensão conta com as segui
   - Tempo decorrido de jornada extra, quando o tempo pre-definido já estiver sido finalizado.
 - Notificações
   - Execução em background de um monitor de jornada que capture essas informações a cada X tempo e notifique o usuário em casos específicos por meio da API do [https://www.callmebot.com/](callmebot.com).
-  - Noticações no Whatsapp
   - Notificações no Browser
 
 
