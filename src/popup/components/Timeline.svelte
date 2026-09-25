@@ -65,32 +65,35 @@
   }));
 
   /**
-   * Lays out one tick per given minute, aligned to the window, with any label whose estimated
-   * bounds collide with the previous one bumped to a second row instead of overlapping into
-   * unreadable text.
+   * Lays out one tick per given minute, centered on its actual point on the bar so it always
+   * lines up with the mark it names. The track and the ticks row both keep a side margin equal
+   * to half a label's width (see LABEL_WIDTH_PX / 2 below), so even a tick at the very start or
+   * end of the bar has room to center without clipping. Any label whose estimated bounds collide
+   * with the previous one is bumped to a second row instead of overlapping into unreadable text.
    */
-  function buildTickRow(minutesList: number[]) {
+  function buildTickRow(minutesList: number[], width: number) {
     const sorted = [...new Set(minutesList)].sort((a, b) => a - b);
     let row0RightEdge = -Infinity;
-    return sorted.map((minutes, index) => {
-      const align = index === 0 ? 'left' : index === sorted.length - 1 ? 'right' : 'center';
+    return sorted.map((minutes) => {
       const leftPct = ((minutes - windowBounds.start) / windowMinutes) * 100;
-      const leftPx = (leftPct / 100) * ticksWidth;
-      const leftEdge = align === 'left' ? leftPx : align === 'right' ? leftPx - LABEL_WIDTH_PX : leftPx - LABEL_WIDTH_PX / 2;
+      const leftPx = (leftPct / 100) * width;
+      const leftEdge = leftPx - LABEL_WIDTH_PX / 2;
       const rightEdge = leftEdge + LABEL_WIDTH_PX;
       const row = leftEdge < row0RightEdge ? 1 : 0;
       if (row === 0) row0RightEdge = rightEdge;
-      return { label: minutesToTime(minutes), leftPct, align, row };
+      return { label: minutesToTime(minutes), leftPct, row };
     });
   }
 
   /**
    * Clock-in punches tick above the bar, clock-outs tick below it — since real punches already
    * alternate in/out, the two rows never compete for the same space, and a punch's row tells you
-   * what kind of punch it was without reading the label.
+   * what kind of punch it was without reading the label. `ticksWidth` is passed explicitly (not
+   * just closed over) so Svelte tracks it as a dependency and relayouts once the bar's real width
+   * is known, instead of freezing every tick at the width-0 initial measurement.
    */
-  $: aboveTicks = buildTickRow(punches.filter((punch) => punch.kind === 'in').map((punch) => parseTime(punch.time)));
-  $: belowTicks = buildTickRow(punches.filter((punch) => punch.kind === 'out').map((punch) => parseTime(punch.time)));
+  $: aboveTicks = buildTickRow(punches.filter((punch) => punch.kind === 'in').map((punch) => parseTime(punch.time)), ticksWidth);
+  $: belowTicks = buildTickRow(punches.filter((punch) => punch.kind === 'out').map((punch) => parseTime(punch.time)), ticksWidth);
   $: aboveHasTwoRows = aboveTicks.some((tick) => tick.row === 1);
   $: belowHasTwoRows = belowTicks.some((tick) => tick.row === 1);
 </script>
@@ -98,7 +101,7 @@
 {#if aboveTicks.length > 0}
   <div class="ticks ticks-above" class:tall={aboveHasTwoRows}>
     {#each aboveTicks as tick}
-      <span class="tick align-{tick.align}" class:row-1={tick.row === 1} style:left="{tick.leftPct}%">{tick.label}</span>
+      <span class="tick" class:row-1={tick.row === 1} style:left="{tick.leftPct}%">{tick.label}</span>
     {/each}
   </div>
 {/if}
@@ -116,7 +119,7 @@
 {#if belowTicks.length > 0}
   <div class="ticks ticks-below" class:tall={belowHasTwoRows}>
     {#each belowTicks as tick}
-      <span class="tick align-{tick.align}" class:row-1={tick.row === 1} style:left="{tick.leftPct}%">{tick.label}</span>
+      <span class="tick" class:row-1={tick.row === 1} style:left="{tick.leftPct}%">{tick.label}</span>
     {/each}
   </div>
 {/if}
@@ -125,6 +128,7 @@
   .track {
     position: relative;
     height: 8px;
+    margin: 0 17px;
     border-radius: 4px;
     background: var(--color-border);
   }
@@ -177,6 +181,8 @@
   .ticks {
     position: relative;
     height: 12px;
+    margin-left: 17px;
+    margin-right: 17px;
   }
 
   .ticks-above {
@@ -193,6 +199,7 @@
 
   .tick {
     position: absolute;
+    transform: translateX(-50%);
     font-family: var(--font-mono);
     font-size: 10px;
     color: var(--color-text-muted);
@@ -213,17 +220,5 @@
 
   .ticks-above .tick.row-1 {
     bottom: 14px;
-  }
-
-  .tick.align-left {
-    transform: translateX(0);
-  }
-
-  .tick.align-right {
-    transform: translateX(-100%);
-  }
-
-  .tick.align-center {
-    transform: translateX(-50%);
   }
 </style>
