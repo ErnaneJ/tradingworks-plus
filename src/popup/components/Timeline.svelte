@@ -1,14 +1,17 @@
 <script lang="ts">
   import type { DayInterval } from '../../lib/storage/schema';
-  import { formatDurationHM, minutesToTime, timeToMinutes } from '../../lib/domain/time';
-  import { t } from '../../lib/i18n';
+  import { formatDurationHM, minutesToTime } from '../../lib/domain/time';
+  import { settingsStore } from '../../lib/storage/stores';
 
   export let intervals: DayInterval[];
   export let size: 'normal' | 'large' = 'normal';
 
   const DAY_MINUTES = 24 * 60;
-  /** Minutes of breathing room added on each side of the active window. */
-  const WINDOW_PADDING = 20;
+
+  function currentMinutes(): number {
+    const now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+  }
 
   function startMinutes(interval: DayInterval): number {
     const [h, m] = interval.start.split(':').map(Number);
@@ -22,43 +25,57 @@
       return h * 60 + m;
     }
     if (interval.durationMinutes !== null) return startMinutes(interval) + interval.durationMinutes;
-    const now = new Date();
-    return now.getHours() * 60 + now.getMinutes();
+    return currentMinutes();
   }
 
-  /** Re-formats an "HH:mm"-ish time through minutesToTime so it's always zero-padded, regardless of the source formatting. */
-  function formatTime(value: string): string {
-    const minutes = timeToMinutes(value);
-    return minutes === null ? value : minutesToTime(minutes);
+  /** Duration for a still-open interval (no end, no known duration): minutes elapsed since its start, so it doesn't read as a false 00h00. */
+  function liveDuration(interval: DayInterval): number {
+    if (interval.durationMinutes !== null) return interval.durationMinutes;
+    const elapsed = currentMinutes() - startMinutes(interval);
+    return elapsed >= 0 ? elapsed : 0;
   }
 
-  /** Zooms the track to the day's actual activity span instead of the full 24h, so segments stay legible at popup width. */
+  /** Planned length of the day: the configured work goal plus the planned break, so the bar grows past this only once the day actually runs long. */
+  $: plannedMinutes = $settingsStore.dailyRequiredWorkMinutes + $settingsStore.breakDurationMinutes;
+
   $: windowBounds = (() => {
-    if (intervals.length === 0) return { start: 8 * 60, end: 18 * 60 };
-    const rawStart = Math.min(...intervals.map(startMinutes));
+    if (intervals.length === 0) {
+      const start = currentMinutes();
+      return { start, end: Math.min(start + plannedMinutes, DAY_MINUTES) };
+    }
+    const start = Math.min(...intervals.map(startMinutes));
     const rawEnd = Math.max(...intervals.map(endMinutes));
-    const start = Math.max(Math.floor((rawStart - WINDOW_PADDING) / 60) * 60, 0);
-    let end = Math.min(Math.ceil((rawEnd + WINDOW_PADDING) / 60) * 60, DAY_MINUTES);
-    if (end - start < 60) end = Math.min(start + 60, DAY_MINUTES);
+    const end = Math.min(Math.max(rawEnd, start + plannedMinutes), DAY_MINUTES);
     return { start, end };
   })();
 
-  $: windowMinutes = windowBounds.end - windowBounds.start;
+  $: windowMinutes = Math.max(windowBounds.end - windowBounds.start, 1);
 
   $: segments = intervals.map((interval) => ({
     ...interval,
     leftPct: ((startMinutes(interval) - windowBounds.start) / windowMinutes) * 100,
     widthPct: Math.max(((endMinutes(interval) - startMinutes(interval)) / windowMinutes) * 100, 1.2),
-    tooltip: $t('popup.timelineTooltip', {
-      start: formatTime(interval.start),
-      end: interval.end ? formatTime(interval.end) : '…',
-      duration: formatDurationHM(interval.durationMinutes ?? 0),
-    }),
+    tooltip: formatDurationHM(liveDuration(interval)),
   }));
 
-  function formatBoundary(totalMinutes: number): string {
-    return minutesToTime(((totalMinutes % DAY_MINUTES) + DAY_MINUTES) % DAY_MINUTES);
-  }
+  /** One tick per actual punch (never a synthetic "now" for an interval still open), deduped so a back-to-back punch-out/punch-in pair only labels once. */
+  $: tickMarks = (() => {
+    const byMinute = new Map<number, string>();
+    for (const interval of intervals) {
+      const start = startMinutes(interval);
+      if (!byMinute.has(start)) byMinute.set(start, minutesToTime(start));
+      if (interval.end) {
+        const end = endMinutes(interval);
+        if (!byMinute.has(end)) byMinute.set(end, minutesToTime(end));
+      }
+    }
+    const sorted = [...byMinute.entries()].sort((a, b) => a[0] - b[0]);
+    return sorted.map(([minutes, label], index) => ({
+      label,
+      leftPct: ((minutes - windowBounds.start) / windowMinutes) * 100,
+      align: index === 0 ? 'left' : index === sorted.length - 1 ? 'right' : 'center',
+    }));
+  })();
 </script>
 
 <div class="track" class:large={size === 'large'}>
@@ -72,10 +89,13 @@
     />
   {/each}
 </div>
-<div class="ticks">
-  <span>{formatBoundary(windowBounds.start)}</span>
-  <span>{formatBoundary(windowBounds.end)}</span>
-</div>
+{#if tickMarks.length > 0}
+  <div class="ticks">
+    {#each tickMarks as tick}
+      <span class="tick align-{tick.align}" style:left="{tick.leftPct}%">{tick.label}</span>
+    {/each}
+  </div>
+{/if}
 
 <style>
   .track {
@@ -131,11 +151,29 @@
   }
 
   .ticks {
-    display: flex;
-    justify-content: space-between;
+    position: relative;
+    height: 12px;
     margin-top: 4px;
+  }
+
+  .tick {
+    position: absolute;
+    top: 0;
     font-family: var(--font-mono);
     font-size: 10px;
     color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .tick.align-left {
+    transform: translateX(0);
+  }
+
+  .tick.align-right {
+    transform: translateX(-100%);
+  }
+
+  .tick.align-center {
+    transform: translateX(-50%);
   }
 </style>

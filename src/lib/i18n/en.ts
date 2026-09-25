@@ -46,7 +46,6 @@ export const en: Dictionary = {
     goToTradingWorks: 'Open TradingWorks',
     lastUpdated: 'Updated {{time}} ago',
     loadingMessage: 'Fetching your status…',
-    timelineTooltip: '{{start}} to {{end}} ({{duration}})',
     forceRefresh: 'Force refresh',
     classicStartColumn: 'Start',
     classicEndColumn: 'End',

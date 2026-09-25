@@ -46,7 +46,6 @@ export const ptBR: Dictionary = {
     goToTradingWorks: 'Abrir TradingWorks',
     lastUpdated: 'Atualizado há {{time}}',
     loadingMessage: 'Buscando seu status…',
-    timelineTooltip: '{{start}} às {{end}} ({{duration}})',
     forceRefresh: 'Forçar atualização',
     classicStartColumn: 'Início',
     classicEndColumn: 'Término',

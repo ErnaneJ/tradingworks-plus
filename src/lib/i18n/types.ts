@@ -48,7 +48,6 @@ export interface Dictionary {
     goToTradingWorks: string;
     lastUpdated: string;
     loadingMessage: string;
-    timelineTooltip: string;
     forceRefresh: string;
     classicStartColumn: string;
     classicEndColumn: string;
