@@ -1,4 +1,4 @@
-import { tradingWorksClient } from '../lib/tw/client';
+import { tradingWorksClient, type ClockInOutSnapshot } from '../lib/tw/client';
 import type { FastPollData, FieldResult, HistoryPollData } from '../lib/messaging';
 
 /**
@@ -60,6 +60,7 @@ export async function fetchHistorySnapshot(): Promise<HistoryPollData> {
   };
 }
 
-export async function punch(): Promise<void> {
-  await tradingWorksClient.punch();
+/** Returns the postback's own response page, the freshest and most authoritative read of the punch's result. */
+export async function punch(): Promise<ClockInOutSnapshot> {
+  return tradingWorksClient.punch();
 }

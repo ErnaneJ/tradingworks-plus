@@ -17,7 +17,7 @@
   <StatusPill status={state.status} />
 </div>
 
-<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} />
+<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} lastUpdatedAt={state.lastUpdatedAt} />
 
 <StatRow workedMinutes={state.workedMinutes} breakMinutes={state.breakMinutes} timeBankMinutes={state.timeBankMinutes} layout="grid" />
 

@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       } else if (message.type === 'poll-history') {
         response.historyData = await fetchHistorySnapshot();
       } else if (message.type === 'punch') {
-        await punch();
+        response.punchData = await punch();
       }
     } catch (error) {
       response.ok = false;

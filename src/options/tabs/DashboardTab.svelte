@@ -5,6 +5,7 @@
   import StatusPill from '../../popup/components/StatusPill.svelte';
   import StatRow from '../../popup/components/StatRow.svelte';
   import Timeline from '../../popup/components/Timeline.svelte';
+  import EstimatedFinish from '../../popup/components/EstimatedFinish.svelte';
   import BarChart from '../components/BarChart.svelte';
 
   const HISTORY_DAYS = 14;
@@ -43,6 +44,7 @@
   <div class="summary">
     <StatRow workedMinutes={state.workedMinutes} breakMinutes={state.breakMinutes} timeBankMinutes={state.timeBankMinutes} />
   </div>
+  <EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} lastUpdatedAt={state.lastUpdatedAt} />
   {#if state.punches.length > 0}
     <Timeline intervals={state.intervals} punches={state.punches} />
   {/if}

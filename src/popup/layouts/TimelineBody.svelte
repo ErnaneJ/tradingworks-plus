@@ -18,7 +18,7 @@
   <StatusPill status={state.status} />
 </div>
 
-<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} />
+<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} lastUpdatedAt={state.lastUpdatedAt} />
 
 <section class="today">
   <div class="today-heading">

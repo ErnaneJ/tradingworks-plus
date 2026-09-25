@@ -50,6 +50,7 @@ export interface HistoryPollData {
 export interface OffscreenResponse extends BasicResponse {
   fastData?: FastPollData;
   historyData?: HistoryPollData;
+  punchData?: ClockInOutSnapshot;
 }
 
 function hasType(value: unknown): value is { type: unknown } {

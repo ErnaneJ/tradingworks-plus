@@ -1,5 +1,6 @@
 import { computeIntervals, computeStatus, inferPunchKinds, sumMinutes } from '../lib/domain/attendance';
 import { computeBadge } from '../lib/domain/badge';
+import type { ClockInOutSnapshot } from '../lib/tw/client';
 import { detectDailyAlertEvents, detectEvents } from '../lib/notify/events';
 import { dispatchEvents } from '../lib/notify/dispatch';
 import { getFromStorage, setInStorage } from '../lib/storage/local';
@@ -99,8 +100,13 @@ async function sendToOffscreen(request: OffscreenRequest): Promise<OffscreenResp
   }
 }
 
-/** Fetches clock in/out + time bank balance, recomputes derived state, and dispatches any resulting notifications. */
-async function runFastPoll(): Promise<void> {
+/**
+ * Fetches clock in/out + time bank balance, recomputes derived state, and dispatches any resulting notifications.
+ * `clockInOutOverride` lets a caller that already holds a fresher read (the punch postback's own response page)
+ * skip this poll's independent re-fetch of that same page, which can otherwise race the server and read back
+ * the punch list from just before the new punch was recorded.
+ */
+async function runFastPoll(clockInOutOverride?: ClockInOutSnapshot): Promise<void> {
   const settings = await loadSettings();
   if (!settings.extensionEnabled) {
     await setInStorage<TrackedState>(STATE_KEY, { ...DEFAULT_STATE, status: 'disabled' });
@@ -115,7 +121,8 @@ async function runFastPoll(): Promise<void> {
     return;
   }
 
-  const { clockInOut, timeBankMinutes, home: homeResult } = response.fastData;
+  const { timeBankMinutes, home: homeResult } = response.fastData;
+  const clockInOut = clockInOutOverride ?? response.fastData.clockInOut;
   const home = homeResult.ok ? homeResult.data : null;
 
   if (!clockInOut.loggedIn) {
@@ -195,15 +202,15 @@ async function runHistoryPoll(): Promise<void> {
   await setInStorage(DISPATCH_LEDGER_KEY, nextLedger);
 }
 
-/** Replays the clock in/out postback, then immediately reruns the fast poll to reflect the fresh state. */
+/** Replays the clock in/out postback, then immediately reruns the fast poll using that postback's own fresh punch list. */
 async function runPunch(): Promise<BasicResponse> {
   const settings = await loadSettings();
   if (!settings.extensionEnabled) return { ok: false, error: 'Extension disabled' };
 
   const response = await sendToOffscreen({ type: 'punch' });
-  if (!response.ok) return response;
+  if (!response.ok || !response.punchData) return response;
 
-  await runFastPoll();
+  await runFastPoll(response.punchData);
   return { ok: true };
 }
 

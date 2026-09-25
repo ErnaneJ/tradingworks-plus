@@ -16,7 +16,7 @@
   <StatusPill status={state.status} />
 </div>
 
-<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} />
+<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} lastUpdatedAt={state.lastUpdatedAt} />
 
 {#if canPunch}
   <PunchButton status={state.status} {pending} {onPunch} />
