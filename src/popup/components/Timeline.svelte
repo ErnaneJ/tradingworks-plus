@@ -7,6 +7,10 @@
   export let size: 'normal' | 'large' = 'normal';
 
   const DAY_MINUTES = 24 * 60;
+  /** Approximate pixel width of a "HH:mm" tick label at the ticks row's font size, used only to detect overlap. */
+  const LABEL_WIDTH_PX = 34;
+
+  let ticksWidth = 0;
 
   function currentMinutes(): number {
     const now = new Date();
@@ -58,7 +62,11 @@
     tooltip: formatDurationHM(liveDuration(interval)),
   }));
 
-  /** One tick per actual punch (never a synthetic "now" for an interval still open), deduped so a back-to-back punch-out/punch-in pair only labels once. */
+  /**
+   * One tick per actual punch (never a synthetic "now" for an interval still open), deduped so a
+   * back-to-back punch-out/punch-in pair only labels once. Ticks whose labels would collide are
+   * bumped to a second row instead of overlapping into unreadable text.
+   */
   $: tickMarks = (() => {
     const byMinute = new Map<number, string>();
     for (const interval of intervals) {
@@ -70,12 +78,21 @@
       }
     }
     const sorted = [...byMinute.entries()].sort((a, b) => a[0] - b[0]);
-    return sorted.map(([minutes, label], index) => ({
-      label,
-      leftPct: ((minutes - windowBounds.start) / windowMinutes) * 100,
-      align: index === 0 ? 'left' : index === sorted.length - 1 ? 'right' : 'center',
-    }));
+
+    let row0RightEdge = -Infinity;
+    return sorted.map(([minutes, label], index) => {
+      const align = index === 0 ? 'left' : index === sorted.length - 1 ? 'right' : 'center';
+      const leftPct = ((minutes - windowBounds.start) / windowMinutes) * 100;
+      const leftPx = (leftPct / 100) * ticksWidth;
+      const leftEdge = align === 'left' ? leftPx : align === 'right' ? leftPx - LABEL_WIDTH_PX : leftPx - LABEL_WIDTH_PX / 2;
+      const rightEdge = leftEdge + LABEL_WIDTH_PX;
+      const row = leftEdge < row0RightEdge ? 1 : 0;
+      if (row === 0) row0RightEdge = rightEdge;
+      return { label, leftPct, align, row };
+    });
   })();
+
+  $: ticksHaveTwoRows = tickMarks.some((tick) => tick.row === 1);
 </script>
 
 <div class="track" class:large={size === 'large'}>
@@ -90,9 +107,9 @@
   {/each}
 </div>
 {#if tickMarks.length > 0}
-  <div class="ticks">
+  <div class="ticks" class:tall={ticksHaveTwoRows} bind:clientWidth={ticksWidth}>
     {#each tickMarks as tick}
-      <span class="tick align-{tick.align}" style:left="{tick.leftPct}%">{tick.label}</span>
+      <span class="tick align-{tick.align}" class:row-1={tick.row === 1} style:left="{tick.leftPct}%">{tick.label}</span>
     {/each}
   </div>
 {/if}
@@ -156,6 +173,10 @@
     margin-top: 4px;
   }
 
+  .ticks.tall {
+    height: 26px;
+  }
+
   .tick {
     position: absolute;
     top: 0;
@@ -163,6 +184,10 @@
     font-size: 10px;
     color: var(--color-text-muted);
     white-space: nowrap;
+  }
+
+  .tick.row-1 {
+    top: 14px;
   }
 
   .tick.align-left {
