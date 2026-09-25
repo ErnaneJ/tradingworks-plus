@@ -54,6 +54,7 @@ export interface Dictionary {
     classicDurationColumn: string;
     classicPauseLabel: string;
     currentTimeLabel: string;
+    estimatedFinishLabel: string;
   };
   dashboard: {
     title: string;

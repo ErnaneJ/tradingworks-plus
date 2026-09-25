@@ -52,6 +52,7 @@ export const ptBR: Dictionary = {
     classicDurationColumn: 'Duração',
     classicPauseLabel: 'Pausa de {{duration}}',
     currentTimeLabel: 'Hora atual',
+    estimatedFinishLabel: 'Estimativa de saída às {{time}}',
   },
   dashboard: {
     title: 'Painel',

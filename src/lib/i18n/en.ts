@@ -52,6 +52,7 @@ export const en: Dictionary = {
     classicDurationColumn: 'Duration',
     classicPauseLabel: 'Break of {{duration}}',
     currentTimeLabel: 'Current time',
+    estimatedFinishLabel: 'Estimated finish at {{time}}',
   },
   dashboard: {
     title: 'Dashboard',

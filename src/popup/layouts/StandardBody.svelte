@@ -6,6 +6,7 @@
   import PunchButton from '../components/PunchButton.svelte';
   import Timeline from '../components/Timeline.svelte';
   import StatRow from '../components/StatRow.svelte';
+  import EstimatedFinish from '../components/EstimatedFinish.svelte';
 
   export let state: TrackedState;
   export let pending: boolean;
@@ -17,6 +18,8 @@
   <LiveClock size="large" />
   <StatusPill status={state.status} />
 </section>
+
+<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} />
 
 {#if canPunch}
   <PunchButton status={state.status} {pending} {onPunch} />
