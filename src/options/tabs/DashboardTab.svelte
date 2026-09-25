@@ -44,7 +44,7 @@
     <StatRow workedMinutes={state.workedMinutes} breakMinutes={state.breakMinutes} timeBankMinutes={state.timeBankMinutes} />
   </div>
   {#if state.punches.length > 0}
-    <Timeline intervals={state.intervals} />
+    <Timeline intervals={state.intervals} punches={state.punches} />
   {/if}
 </section>
 

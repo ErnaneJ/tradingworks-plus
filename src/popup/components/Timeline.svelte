@@ -1,9 +1,10 @@
 <script lang="ts">
-  import type { DayInterval } from '../../lib/storage/schema';
+  import type { DayInterval, PunchEntry } from '../../lib/storage/schema';
   import { formatDurationHM, minutesToTime } from '../../lib/domain/time';
   import { settingsStore } from '../../lib/storage/stores';
 
   export let intervals: DayInterval[];
+  export let punches: PunchEntry[] = [];
   export let size: 'normal' | 'large' = 'normal';
 
   const DAY_MINUTES = 24 * 60;
@@ -17,17 +18,18 @@
     return now.getHours() * 60 + now.getMinutes();
   }
 
-  function startMinutes(interval: DayInterval): number {
-    const [h, m] = interval.start.split(':').map(Number);
+  function parseTime(time: string): number {
+    const [h, m] = time.split(':').map(Number);
     return h * 60 + m;
+  }
+
+  function startMinutes(interval: DayInterval): number {
+    return parseTime(interval.start);
   }
 
   /** End of an interval in minutes since midnight; falls back to duration, then to the current time for an interval still in progress. */
   function endMinutes(interval: DayInterval): number {
-    if (interval.end) {
-      const [h, m] = interval.end.split(':').map(Number);
-      return h * 60 + m;
-    }
+    if (interval.end) return parseTime(interval.end);
     if (interval.durationMinutes !== null) return startMinutes(interval) + interval.durationMinutes;
     return currentMinutes();
   }
@@ -63,24 +65,14 @@
   }));
 
   /**
-   * One tick per actual punch (never a synthetic "now" for an interval still open), deduped so a
-   * back-to-back punch-out/punch-in pair only labels once. Ticks whose labels would collide are
-   * bumped to a second row instead of overlapping into unreadable text.
+   * Lays out one tick per given minute, aligned to the window, with any label whose estimated
+   * bounds collide with the previous one bumped to a second row instead of overlapping into
+   * unreadable text.
    */
-  $: tickMarks = (() => {
-    const byMinute = new Map<number, string>();
-    for (const interval of intervals) {
-      const start = startMinutes(interval);
-      if (!byMinute.has(start)) byMinute.set(start, minutesToTime(start));
-      if (interval.end) {
-        const end = endMinutes(interval);
-        if (!byMinute.has(end)) byMinute.set(end, minutesToTime(end));
-      }
-    }
-    const sorted = [...byMinute.entries()].sort((a, b) => a[0] - b[0]);
-
+  function buildTickRow(minutesList: number[]) {
+    const sorted = [...new Set(minutesList)].sort((a, b) => a - b);
     let row0RightEdge = -Infinity;
-    return sorted.map(([minutes, label], index) => {
+    return sorted.map((minutes, index) => {
       const align = index === 0 ? 'left' : index === sorted.length - 1 ? 'right' : 'center';
       const leftPct = ((minutes - windowBounds.start) / windowMinutes) * 100;
       const leftPx = (leftPct / 100) * ticksWidth;
@@ -88,14 +80,29 @@
       const rightEdge = leftEdge + LABEL_WIDTH_PX;
       const row = leftEdge < row0RightEdge ? 1 : 0;
       if (row === 0) row0RightEdge = rightEdge;
-      return { label, leftPct, align, row };
+      return { label: minutesToTime(minutes), leftPct, align, row };
     });
-  })();
+  }
 
-  $: ticksHaveTwoRows = tickMarks.some((tick) => tick.row === 1);
+  /**
+   * Clock-in punches tick above the bar, clock-outs tick below it — since real punches already
+   * alternate in/out, the two rows never compete for the same space, and a punch's row tells you
+   * what kind of punch it was without reading the label.
+   */
+  $: aboveTicks = buildTickRow(punches.filter((punch) => punch.kind === 'in').map((punch) => parseTime(punch.time)));
+  $: belowTicks = buildTickRow(punches.filter((punch) => punch.kind === 'out').map((punch) => parseTime(punch.time)));
+  $: aboveHasTwoRows = aboveTicks.some((tick) => tick.row === 1);
+  $: belowHasTwoRows = belowTicks.some((tick) => tick.row === 1);
 </script>
 
-<div class="track" class:large={size === 'large'}>
+{#if aboveTicks.length > 0}
+  <div class="ticks ticks-above" class:tall={aboveHasTwoRows}>
+    {#each aboveTicks as tick}
+      <span class="tick align-{tick.align}" class:row-1={tick.row === 1} style:left="{tick.leftPct}%">{tick.label}</span>
+    {/each}
+  </div>
+{/if}
+<div class="track" class:large={size === 'large'} bind:clientWidth={ticksWidth}>
   {#each segments as segment}
     <div
       class="segment"
@@ -106,9 +113,9 @@
     />
   {/each}
 </div>
-{#if tickMarks.length > 0}
-  <div class="ticks" class:tall={ticksHaveTwoRows} bind:clientWidth={ticksWidth}>
-    {#each tickMarks as tick}
+{#if belowTicks.length > 0}
+  <div class="ticks ticks-below" class:tall={belowHasTwoRows}>
+    {#each belowTicks as tick}
       <span class="tick align-{tick.align}" class:row-1={tick.row === 1} style:left="{tick.leftPct}%">{tick.label}</span>
     {/each}
   </div>
@@ -170,6 +177,13 @@
   .ticks {
     position: relative;
     height: 12px;
+  }
+
+  .ticks-above {
+    margin-bottom: 4px;
+  }
+
+  .ticks-below {
     margin-top: 4px;
   }
 
@@ -179,15 +193,26 @@
 
   .tick {
     position: absolute;
-    top: 0;
     font-family: var(--font-mono);
     font-size: 10px;
     color: var(--color-text-muted);
     white-space: nowrap;
   }
 
-  .tick.row-1 {
+  .ticks-below .tick {
+    top: 0;
+  }
+
+  .ticks-below .tick.row-1 {
     top: 14px;
+  }
+
+  .ticks-above .tick {
+    bottom: 0;
+  }
+
+  .ticks-above .tick.row-1 {
+    bottom: 14px;
   }
 
   .tick.align-left {

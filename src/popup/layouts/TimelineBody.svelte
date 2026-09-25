@@ -28,7 +28,7 @@
   {#if state.punches.length === 0}
     <p class="empty">{$t('popup.noPunchesYet')}</p>
   {:else}
-    <Timeline intervals={state.intervals} size="large" />
+    <Timeline intervals={state.intervals} punches={state.punches} size="large" />
   {/if}
 </section>
 
