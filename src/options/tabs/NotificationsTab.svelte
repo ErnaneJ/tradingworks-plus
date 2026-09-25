@@ -102,7 +102,7 @@
   />
 </section>
 
-<section>
+<section class="matrix-section">
   <h2>{$t('notifications.matrixHeading')}</h2>
   <p class="hint">{$t('notifications.matrixHint')}</p>
 
@@ -168,6 +168,10 @@
 
   .field-row:first-child {
     margin-top: 0;
+  }
+
+  .matrix-section {
+    margin-top: 24px;
   }
 
   .field-text {
