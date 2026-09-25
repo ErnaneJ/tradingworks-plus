@@ -83,7 +83,6 @@
     height: 8px;
     border-radius: 4px;
     background: var(--color-border);
-    overflow: hidden;
   }
 
   .track.large {
