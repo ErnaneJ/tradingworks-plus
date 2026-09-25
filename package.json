@@ -1,0 +1,30 @@
+{
+  "name": "tradingworks-plus",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Extension to facilitate the usability of the TradingWorks platform for managing points between work shifts.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json && svelte-check --tsconfig ./tsconfig.json",
+    "zip": "npm run build && cd dist && zip -r ../tradingworks-plus.zip . -x '.*'"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/chrome": "^0.0.278",
+    "jsdom": "^25.0.1",
+    "svelte": "^4.2.19",
+    "svelte-check": "^3.8.6",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vite-plugin-web-extension": "^4.4.3",
+    "vitest": "^2.1.4"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1"
+  }
+}
