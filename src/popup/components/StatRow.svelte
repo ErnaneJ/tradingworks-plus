@@ -1,6 +1,7 @@
 <script lang="ts">
   import { t } from '../../lib/i18n';
   import { minutesToTime } from '../../lib/domain/time';
+  import { settingsStore } from '../../lib/storage/stores';
 
   export let workedMinutes: number;
   export let breakMinutes: number;
@@ -9,6 +10,7 @@
 
   $: timeBankLabel = timeBankMinutes === null ? '—' : minutesToTime(timeBankMinutes);
   $: timeBankTone = timeBankMinutes === null ? 'neutral' : timeBankMinutes < 0 ? 'negative' : timeBankMinutes > 0 ? 'positive' : 'neutral';
+  $: remainingMinutes = Math.max($settingsStore.dailyRequiredWorkMinutes - workedMinutes, 0);
 </script>
 
 <div class="row" class:grid={layout === 'grid'}>
@@ -24,6 +26,10 @@
     <span class="value tone-{timeBankTone}">{timeBankLabel}</span>
     <span class="label">{$t('popup.timeBankLabel')}</span>
   </div>
+  <div class="stat">
+    <span class="value">{minutesToTime(remainingMinutes)}</span>
+    <span class="label">{$t('popup.remainingLabel')}</span>
+  </div>
 </div>
 
 <style>
@@ -35,7 +41,7 @@
 
   .row.grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .row.grid .stat {

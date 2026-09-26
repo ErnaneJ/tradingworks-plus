@@ -4,7 +4,6 @@
   import StatusPill from '../components/StatusPill.svelte';
   import PunchButton from '../components/PunchButton.svelte';
   import StatRow from '../components/StatRow.svelte';
-  import EstimatedFinish from '../components/EstimatedFinish.svelte';
 
   export let state: TrackedState;
   export let pending: boolean;
@@ -16,8 +15,6 @@
   <LiveClock size="small" />
   <StatusPill status={state.status} />
 </div>
-
-<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} lastUpdatedAt={state.lastUpdatedAt} />
 
 <StatRow workedMinutes={state.workedMinutes} breakMinutes={state.breakMinutes} timeBankMinutes={state.timeBankMinutes} layout="grid" />
 

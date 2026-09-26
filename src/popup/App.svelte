@@ -11,6 +11,7 @@
   import TimelineBody from './layouts/TimelineBody.svelte';
   import FullBody from './layouts/FullBody.svelte';
   import ClassicBody from './layouts/ClassicBody.svelte';
+  import EstimatedFinish from './components/EstimatedFinish.svelte';
 
   initThemeSync();
 
@@ -103,6 +104,10 @@
     <button class="external" on:click={openSettings}>{$t('popup.openSettings')}</button>
   {:else}
     <svelte:component this={Body} {state} {pending} {canPunch} onPunch={handlePunch} />
+  {/if}
+
+  {#if layout !== 'classic' && layout !== 'compact'}
+    <EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} lastUpdatedAt={state.lastUpdatedAt} />
   {/if}
 
   {#if state.lastUpdatedAt && layout !== 'classic'}

@@ -29,7 +29,6 @@
 
 {#if finishTime}
   <p class="estimate">{$t('popup.estimatedFinishLabel', { time: finishTime })}</p>
-  <p class="remaining">{$t('popup.remainingLabel', { time: minutesToTime(remainingMinutes) })}</p>
 {/if}
 
 <style>
@@ -37,13 +36,6 @@
     font-size: 12px;
     color: var(--color-text-muted);
     margin: 0;
-    text-align: center;
-  }
-
-  .remaining {
-    font-size: 12px;
-    color: var(--color-text-muted);
-    margin: 2px 0 0;
     text-align: center;
   }
 </style>

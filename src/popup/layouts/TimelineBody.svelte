@@ -5,7 +5,6 @@
   import StatusPill from '../components/StatusPill.svelte';
   import PunchButton from '../components/PunchButton.svelte';
   import Timeline from '../components/Timeline.svelte';
-  import EstimatedFinish from '../components/EstimatedFinish.svelte';
 
   export let state: TrackedState;
   export let pending: boolean;
@@ -17,8 +16,6 @@
   <LiveClock size="small" />
   <StatusPill status={state.status} />
 </div>
-
-<EstimatedFinish workedMinutes={state.workedMinutes} status={state.status} lastUpdatedAt={state.lastUpdatedAt} />
 
 <section class="today">
   <div class="today-heading">

@@ -53,7 +53,7 @@ export const ptBR: Dictionary = {
     classicPauseLabel: 'Pausa de {{duration}}',
     currentTimeLabel: 'Hora atual',
     estimatedFinishLabel: 'Estimativa de saída às {{time}}',
-    remainingLabel: 'Faltam {{time}} para o fim do expediente',
+    remainingLabel: 'Faltam',
   },
   dashboard: {
     title: 'Painel',

@@ -53,7 +53,7 @@ export const en: Dictionary = {
     classicPauseLabel: 'Break of {{duration}}',
     currentTimeLabel: 'Current time',
     estimatedFinishLabel: 'Estimated finish at {{time}}',
-    remainingLabel: '{{time}} left until your shift ends',
+    remainingLabel: 'Remaining',
   },
   dashboard: {
     title: 'Dashboard',
