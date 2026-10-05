@@ -72,6 +72,20 @@ describe('computeStatus', () => {
     expect(computeStatus(inferPunchKinds(['08:00']), 'Em intervalo')).toBe('on-break');
   });
 
+  it('treats an explicit break label as finished once the goal is met on an even punch count', () => {
+    const punches = inferPunchKinds(['08:00', '12:00', '13:00', '14:00']);
+    expect(computeStatus(punches, 'Em intervalo', 480, 480)).toBe('finished');
+  });
+
+  it('still trusts an explicit break label before the goal is met', () => {
+    const punches = inferPunchKinds(['08:00', '12:00']);
+    expect(computeStatus(punches, 'Em intervalo', 240, 480)).toBe('on-break');
+  });
+
+  it('still trusts an explicit break label on an odd punch count even past the goal', () => {
+    expect(computeStatus(inferPunchKinds(['08:00']), 'Em intervalo', 500, 480)).toBe('on-break');
+  });
+
   it('falls back to punch-count parity when there is no explicit label', () => {
     expect(computeStatus([], null)).toBe('not-started');
     expect(computeStatus(inferPunchKinds(['08:00']), null)).toBe('working');

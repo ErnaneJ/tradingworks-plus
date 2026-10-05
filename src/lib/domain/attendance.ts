@@ -51,12 +51,13 @@ export function sumMinutes(intervals: DayInterval[], kind: DayInterval['kind']):
  * (e.g. "Encerrado"), since that also captures shifts that finished with
  * an odd number of punches or other edge cases parity alone can't see.
  *
- * TradingWorks sometimes renders that label as an empty badge (no text)
- * once a shift's periods are all closed but the next one hasn't started —
- * parity alone would then read as "on-break" forever, even long after the
- * configured daily goal was met. `workedMinutes`/`dailyRequiredWorkMinutes`
- * let that fallback resolve to "finished" once the goal is reached, instead
- * of showing an indefinite break.
+ * TradingWorks sometimes renders that label as an empty badge (no text),
+ * or keeps showing "Intervalo", once a shift's periods are all closed but
+ * the next one hasn't started — parity alone (or an explicit break label)
+ * would then read as "on-break" forever, with the break timer counting up
+ * against the real clock long after the configured daily goal was met.
+ * `workedMinutes`/`dailyRequiredWorkMinutes` let that case resolve to
+ * "finished" once the goal is reached, instead of showing an indefinite break.
  */
 export function computeStatus(
   punches: PunchEntry[],
@@ -67,8 +68,11 @@ export function computeStatus(
   if (explicitLabel) {
     const normalized = explicitLabel.toLowerCase();
     if (/(encerr|finaliz|finish)/.test(normalized)) return 'finished';
-    if (/(intervalo|almoco|break)/.test(normalized)) return 'on-break';
     if (/(trabalh|working)/.test(normalized)) return 'working';
+    if (/(intervalo|almoco|break)/.test(normalized)) {
+      if (punches.length > 0 && punches.length % 2 === 0 && workedMinutes >= dailyRequiredWorkMinutes) return 'finished';
+      return 'on-break';
+    }
   }
 
   if (punches.length === 0) return 'not-started';
