@@ -51,13 +51,19 @@ export function sumMinutes(intervals: DayInterval[], kind: DayInterval['kind']):
  * (e.g. "Encerrado"), since that also captures shifts that finished with
  * an odd number of punches or other edge cases parity alone can't see.
  *
- * TradingWorks sometimes renders that label as an empty badge (no text),
- * or keeps showing "Intervalo", once a shift's periods are all closed but
- * the next one hasn't started — parity alone (or an explicit break label)
- * would then read as "on-break" forever, with the break timer counting up
- * against the real clock long after the configured daily goal was met.
- * `workedMinutes`/`dailyRequiredWorkMinutes` let that case resolve to
- * "finished" once the goal is reached, instead of showing an indefinite break.
+ * Only the first break (punches 2-3) is treated as a real, ongoing break:
+ * once a second gap opens (punches 4-5, 6-7, ...), it's far more likely the
+ * person left for the day than that they're taking a second formal break,
+ * so it resolves straight to "finished" instead of counting up as "on-break"
+ * — matching what TradingWorks sometimes still renders as an empty badge, or
+ * a lingering "Intervalo" label, long past the point the person is gone.
+ * If they do punch back in, that gap is retroactively counted as a second
+ * break (see computeIntervals) and work resumes as normal.
+ *
+ * `workedMinutes`/`dailyRequiredWorkMinutes` cover the remaining edge case:
+ * even within that trusted first break, the configured daily goal may
+ * already be met, which should also resolve to "finished" rather than an
+ * indefinite break.
  */
 export function computeStatus(
   punches: PunchEntry[],
@@ -65,17 +71,21 @@ export function computeStatus(
   workedMinutes = 0,
   dailyRequiredWorkMinutes = Infinity,
 ): WorkStatus {
+  const isClosedPeriod = punches.length > 0 && punches.length % 2 === 0;
+  const isSecondOrLaterBreak = isClosedPeriod && punches.length / 2 >= 2;
+  const goalMet = workedMinutes >= dailyRequiredWorkMinutes;
+
   if (explicitLabel) {
     const normalized = explicitLabel.toLowerCase();
     if (/(encerr|finaliz|finish)/.test(normalized)) return 'finished';
     if (/(trabalh|working)/.test(normalized)) return 'working';
     if (/(intervalo|almoco|break)/.test(normalized)) {
-      if (punches.length > 0 && punches.length % 2 === 0 && workedMinutes >= dailyRequiredWorkMinutes) return 'finished';
+      if (isClosedPeriod && (isSecondOrLaterBreak || goalMet)) return 'finished';
       return 'on-break';
     }
   }
 
   if (punches.length === 0) return 'not-started';
   if (punches.length % 2 === 1) return 'working';
-  return workedMinutes >= dailyRequiredWorkMinutes ? 'finished' : 'on-break';
+  return isSecondOrLaterBreak || goalMet ? 'finished' : 'on-break';
 }

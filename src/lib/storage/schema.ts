@@ -10,7 +10,18 @@ export interface DiscordSettings {
 
 export type Theme = 'light' | 'dark' | 'system';
 
-export type PopupLayout = 'standard' | 'compact' | 'minimal' | 'stats' | 'timeline' | 'full' | 'classic';
+export type PopupLayout =
+  | 'standard'
+  | 'compact'
+  | 'minimal'
+  | 'stats'
+  | 'timeline'
+  | 'full'
+  | 'classic'
+  | 'ring'
+  | 'week'
+  | 'approvals'
+  | 'timebank';
 
 /** A single notification channel a per-event row can toggle. */
 export type NotificationChannel = 'browser' | 'webhook' | 'discord';

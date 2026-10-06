@@ -82,6 +82,16 @@ describe('computeStatus', () => {
     expect(computeStatus(punches, 'Em intervalo', 240, 480)).toBe('on-break');
   });
 
+  it('treats an explicit break label as finished on a second break even under the daily goal', () => {
+    const punches = inferPunchKinds(['08:00', '12:00', '13:00', '16:00']);
+    expect(computeStatus(punches, 'Em intervalo', 300, 480)).toBe('finished');
+  });
+
+  it('resumes working once a punch closes a second break', () => {
+    const punches = inferPunchKinds(['08:00', '12:00', '13:00', '16:00', '16:30']);
+    expect(computeStatus(punches, 'Trabalhando', 300, 480)).toBe('working');
+  });
+
   it('still trusts an explicit break label on an odd punch count even past the goal', () => {
     expect(computeStatus(inferPunchKinds(['08:00']), 'Em intervalo', 500, 480)).toBe('on-break');
   });
@@ -99,6 +109,11 @@ describe('computeStatus', () => {
   it('treats an even punch count with no label as finished once the daily goal is met', () => {
     expect(computeStatus(inferPunchKinds(['08:00', '12:00']), null, 480, 480)).toBe('finished');
     expect(computeStatus(inferPunchKinds(['08:00', '12:00']), null, 500, 480)).toBe('finished');
+  });
+
+  it('treats a second break with no label as finished even under the daily goal', () => {
+    const punches = inferPunchKinds(['08:00', '12:00', '13:00', '16:00']);
+    expect(computeStatus(punches, null, 300, 480)).toBe('finished');
   });
 });
 

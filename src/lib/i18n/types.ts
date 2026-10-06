@@ -89,6 +89,10 @@ export interface Dictionary {
     popupLayoutTimeline: string;
     popupLayoutFull: string;
     popupLayoutClassic: string;
+    popupLayoutRing: string;
+    popupLayoutWeek: string;
+    popupLayoutApprovals: string;
+    popupLayoutTimeBank: string;
     pollingIntervalLabel: string;
     pollingIntervalHint: string;
     dailyRequiredWorkLabel: string;

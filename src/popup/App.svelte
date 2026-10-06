@@ -11,6 +11,10 @@
   import TimelineBody from './layouts/TimelineBody.svelte';
   import FullBody from './layouts/FullBody.svelte';
   import ClassicBody from './layouts/ClassicBody.svelte';
+  import RingBody from './layouts/RingBody.svelte';
+  import WeekBody from './layouts/WeekBody.svelte';
+  import ApprovalsBody from './layouts/ApprovalsBody.svelte';
+  import TimeBankBody from './layouts/TimeBankBody.svelte';
   import EstimatedFinish from './components/EstimatedFinish.svelte';
 
   initThemeSync();
@@ -23,6 +27,10 @@
     timeline: TimelineBody,
     full: FullBody,
     classic: ClassicBody,
+    ring: RingBody,
+    week: WeekBody,
+    approvals: ApprovalsBody,
+    timebank: TimeBankBody,
   };
 
   let pending = false;

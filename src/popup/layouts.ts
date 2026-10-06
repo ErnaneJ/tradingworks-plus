@@ -4,7 +4,19 @@ import type { PopupLayout } from '../lib/storage/schema';
  * Cycling order for the header's layout switcher, and the single source of
  * truth for which PopupLayout values exist (GeneralTab's dropdown reuses this).
  */
-export const POPUP_LAYOUT_ORDER: PopupLayout[] = ['standard', 'compact', 'minimal', 'stats', 'timeline', 'full', 'classic'];
+export const POPUP_LAYOUT_ORDER: PopupLayout[] = [
+  'standard',
+  'compact',
+  'minimal',
+  'stats',
+  'timeline',
+  'full',
+  'classic',
+  'ring',
+  'week',
+  'approvals',
+  'timebank',
+];
 
 /** Popup width per layout — each variant's composition earns its own footprint rather than reusing one shell size. */
 export const POPUP_LAYOUT_WIDTHS: Record<PopupLayout, number> = {
@@ -15,6 +27,10 @@ export const POPUP_LAYOUT_WIDTHS: Record<PopupLayout, number> = {
   timeline: 360,
   full: 380,
   classic: 300,
+  ring: 260,
+  week: 320,
+  approvals: 340,
+  timebank: 320,
 };
 
 export function nextPopupLayout(current: PopupLayout): PopupLayout {
@@ -31,4 +47,8 @@ export const POPUP_LAYOUT_NAME_KEYS: Record<PopupLayout, string> = {
   timeline: 'options.popupLayoutTimeline',
   full: 'options.popupLayoutFull',
   classic: 'options.popupLayoutClassic',
+  ring: 'options.popupLayoutRing',
+  week: 'options.popupLayoutWeek',
+  approvals: 'options.popupLayoutApprovals',
+  timebank: 'options.popupLayoutTimeBank',
 };
