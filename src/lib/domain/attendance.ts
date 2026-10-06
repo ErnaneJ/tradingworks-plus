@@ -56,14 +56,18 @@ export function sumMinutes(intervals: DayInterval[], kind: DayInterval['kind']):
  * person left for the day than that they're taking a second formal break,
  * so it resolves straight to "finished" instead of counting up as "on-break"
  * — matching what TradingWorks sometimes still renders as an empty badge, or
- * a lingering "Intervalo" label, long past the point the person is gone.
- * If they do punch back in, that gap is retroactively counted as a second
- * break (see computeIntervals) and work resumes as normal.
+ * a lingering "Intervalo" (or even a stale "Trabalhando") label, long past
+ * the point the person is gone. If they do punch back in, that gap is
+ * retroactively counted as a second break (see computeIntervals) and work
+ * resumes as normal.
  *
  * `workedMinutes`/`dailyRequiredWorkMinutes` cover the remaining edge case:
  * even within that trusted first break, the configured daily goal may
  * already be met, which should also resolve to "finished" rather than an
- * indefinite break.
+ * indefinite break. This override applies to ANY explicit label on a closed
+ * punch period (even a "Trabalhando" one) — TradingWorks' own badge can lag
+ * behind the real state, so it's only trusted once these stronger signals
+ * don't already say the day is over.
  */
 export function computeStatus(
   punches: PunchEntry[],
@@ -78,11 +82,9 @@ export function computeStatus(
   if (explicitLabel) {
     const normalized = explicitLabel.toLowerCase();
     if (/(encerr|finaliz|finish)/.test(normalized)) return 'finished';
+    if (isClosedPeriod && (isSecondOrLaterBreak || goalMet)) return 'finished';
     if (/(trabalh|working)/.test(normalized)) return 'working';
-    if (/(intervalo|almoco|break)/.test(normalized)) {
-      if (isClosedPeriod && (isSecondOrLaterBreak || goalMet)) return 'finished';
-      return 'on-break';
-    }
+    if (/(intervalo|almoco|break)/.test(normalized)) return 'on-break';
   }
 
   if (punches.length === 0) return 'not-started';

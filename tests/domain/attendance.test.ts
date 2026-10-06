@@ -92,6 +92,16 @@ describe('computeStatus', () => {
     expect(computeStatus(punches, 'Trabalhando', 300, 480)).toBe('working');
   });
 
+  it('treats a stale "Trabalhando" label as finished on a second break', () => {
+    const punches = inferPunchKinds(['08:02', '13:06', '14:00', '15:51']);
+    expect(computeStatus(punches, 'Trabalhando', 415, 360)).toBe('finished');
+  });
+
+  it('treats a stale "Trabalhando" label as finished once the goal is met on an even punch count', () => {
+    const punches = inferPunchKinds(['08:00', '12:00']);
+    expect(computeStatus(punches, 'Trabalhando', 480, 480)).toBe('finished');
+  });
+
   it('still trusts an explicit break label on an odd punch count even past the goal', () => {
     expect(computeStatus(inferPunchKinds(['08:00']), 'Em intervalo', 500, 480)).toBe('on-break');
   });
