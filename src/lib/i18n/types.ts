@@ -38,6 +38,7 @@ export interface Dictionary {
     workedLabel: string;
     breakLabel: string;
     timeBankLabel: string;
+    timeBankLabelShort: string;
     timeBankPositive: string;
     timeBankNegative: string;
     timeBankNeutral: string;

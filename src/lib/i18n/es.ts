@@ -36,6 +36,7 @@ export const es: Dictionary = {
     workedLabel: 'Trabajado',
     breakLabel: 'Descanso',
     timeBankLabel: 'Banco de horas',
+    timeBankLabelShort: 'Banco',
     timeBankPositive: 'Tienes un saldo de {{time}}.',
     timeBankNegative: 'Debes {{time}}.',
     timeBankNeutral: 'Tu banco de horas está en cero.',

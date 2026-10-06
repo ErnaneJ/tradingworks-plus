@@ -36,6 +36,7 @@ export const en: Dictionary = {
     workedLabel: 'Worked',
     breakLabel: 'Break',
     timeBankLabel: 'Time bank',
+    timeBankLabelShort: 'Bank',
     timeBankPositive: 'You have a surplus of {{time}}.',
     timeBankNegative: 'You owe {{time}}.',
     timeBankNeutral: 'Your time bank is even.',

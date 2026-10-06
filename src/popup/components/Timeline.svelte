@@ -66,10 +66,10 @@
 
   /**
    * Lays out one tick per given minute, centered on its actual point on the bar so it always
-   * lines up with the mark it names. The track and the ticks row both keep a side margin equal
-   * to half a label's width (see LABEL_WIDTH_PX / 2 below), so even a tick at the very start or
-   * end of the bar has room to center without clipping. Any label whose estimated bounds collide
-   * with the previous one is bumped to a second row instead of overlapping into unreadable text.
+   * lines up with the mark it names. The track spans edge-to-edge (flush with the punch button
+   * above/below it); an edge tick's label can overflow a little past the bar into the popup's
+   * own padding, which has room for it. Any label whose estimated bounds collide with the
+   * previous one is bumped to a second row instead of overlapping into unreadable text.
    */
   function buildTickRow(minutesList: number[], width: number) {
     const sorted = [...new Set(minutesList)].sort((a, b) => a - b);
@@ -128,7 +128,6 @@
   .track {
     position: relative;
     height: 8px;
-    margin: 0 17px;
     border-radius: 4px;
     background: var(--color-border);
   }
@@ -181,8 +180,6 @@
   .ticks {
     position: relative;
     height: 12px;
-    margin-left: 17px;
-    margin-right: 17px;
   }
 
   .ticks-above {

@@ -18,6 +18,12 @@
 
   $: trend = state.monthlyTimeBankHistory.slice(0, TREND_MONTHS);
   $: maxAbsBalance = Math.max(...trend.map((row) => Math.abs(row.balanceMinutes ?? 0)), 1);
+
+  /** Shortens a scraped "mês/ano" period (e.g. "outubro/2026") to "mês/aa" (e.g. "out/26") so it fits the narrow period column without overflowing onto the bar. */
+  function shortPeriod(period: string): string {
+    const [month, year] = period.split('/');
+    return month && year ? `${month.slice(0, 3)}/${year.slice(-2)}` : period;
+  }
 </script>
 
 <div class="caption">
@@ -37,7 +43,7 @@
   {:else}
     {#each trend as row (row.period)}
       <div class="trend-row">
-        <span class="period">{row.period}</span>
+        <span class="period">{shortPeriod(row.period)}</span>
         <div class="bar-track">
           {#if row.balanceMinutes !== null}
             <div
@@ -139,6 +145,9 @@
   .period {
     font-size: 12px;
     color: var(--color-text-muted);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .bar-track {

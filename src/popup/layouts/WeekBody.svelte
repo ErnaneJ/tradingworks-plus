@@ -15,7 +15,10 @@
   const WEEK_DAYS = 7;
 
   $: goal = $settingsStore.dailyRequiredWorkMinutes;
-  $: weekRows = state.attendanceHistory.slice(0, WEEK_DAYS);
+  // attendanceHistory comes from the scraped page oldest-first, so the last WEEK_DAYS
+  // entries are the most recent days — slicing from the start would show the oldest
+  // days of the period instead once more than WEEK_DAYS rows exist.
+  $: weekRows = state.attendanceHistory.slice(-WEEK_DAYS);
 </script>
 
 <div class="caption">

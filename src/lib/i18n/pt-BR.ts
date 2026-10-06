@@ -36,6 +36,7 @@ export const ptBR: Dictionary = {
     workedLabel: 'Trabalhado',
     breakLabel: 'Intervalo',
     timeBankLabel: 'Banco de horas',
+    timeBankLabelShort: 'Banco',
     timeBankPositive: 'Você tem um saldo de {{time}}.',
     timeBankNegative: 'Você deve {{time}}.',
     timeBankNeutral: 'Seu banco de horas está zerado.',

@@ -24,7 +24,7 @@
   </div>
   <div class="stat">
     <span class="value tone-{timeBankTone}">{timeBankLabel}</span>
-    <span class="label">{$t('popup.timeBankLabel')}</span>
+    <span class="label">{$t('popup.timeBankLabelShort')}</span>
   </div>
   <div class="stat">
     <span class="value">{minutesToTime(remainingMinutes)}</span>
