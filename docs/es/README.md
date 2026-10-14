@@ -99,7 +99,7 @@ Luego, en `chrome://extensions`: activa el **Modo de desarrollador**, haz clic e
 
 ## Privacidad
 
-La extensión no envía los datos de tu marcación a ningún servidor propio: todo se guarda localmente en el navegador (`chrome.storage.local`), y solo sale de tu dispositivo si tú mismo configuras un webhook o una integración con Discord en Notificaciones. Detalles completos en la [Política de Privacidad](../privacy_policy/en.md) (disponible en inglés y portugués).
+La extensión no envía los datos de tu marcación a ningún servidor propio: todo se guarda localmente en el navegador (`chrome.storage.local`), y solo sale de tu dispositivo si tú mismo configuras un webhook o una integración con Discord en Notificaciones. Detalles completos en la [Política de Privacidad](../privacy_policy/es.md).
 
 ## Contribuir
 

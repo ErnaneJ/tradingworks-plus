@@ -1,41 +1,40 @@
 # Política de Privacidade
 
-> Última atualização: 07 de Abril de 2024
+> Última atualização: 14 de outubro de 2026
 
-Agradecemos por escolher utilizar a extensão **TradingWorks+**. Esta política de privacidade visa informar sobre como coletamos, usamos e protegemos as informações fornecidas pelo usuário durante o uso da nossa extensão do navegador.
+Obrigado por usar o **TradingWorks+**. Esta é uma extensão de navegador não oficial, sem vínculo com a empresa TWO. Esta política explica quais dados a extensão lida e como.
 
-## Informações Coletadas:
+## O que a extensão lê
 
-1.1 Dados fornecidos pelo usuário: Para utilizar a extensão **TradingWorks+**, é necessário que o usuário forneça algumas informações, incluindo, mas não se limitando a, tempo de intervalo e duração da jornada de trabalho. Todas as manipulações de dados ocorrem exclusivamente no lado do cliente, em sua própria máquina.
+O **TradingWorks+** lê páginas do [app.tradingworks.net](https://app.tradingworks.net/) usando a sessão do navegador que você já tem aberta — do mesmo jeito que aconteceria se você visitasse o site manualmente. A partir dessas páginas, a extensão lê o status do seu ponto, a linha do tempo do dia, o banco de horas, o histórico de presença e, se você for gestor, a fila de aprovação da equipe. Tudo isso acontece inteiramente no seu dispositivo; a extensão não tem servidor próprio, e suas credenciais de login do TradingWorks nunca passam pela extensão.
 
-1.2 Dados de uso: Nossa extensão poderá coletar dados de uso, como interações com a extensão, histórico de atividades e preferências do usuário. Esses dados são utilizados para melhorar a experiência do usuário e aprimorar nossos serviços.
+## O que fica no seu dispositivo
 
-## Uso das Informações
+Suas preferências (tema, idioma, layout do popup, configurações de notificação) ficam salvas localmente no navegador via `chrome.storage.local`. Esse dado nunca é enviado pra lugar nenhum e nunca sai da sua máquina.
 
-2. Coleta e Armazenamento de Dados
+## O que você pode optar por enviar pra fora
 
-A extensão **TradingWorks+** coleta e armazena informações de preferências e configurações do usuário, incluindo mas não se limitando a, tempo de intervalo e duração da jornada de trabalho. Todas as manipulações de dados ocorrem exclusivamente no lado do cliente, em sua própria máquina.
+Notificações são opcionais e vêm desligadas por padrão. Se você ativar um canal de notificação nas Configurações, uma mensagem curta sobre o status do seu ponto é enviada direto do seu navegador pro destino que você configurou:
 
-3. Uso dos Dados
+- **Discord:** pra URL de webhook do Discord que você informar.
+- **Webhook genérico:** pra URL que você informar.
 
-3.1 Notificações: A extensão **TradingWorks+** utiliza os dados coletados para enviar notificações através do sistema operacional, através do navegador.
+Essas mensagens vão direto do seu navegador pro destino — nunca passam por um servidor nosso. A extensão só pede permissão pra origem específica que você digitou, no momento em que você ativa o canal.
 
-3.2 Serviço de Mensageiria: A extensão **TradingWorks+** não utiliza nenhum serviço de mensageiria externo.
+## O que não fazemos
 
-## Compartilhamento de Informações
+Não fazemos analytics nem rastreamento, não mostramos anúncios e não vendemos, compartilhamos ou divulgamos seus dados pra terceiros de nenhuma forma. Os únicos destinos externos com quem o TradingWorks+ conversa são `app.tradingworks.net` (pra ler seu próprio dado) e, só se você configurar, os destinos de notificação acima.
 
-3.1 Terceiros: Ressaltamos que NENHUMA informação fornecida pelo usuário será compartilhada, vendida ou divulgada a terceiros. Todas as informações coletadas são estritamente utilizadas para fornecer os recursos e serviços da extensão no próprio dispositivo do usuário.
+## Segurança
 
-## Medidas de Segurança
+Todo o tratamento de dado acontece no lado do cliente, no seu navegador. Não temos servidores que armazenem ou processem sua informação.
 
-4.1 Proteção de Dados: Implementamos medidas de segurança adequadas para proteger as informações fornecidas pelo usuário, visando evitar acesso não autorizado, divulgação ou alteração não autorizada dessas informações.
+## Mudanças nesta política
 
-## Alterações na Política de Privacidade
-
-5.1 Reservamo-nos o direito de atualizar esta política de privacidade periodicamente. Recomendamos que o usuário revise esta página regularmente para estar ciente de quaisquer alterações que possam ocorrer.
+Podemos atualizar esta política conforme a extensão muda. Confira esta página periodicamente pra ver atualizações.
 
 ## Contato
 
-6.1 Se tiver alguma dúvida ou preocupação relacionada à privacidade ou ao uso da extensão **TradingWorks+**, entre em contato pelo email ernane.juinor25@gmail.com.
+Dúvida sobre privacidade ou sobre o **TradingWorks+**? Fala com a gente em [ernane.junior25@gmail.com](mailto:ernane.junior25@gmail.com).
 
-Ao utilizar a extensão **TradingWorks+**, o usuário concorda com os termos estabelecidos nesta Política de Privacidade.
+Ao usar o **TradingWorks+**, você concorda com os termos desta Política de Privacidade.

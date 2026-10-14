@@ -1,39 +1,40 @@
 # Privacy Policy
 
-> Last Updated: April 07, 2024
+> Last updated: October 14, 2026
 
-Thank you for choosing to use the **TradingWorks+** extension. This privacy policy aims to inform you about how we collect, use, and protect the information provided by the user during the use of our browser extension.
+Thank you for using **TradingWorks+**. This is an unofficial browser extension, with no affiliation to the TWO company. This policy explains what data the extension handles and how.
 
-## Information Collected:
+## What the extension reads
 
-1.1 User-Provided Data: To use the **TradingWorks+** extension, it is necessary for the user to provide some information, including but not limited to, break time and work shift duration. All data manipulations occur exclusively on the client-side, on their own machine.
+**TradingWorks+** reads pages from [app.tradingworks.net](https://app.tradingworks.net/) using the browser session you already have open — the same way your browser would if you visited the site yourself. From those pages it reads your clock-in status, daily timeline, time bank, attendance history and, if you're a manager, your team's approval queue. This happens entirely on your own device; the extension has no server of its own, and your TradingWorks login credentials never pass through the extension.
 
-1.2 Usage Data: Our extension may collect usage data, such as interactions with the extension, activity history, and user preferences. These data are used to improve the user experience and enhance our services.
+## What stays on your device
 
-## Use of Information
+Your preferences (theme, language, popup layout, notification settings) are stored locally in the browser via `chrome.storage.local`. This data is never uploaded anywhere and never leaves your machine.
 
-2.1 Personalization: The information provided by the user and usage data may be used to personalize the user experience and provide relevant information related to the time tracking system of [TradingWorks](https://app.tradingworks.net/).
+## What you can choose to send elsewhere
 
-2.2 Notifications: The **TradingWorks+** extension uses the collected data to send notifications through the operating system, via the browser.
+Notifications are opt-in and off by default. If you turn on a notification channel in Settings, a short message about your clock-in status is sent directly from your browser to the destination you configured:
 
-2.3 Service Improvement: The information collected, in an aggregated and anonymous form, may be used for analysis and improvement of our services, always aiming to enhance the functionality and usability of the extension.
+- **Discord:** to the Discord webhook URL you provide.
+- **Generic webhook:** to the URL you provide.
 
-## Sharing of Information
+These messages go straight from your browser to that destination — never through a server operated by us. The extension only requests permission for the specific origin you typed, at the moment you turn the channel on.
 
-3.1 Third Parties: We emphasize that NO information provided by the user will be shared, sold, or disclosed to third parties. All collected information is strictly used to provide the features and services of the extension on the user's own device.
+## What we don't do
 
-3.2 Messaging Service: The **TradingWorks+** extension does not use any external messaging service.
+We don't run analytics or tracking, don't show ads, and don't sell, share, or otherwise disclose your data to third parties. The only external destinations TradingWorks+ talks to are `app.tradingworks.net` (to read your own data) and, only if you set them up, the notification destinations above.
 
-## Security Measures
+## Security
 
-4.1 Data Protection: We have implemented appropriate security measures to protect the information provided by the user, aiming to prevent unauthorized access, disclosure, or unauthorized alteration of this information.
+All data handling happens client-side, in your browser. We have no servers that store or process your information.
 
-## Changes to the Privacy Policy
+## Changes to this policy
 
-5.1 We reserve the right to update this privacy policy periodically. We recommend that the user regularly review this page to be aware of any changes that may occur.
+We may update this policy as the extension changes. Check this page periodically for updates.
 
 ## Contact
 
-6.1 If you have any questions or concerns regarding privacy or the use of the **TradingWorks+** extension, please contact us at ernane.juinor25@gmail.com.
+Questions about privacy or about **TradingWorks+**? Reach out at [ernane.junior25@gmail.com](mailto:ernane.junior25@gmail.com).
 
-By using the **TradingWorks+** extension, you agree to the terms set forth in this Privacy Policy.
+By using **TradingWorks+**, you agree to the terms set out in this Privacy Policy.
