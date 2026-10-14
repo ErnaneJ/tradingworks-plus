@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="../video/promo.mp4">
+    <img alt="TradingWorks+ — tu marcación, bolsa de horas y avisos en un clic" src="../imgs/promo/marquee-1400x560.png" width="100%">
+  </a>
+</p>
+
 <h1 align="center">
   <img alt="Icono" src="../imgs/icon.png" width="28"> TradingWorks+
 </h1>
@@ -20,47 +26,21 @@
   <a href="../en/README.md">English</a>
 </p>
 
-<p align="center">
-  <img alt="Vista previa del popup y del panel de opciones" src="../imgs/popup/full.png" width="320">
-</p>
-
-## Contenido
-
-- [Qué es](#qué-es)
-- [Funcionalidades](#funcionalidades)
-- [Popup: 11 formatos](#popup-11-formatos)
-- [Panel de opciones](#panel-de-opciones)
-- [Tecnologías](#tecnologías)
-- [Instalación](#instalación)
-- [Privacidad](#privacidad)
-- [Contribuir](#contribuir)
-- [Apoya el proyecto](#apoya-el-proyecto)
-
 ## Qué es
 
-TradingWorks+ es una extensión de navegador no oficial, sin ningún vínculo con la empresa TWO, que agiliza el uso diario de [TradingWorks](https://app.tradingworks.net/). En vez de entrar a la plataforma y navegar por varias pantallas, marcas tu entrada, revisas el saldo del día y recibes avisos directamente desde el navegador.
-
-<p align="center">
-  <b>Esta extensión solo reorganiza, de forma más práctica, datos que la propia plataforma TradingWorks ya pone a disposición del colaborador.</b>
-</p>
+TradingWorks+ es una extensión de navegador sin vínculo oficial con la empresa TWO. La idea es simple: dejar de entrar a [TradingWorks](https://app.tradingworks.net/) solo para ver si marcaste la entrada o cuánta bolsa de horas tienes. La extensión lo resuelve en un clic, directo desde el navegador — sin reinventar nada, solo reorganizando lo que la propia plataforma ya muestra.
 
 ## Funcionalidades
 
-- **Marcación en un clic**, con el estado actual (trabajando, en descanso, jornada finalizada);
-- **Línea de tiempo del día**, con entradas, descansos y horas extra lado a lado;
-- **Bolsa de horas**, con saldo actual e historial mes a mes;
-- **Historial de marcaciones**, con los registros de días anteriores;
-- **Panel de equipo**, para quien necesite revisar o aprobar marcaciones de otras personas;
-- **Notificaciones configurables** por evento (entrada, salida, fin de descanso, jornada por terminar, horas extra, etc.), entregadas por notificación del navegador, webhook genérico o Discord;
-- **11 formatos de popup**, desde un vistazo mínimo hasta el panel completo;
-- **Tema claro, oscuro o automático**;
-- Interfaz en **portugués (predeterminado), inglés y español**.
+Marca tu entrada con un clic y ve al instante si estás trabajando, en descanso o si ya terminaste la jornada. La línea de tiempo del día muestra entradas, descansos y horas extra lado a lado, y tu bolsa de horas siempre está a la mano, con el saldo actual y el historial mes a mes. Puedes revisar el historial de marcaciones cuando necesites consultar un día anterior, y quien aprueba la marcación del equipo puede revisar y aprobar directo desde el panel.
+
+También puedes elegir cómo quieres recibir avisos — notificación del navegador, webhook genérico o Discord — para cada evento (entrada, salida, fin de descanso, jornada por terminar, horas extra, y más). El popup tiene 11 formatos, desde un vistazo mínimo hasta el panel completo, el tema sigue al sistema (o claro/oscuro manual) y la interfaz habla portugués, inglés o español.
 
 _Nota: los datos se leen directamente de tu sesión de TradingWorks ya autenticada en el navegador — la extensión nunca pide usuario ni contraseña, solo reutiliza la sesión que ya tienes abierta._
 
 ## Popup: 11 formatos
 
-Haz clic en el ícono de formato en el encabezado del popup para alternar entre ellos, del más simple al más completo. Algunos ejemplos:
+Haz clic en el ícono de formato en el encabezado del popup para alternar entre ellos. Algunos ejemplos, del más simple al más completo:
 
 <table>
   <tr>
@@ -115,23 +95,7 @@ npm install
 npm run build
 ```
 
-Luego:
-
-1. Abre `chrome://extensions`;
-
-  <p align="center"><img alt="Accediendo a la sección de extensiones" src="../imgs/en/extensions.png" width="520"></p>
-
-2. Activa el **Modo de desarrollador**;
-
-  <p align="center"><img alt="Activando el modo de desarrollador" src="../imgs/en/dev.png" width="520"></p>
-
-3. Haz clic en **Cargar descomprimida** y selecciona la carpeta `dist/` generada por el build;
-
-  <p align="center"><img alt="Cargando la extensión" src="../imgs/en/load.png" width="520"></p>
-
-4. Listo — el ícono de TradingWorks+ aparece en la barra de extensiones.
-
-  <p align="center"><img alt="Extensión cargada" src="../imgs/ok.png" width="520"></p>
+Luego, en `chrome://extensions`: activa el **Modo de desarrollador**, haz clic en **Cargar descomprimida** y selecciona la carpeta `dist/` generada por el build.
 
 ## Privacidad
 
@@ -147,17 +111,7 @@ npm run typecheck # TypeScript + svelte-check
 npm run test      # Vitest
 ```
 
-Carga la carpeta `dist/` como extensión descomprimida (paso 3 de la instalación manual) para ver tus cambios en acción. Al terminar, abre un PR — toda contribución es bienvenida.
-
-## Apoya el proyecto
-
-Cualquier crítica constructiva es bienvenida. Si TradingWorks+ te ahorra tiempo en el día a día, considera apoyar el proyecto:
-
-<p align="center">
-  <a href="https://github.com/sponsors/ErnaneJ">
-    <img alt="Buy Me a Coffee" src="../imgs/buy-me-a-coffee.png" width="260">
-  </a>
-</p>
+Carga la carpeta `dist/` como extensión descomprimida (instalación manual arriba) para ver tus cambios en acción. Al terminar, abre un PR — toda contribución es bienvenida.
 
 ---
 

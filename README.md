@@ -1,6 +1,6 @@
 <p align="center">
   <a href="./docs/video/promo.mp4">
-    <img alt="Vídeo promocional do TradingWorks+" src="./docs/video/promo-contact-sheet.png" width="100%">
+    <img alt="TradingWorks+ — seu ponto, banco de horas e avisos em um clique" src="./docs/imgs/promo/marquee-1400x560.png" width="100%">
   </a>
 </p>
 
@@ -28,25 +28,19 @@
 
 ## O que é
 
-TradingWorks+ é uma extensão de navegador, não oficial e sem qualquer vínculo com a empresa TWO, que torna o uso do [TradingWorks](https://app.tradingworks.net/) mais rápido no dia a dia. Em vez de entrar na plataforma e navegar por várias telas, você bate o ponto, acompanha o saldo do dia e recebe avisos direto do navegador — apenas reorganizando, de forma mais prática, dados que a própria plataforma já disponibiliza ao colaborador.
+TradingWorks+ é uma extensão de navegador sem vínculo oficial com a empresa TWO. A ideia é simples: parar de entrar no [TradingWorks](https://app.tradingworks.net/) só pra ver se bateu o ponto ou quanto tem de banco de horas. A extensão resolve isso num clique, direto do navegador — sem reinventar nada, só reorganizando o que a própria plataforma já mostra.
 
 ## Funcionalidades
 
-- **Ponto em um clique**, com o status atual (trabalhando, em intervalo, jornada concluída);
-- **Linha do tempo do dia**, mostrando entradas, intervalos e horas extras lado a lado;
-- **Banco de horas**, com saldo atual e histórico mês a mês;
-- **Histórico de apontamentos**, com os registros de dias anteriores;
-- **Painel da equipe**, para quem precisa acompanhar ou aprovar apontamentos de outras pessoas;
-- **Notificações configuráveis** por evento (entrada, saída, fim de intervalo, jornada perto de terminar, horas extras, etc.), entregues por notificação do navegador, webhook genérico ou Discord;
-- **11 formatos de popup** diferentes, para escolher o que mostra só o essencial ou o painel completo;
-- **Tema claro, escuro ou automático**, seguindo o sistema;
-- Interface em **português (padrão), inglês e espanhol**.
+Bate o ponto com um clique e já vê se está trabalhando, em intervalo ou com a jornada encerrada. A linha do tempo do dia mostra entradas, intervalos e horas extras lado a lado, e o banco de horas fica sempre à mão, com saldo atual e histórico mês a mês. Dá pra revisitar o histórico de apontamentos quando precisar conferir um dia anterior, e quem aprova ponto de equipe acompanha e aprova direto pelo painel.
 
-_Obs.: as informações são lidas diretamente da sessão já autenticada do TradingWorks no seu navegador — a extensão não pede login nem senha, só reaproveita a sessão que você já tem aberta._
+Também dá pra escolher como quer ser avisado — notificação do navegador, webhook genérico ou Discord — pra cada evento (entrada, saída, fim de intervalo, jornada perto de terminar, horas extras...). O popup tem 11 formatos, do mais enxuto ao mais completo, o tema segue o sistema (ou claro/escuro manual) e a interface fala português, inglês ou espanhol.
+
+_Obs.: as informações vêm direto da sessão já autenticada do TradingWorks no seu navegador — a extensão não pede login nem senha, só reaproveita a sessão que você já tem aberta._
 
 ## Popup: 11 formatos
 
-Clique no ícone no cabeçalho do popup pra alternar entre os formatos, do mais enxuto ao mais completo. Alguns exemplos:
+Clique no ícone no cabeçalho do popup pra alternar entre os formatos. Alguns exemplos, do mais enxuto ao mais completo:
 
 <table>
   <tr>

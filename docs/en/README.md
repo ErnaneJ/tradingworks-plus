@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="../video/promo.mp4">
+    <img alt="TradingWorks+ — your clock-in, time bank and alerts in one click" src="../imgs/promo/marquee-1400x560.png" width="100%">
+  </a>
+</p>
+
 <h1 align="center">
   <img alt="Icon" src="../imgs/icon.png" width="28"> TradingWorks+
 </h1>
@@ -20,47 +26,21 @@
   <a href="../es/README.md">Español</a>
 </p>
 
-<p align="center">
-  <img alt="Popup and options panel preview" src="../imgs/popup/full.png" width="320">
-</p>
-
-## Contents
-
-- [What it is](#what-it-is)
-- [Features](#features)
-- [Popup: 11 layouts](#popup-11-layouts)
-- [Options panel](#options-panel)
-- [Technologies](#technologies)
-- [Installation](#installation)
-- [Privacy](#privacy)
-- [Developing](#developing)
-- [Support the project](#support-the-project)
-
 ## What it is
 
-TradingWorks+ is an unofficial browser extension, with no affiliation to the TWO company, that makes day-to-day use of [TradingWorks](https://app.tradingworks.net/) faster. Instead of logging into the platform and clicking through several screens, you clock in, check today's balance, and get notified straight from the browser.
-
-<p align="center">
-  <b>This extension only reorganizes, in a more convenient way, data the TradingWorks platform already exposes to the employee.</b>
-</p>
+TradingWorks+ is an unofficial browser extension, with no affiliation to the TWO company. The idea is simple: stop logging into [TradingWorks](https://app.tradingworks.net/) just to check whether you clocked in or how much time bank you have. The extension handles it in one click, right from the browser — nothing reinvented, just a more convenient way to see what the platform already shows you.
 
 ## Features
 
-- **One-click clock in/out**, with live status (working, on break, shift finished);
-- **Day timeline**, showing clock-ins, breaks and overtime side by side;
-- **Time bank**, with current balance and month-by-month history;
-- **Attendance history**, with previous days' records;
-- **Team panel**, for anyone who needs to review or approve other people's attendance;
-- **Configurable notifications** per event (clock-in, clock-out, break ending, shift ending soon, overtime threshold, etc.), delivered via browser notification, generic webhook or Discord;
-- **11 popup layouts**, from a minimal glance to the full dashboard;
-- **Light, dark or system theme**;
-- Interface in **Portuguese (default), English and Spanish**.
+Clock in with one click and immediately see whether you're working, on a break, or done for the day. The day's timeline lays out clock-ins, breaks and overtime side by side, and your time bank is always within reach, with the current balance and month-by-month history. You can revisit attendance history whenever you need to check an earlier day, and anyone who approves a team's attendance can review and approve it right from the panel.
+
+You also get to choose how you're notified — browser notification, generic webhook or Discord — for each event (clock-in, clock-out, break ending, shift ending soon, overtime, and more). The popup has 11 layouts, from a quick glance to the full dashboard, the theme follows the system (or a manual light/dark setting), and the interface speaks Portuguese, English or Spanish.
 
 _Note: data is read directly from your already-authenticated TradingWorks browser session — the extension never asks for a login or password, it just reuses the session you already have open._
 
 ## Popup: 11 layouts
 
-Click the layout icon in the popup header to cycle through them, from the leanest to the most complete. A few examples:
+Click the layout icon in the popup header to cycle through them. A few examples, from the leanest to the most complete:
 
 <table>
   <tr>
@@ -115,23 +95,7 @@ npm install
 npm run build
 ```
 
-Then:
-
-1. Open `chrome://extensions`;
-
-  <p align="center"><img alt="Opening the extensions section" src="../imgs/en/extensions.png" width="520"></p>
-
-2. Enable **Developer mode**;
-
-  <p align="center"><img alt="Enabling developer mode" src="../imgs/en/dev.png" width="520"></p>
-
-3. Click **Load unpacked** and select the `dist/` folder produced by the build;
-
-  <p align="center"><img alt="Loading the extension" src="../imgs/en/load.png" width="520"></p>
-
-4. Done — the TradingWorks+ icon shows up in the extensions toolbar.
-
-  <p align="center"><img alt="Extension loaded" src="../imgs/ok.png" width="520"></p>
+Then, in `chrome://extensions`: enable **Developer mode**, click **Load unpacked** and select the `dist/` folder produced by the build.
 
 ## Privacy
 
@@ -147,17 +111,7 @@ npm run typecheck # TypeScript + svelte-check
 npm run test      # Vitest
 ```
 
-Load the `dist/` folder as an unpacked extension (step 3 of the manual install) to see your changes live. When you're done, open a PR — every contribution is welcome.
-
-## Support the project
-
-Any constructive criticism is welcome. If TradingWorks+ saves you time day to day, consider supporting the project:
-
-<p align="center">
-  <a href="https://github.com/sponsors/ErnaneJ">
-    <img alt="Buy Me a Coffee" src="../imgs/buy-me-a-coffee.png" width="260">
-  </a>
-</p>
+Load the `dist/` folder as an unpacked extension (manual install above) to see your changes live. When you're done, open a PR — every contribution is welcome.
 
 ---
 
