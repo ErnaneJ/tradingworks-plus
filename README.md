@@ -1,161 +1,166 @@
 <h1 align="center">
-  <img alt="Icone" src="./docs/imgs/icon.png" width="25"> TradingWorks+
+  <img alt="Ícone" src="./docs/imgs/icon.png" width="28"> TradingWorks+
 </h1>
 
-<br/>
+<p align="center">
+  Marca o ponto, acompanha jornada e banco de horas, e te avisa na hora certa — sem precisar ficar com a aba do TradingWorks aberta o dia todo.
+</p>
 
 <div align="center">
-  <a href="#-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-project">Project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-features">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#%EF%B8%8F-use">Use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-support">Support</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#%EF%B8%8F-contribute">Contribute</a>&nbsp;&nbsp;&nbsp;
+
+  [![Versão](https://img.shields.io/badge/vers%C3%A3o-3.0.0-7c9a4e?logo=googlechrome&logoColor=white)](https://github.com/ErnaneJ/tradingworks-plus/releases)
+  [![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](./LICENSE.md)
+  [![Manifest V3](https://img.shields.io/badge/manifest-v3-orange?logo=googlechrome&logoColor=white)](./src/manifest.json)
+  [![Svelte](https://img.shields.io/badge/svelte-4-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev)
+
 </div>
 
-<br/>
-
-<div align="center">
-  <img alt="Icone" src="https://shields.io/badge/TradingWorks%2B-v2.0.7-brightgreen?logo=github">
-</div>
-
-<br/>
-
 <p align="center">
-  <a href="https://github.com/ErnaneJ/tradingworks-plus/blob/main/docs/ptbr">PT-BR</a>
+  <a href="./docs/en/README.md">English</a> ·
+  <a href="./docs/es/README.md">Español</a>
 </p>
 
-<br/>
-
 <p align="center">
-  <img alt="Application preview image" src="./docs/imgs/prevv2-0-0.png" width="100%">
+  <img alt="Pré-visualização do popup e do painel de opções" src="./docs/imgs/popup/full.png" width="320">
 </p>
 
+## Índice
 
-## 🚀 Technologies
+- [O que é](#o-que-é)
+- [Funcionalidades](#funcionalidades)
+- [Popup: 11 formatos](#popup-11-formatos)
+- [Painel de opções](#painel-de-opções)
+- [Tecnologias](#tecnologias)
+- [Instalação](#instalação)
+- [Privacidade](#privacidade)
+- [Desenvolvendo](#desenvolvendo)
+- [Apoie o projeto](#apoie-o-projeto)
 
-This application was developed with the following technologies:
+## O que é
 
-- HTML
-- CSS
-- Javascript
-
-## 💻 Project
-
-Extension developed with the aim of facilitating the usability of the TradingWorks platform for point management between workdays. His idea was due to the need for some features that are not natively present in the application.
+TradingWorks+ é uma extensão de navegador, não oficial e sem qualquer vínculo com a empresa TWO, que torna o uso do [TradingWorks](https://app.tradingworks.net/) mais rápido no dia a dia. Em vez de entrar na plataforma e navegar por várias telas, você bate o ponto, acompanha o saldo do dia e recebe avisos direto do navegador.
 
 <p align="center">
-  <b>This extension has NO direct link to the TradingWorks platform and its development purpose is entirely educational.</b>
+  <b>Esta extensão apenas reorganiza, de forma mais prática, dados que a própria plataforma TradingWorks já disponibiliza ao colaborador.</b>
 </p>
 
-## ✨ Features
+## Funcionalidades
 
-In order to make life easier for the user, this extension has the following features:
+- **Ponto em um clique**, com o status atual (trabalhando, em intervalo, jornada concluída);
+- **Linha do tempo do dia**, mostrando entradas, intervalos e horas extras lado a lado;
+- **Banco de horas**, com saldo atual e histórico mês a mês;
+- **Histórico de apontamentos**, com os registros de dias anteriores;
+- **Painel da equipe**, para quem precisa acompanhar ou aprovar apontamentos de outras pessoas;
+- **Notificações configuráveis** por evento (entrada, saída, fim de intervalo, jornada perto de terminar, horas extras, etc.), entregues por notificação do navegador, webhook genérico ou Discord;
+- **11 formatos de popup** diferentes, para escolher o que mostra só o essencial ou o painel completo;
+- **Tema claro, escuro ou automático**, seguindo o sistema;
+- Interface em **português (padrão), inglês e espanhol**.
 
-- List of schedules;
-  - Prohibited;
-  - Exit;
-- Automatic calculation of elapsed time;
-  - Elapsed time of working day;
-  - Time elapsed in intervals;
-  - Elapsed time of extra journey, when the pre-defined time has already been finalized.
-- Notifications
-  - Background execution of a journey monitor that captures this information every X time and notifies the user in specific cases through the [https://www.callmebot.com/](callmebot.com) API.
-    - Notifications on browser
+_Obs.: as informações são lidas diretamente da sessão já autenticada do TradingWorks no seu navegador — a extensão não pede login nem senha, só reaproveita a sessão que você já tem aberta._
 
-_Note: All information is captured directly from the [TradingWorks.net](https://app.tradingworks.net/) platform to ensure the accuracy of the calculations. It only needs to identify user session cookies in the browser to obtain the necessary access to enter the platform with the collaborator's profile and capture the information._
+## Popup: 11 formatos
 
-## ⚙️ Use
+Clique no ícone no cabeçalho do popup pra alternar entre os formatos, do mais enxuto ao mais completo. Alguns exemplos:
 
-### 🧩 Installing from the extension store
+<table>
+  <tr>
+    <td align="center"><img src="./docs/imgs/popup/minimal.png" width="160"><br><sub>Minimal</sub></td>
+    <td align="center"><img src="./docs/imgs/popup/ring.png" width="160"><br><sub>Ring</sub></td>
+    <td align="center"><img src="./docs/imgs/popup/stats.png" width="160"><br><sub>Stats</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./docs/imgs/popup/week.png" width="160"><br><sub>Week</sub></td>
+    <td align="center"><img src="./docs/imgs/popup/timebank.png" width="160"><br><sub>Time bank</sub></td>
+    <td align="center"><img src="./docs/imgs/popup/full.png" width="160"><br><sub>Full</sub></td>
+  </tr>
+</table>
 
-Basta seguir o processo de instalação padrão, semelhante ao de qualquer outra extensão no Chrome. Para continuar, clique no link da extensão fornecido abaixo e instale-a prontamente.
+Os outros cinco (standard, compact, timeline, classic e approvals) ficam disponíveis no mesmo ciclo, direto no popup.
 
-[Link da Extensão Tradingworks+](https://chromewebstore.google.com/detail/tradingworks+/gekmgdfmjoccmkagkbcboidgknlolihl).
+## Painel de opções
 
-### 📦 Installation by downloading packages
+<table>
+  <tr>
+    <td align="center"><img src="./docs/imgs/options/painel.png" width="260"><br><sub>Painel</sub></td>
+    <td align="center"><img src="./docs/imgs/options/notificacoes.png" width="260"><br><sub>Notificações</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./docs/imgs/options/historico.png" width="260"><br><sub>Histórico de apontamentos</sub></td>
+    <td align="center"><img src="./docs/imgs/options/equipe.png" width="260"><br><sub>Equipe</sub></td>
+  </tr>
+</table>
 
-Below is explained the process to download and install the extension manually. None of these steps are necessary if it has been installed directly by the store.
+> As imagens acima usam dados fictícios de demonstração — nenhuma é captura real de empresa ou colaborador algum.
 
-#### ⬇️ Download
+## Tecnologias
 
-Go [here](https://github.com/ErnaneJ/tradingworks-plus/releases) to view available packages and versions (ZIP) or download directly from Git.
+- [Svelte 4](https://svelte.dev) + [TypeScript](https://www.typescriptlang.org/) + [Vite 5](https://vitejs.dev)
+- Chrome Extension **Manifest V3** (service worker, `chrome.alarms`, `chrome.storage`, `chrome.notifications`)
+- [Vitest](https://vitest.dev) para os testes
 
-- Clone this repository
+## Instalação
 
-  - SSH
-  ```bash
-  git clone git@github.com:ErnaneJ/tradingworks-plus.git
-  ```
+### Pela loja do Chrome (recomendado)
 
-  - HTTPS
-  ```bash
-  https://github.com/ErnaneJ/tradingworks-plus.git
-    ```
+[Instalar o TradingWorks+ na Chrome Web Store](https://chromewebstore.google.com/detail/tradingworks+/gekmgdfmjoccmkagkbcboidgknlolihl)
 
-#### 🟢 Install
+### Manualmente, a partir do código-fonte
 
-  - Access your browser in the extensions section
+Use este caminho se quiser testar uma branch específica ou contribuir com o projeto.
 
-  <p align="center">
-    <img alt="Accessing extensions session" src="./docs/imgs/en/extensions.png">
-  </p>
+```bash
+git clone git@github.com:ErnaneJ/tradingworks-plus.git
+cd tradingworks-plus
+npm install
+npm run build
+```
 
+Depois:
 
-  - Enable development mode
+1. Abra `chrome://extensions` no navegador;
 
-  <p align="center">
-    <img alt="Enabling development mode" src="./docs/imgs/en/dev.png">
-  </p>
+  <p align="center"><img alt="Acessando a seção de extensões" src="./docs/imgs/ptbr/extensoes.png" width="520"></p>
 
+2. Ative o **Modo do desenvolvedor**;
 
-  - Upload the folder where you cloned the repository
+  <p align="center"><img alt="Ativando o modo do desenvolvedor" src="./docs/imgs/ptbr/dev.png" width="520"></p>
 
-  <p align="center">
-    <img alt="Loading extension" src="./docs/imgs/en/load.png">
-  </p>
+3. Clique em **Carregar sem compactação** e selecione a pasta `dist/` gerada pelo build;
 
+  <p align="center"><img alt="Carregando a extensão" src="./docs/imgs/ptbr/carregar.png" width="520"></p>
 
-  - Ready! 🎊
+4. Pronto — o ícone do TradingWorks+ aparece na barra de extensões.
 
-  <p align="center">
-    <img alt="loaded" src="./docs/imgs/ok.png">
-  </p>
+  <p align="center"><img alt="Extensão carregada" src="./docs/imgs/ok.png" width="520"></p>
 
-## 🆙 Support
+## Privacidade
 
-This Extension has been tested and proven to work in the following browsers:
-  - **Google Chrome**: v111.0.5563.146	(2024-04-07)
-  - **Edge**: v111.0.1661.54 (2023-03-24)
+A extensão não envia os dados do seu ponto para nenhum servidor próprio: tudo fica salvo localmente no navegador (`chrome.storage.local`), e só sai do seu dispositivo se você mesmo configurar um webhook ou integração com Discord nas Notificações. Detalhes completos na [Política de Privacidade](./docs/privacy_policy/pt-BR.md).
 
-## 📃 Privacy Policy
+## Desenvolvendo
 
-[Privacy Policy.](./docs/privacy_policy/en.md)
+Encontrou um problema ou quer sugerir algo? Abra uma [issue](https://github.com/ErnaneJ/tradingworks-plus/issues/new). Quer contribuir com código?
 
-## ⚙️ Contribute
+```bash
+npm run dev       # build em modo watch
+npm run typecheck # TypeScript + svelte-check
+npm run test      # Vitest
+```
 
-### 🚧 Developing
+Carregue a pasta `dist/` como extensão sem compactação (passo 3 da instalação manual) pra ver suas mudanças em ação. Quando terminar, abra um PR — toda contribuição é bem-vinda.
 
-If you encounter a problem or want some new functionality, please open an issue. If you want to implement it on your own, carry out the **Installation by downloading packages** process present in the same documentation file above before starting.
+## Apoie o projeto
 
-With the extension working correctly, open the project in your favorite text editor and good development!
+Qualquer crítica construtiva é bem-vinda. Se o TradingWorks+ te poupa tempo no dia a dia, considere apoiar o projeto:
 
-When you're done, you can open a PR and I'll be extremely happy to review and possibly accept your code!
-
-### 💙 Encouraging
-
-Any criticism (as long as it's constructive) is always welcome. In addition, you can make a donation to support the project if you deem it appropriate.
-
-_One of the future goals for this extension is to publish it on the official Google Extensions store. However, to do so, you need to pay a licensing fee of $5._
-
-<br/><p align="center">
+<p align="center">
   <a href="https://github.com/sponsors/ErnaneJ">
-    <img alt="Buy Me a Coffe" src="./docs/imgs/buy-me-a-coffee.png" width="300">
+    <img alt="Buy Me a Coffee" src="./docs/imgs/buy-me-a-coffee.png" width="260">
   </a>
-</p><br/>
+</p>
 
 ---
 
 <div align="center">
-  2024 | <b>TradingWorks+</b>
+  2023–2026 · <b>TradingWorks+</b> · <a href="https://github.com/ErnaneJ/tradingworks-plus/blob/main/LICENSE.md">MIT</a>
 </div>
