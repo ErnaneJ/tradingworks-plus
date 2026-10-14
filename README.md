@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="./docs/video/promo.mp4">
+    <img alt="Vídeo promocional do TradingWorks+" src="./docs/video/promo-contact-sheet.png" width="100%">
+  </a>
+</p>
+
 <h1 align="center">
   <img alt="Ícone" src="./docs/imgs/icon.png" width="28"> TradingWorks+
 </h1>
@@ -20,29 +26,9 @@
   <a href="./docs/es/README.md">Español</a>
 </p>
 
-<p align="center">
-  <img alt="Pré-visualização do popup e do painel de opções" src="./docs/imgs/popup/full.png" width="320">
-</p>
-
-## Índice
-
-- [O que é](#o-que-é)
-- [Funcionalidades](#funcionalidades)
-- [Popup: 11 formatos](#popup-11-formatos)
-- [Painel de opções](#painel-de-opções)
-- [Tecnologias](#tecnologias)
-- [Instalação](#instalação)
-- [Privacidade](#privacidade)
-- [Desenvolvendo](#desenvolvendo)
-- [Apoie o projeto](#apoie-o-projeto)
-
 ## O que é
 
-TradingWorks+ é uma extensão de navegador, não oficial e sem qualquer vínculo com a empresa TWO, que torna o uso do [TradingWorks](https://app.tradingworks.net/) mais rápido no dia a dia. Em vez de entrar na plataforma e navegar por várias telas, você bate o ponto, acompanha o saldo do dia e recebe avisos direto do navegador.
-
-<p align="center">
-  <b>Esta extensão apenas reorganiza, de forma mais prática, dados que a própria plataforma TradingWorks já disponibiliza ao colaborador.</b>
-</p>
+TradingWorks+ é uma extensão de navegador, não oficial e sem qualquer vínculo com a empresa TWO, que torna o uso do [TradingWorks](https://app.tradingworks.net/) mais rápido no dia a dia. Em vez de entrar na plataforma e navegar por várias telas, você bate o ponto, acompanha o saldo do dia e recebe avisos direto do navegador — apenas reorganizando, de forma mais prática, dados que a própria plataforma já disponibiliza ao colaborador.
 
 ## Funcionalidades
 
@@ -115,23 +101,7 @@ npm install
 npm run build
 ```
 
-Depois:
-
-1. Abra `chrome://extensions` no navegador;
-
-  <p align="center"><img alt="Acessando a seção de extensões" src="./docs/imgs/ptbr/extensoes.png" width="520"></p>
-
-2. Ative o **Modo do desenvolvedor**;
-
-  <p align="center"><img alt="Ativando o modo do desenvolvedor" src="./docs/imgs/ptbr/dev.png" width="520"></p>
-
-3. Clique em **Carregar sem compactação** e selecione a pasta `dist/` gerada pelo build;
-
-  <p align="center"><img alt="Carregando a extensão" src="./docs/imgs/ptbr/carregar.png" width="520"></p>
-
-4. Pronto — o ícone do TradingWorks+ aparece na barra de extensões.
-
-  <p align="center"><img alt="Extensão carregada" src="./docs/imgs/ok.png" width="520"></p>
+Depois, em `chrome://extensions`: ative o **Modo do desenvolvedor**, clique em **Carregar sem compactação** e selecione a pasta `dist/` gerada pelo build.
 
 ## Privacidade
 
@@ -148,16 +118,6 @@ npm run test      # Vitest
 ```
 
 Carregue a pasta `dist/` como extensão sem compactação (passo 3 da instalação manual) pra ver suas mudanças em ação. Quando terminar, abra um PR — toda contribuição é bem-vinda.
-
-## Apoie o projeto
-
-Qualquer crítica construtiva é bem-vinda. Se o TradingWorks+ te poupa tempo no dia a dia, considere apoiar o projeto:
-
-<p align="center">
-  <a href="https://github.com/sponsors/ErnaneJ">
-    <img alt="Buy Me a Coffee" src="./docs/imgs/buy-me-a-coffee.png" width="260">
-  </a>
-</p>
 
 ---
 

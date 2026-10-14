@@ -1,0 +1,13 @@
+[
+ {
+  "file": "music.wav",
+  "checked_at": "2026-10-14T11:07:54",
+  "role": "music",
+  "title": "procedural uplift 100 BPM em D",
+  "author": "gerado por scripts/music.py",
+  "license": "sem direitos de terceiros",
+  "seed": 7,
+  "bpm": 100,
+  "attribution": null
+ }
+]
