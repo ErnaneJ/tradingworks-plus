@@ -130,6 +130,7 @@ export interface Dictionary {
     testFailed: string;
     browserPermissionHint: string;
     browserPermissionDenied: string;
+    originPermissionDenied: string;
     settingsChangedBody: string;
     punchInBody: string;
     punchOutBody: string;

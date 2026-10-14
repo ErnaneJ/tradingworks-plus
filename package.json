@@ -10,7 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit -p tsconfig.json && svelte-check --tsconfig ./tsconfig.json",
-    "zip": "npm run build && cd dist && zip -r ../tradingworks-plus.zip . -x '.*'"
+    "zip": "npm run build && find dist -name '.DS_Store' -delete && cd dist && zip -r ../tradingworks-plus.zip . -x '.*' -x '*/.DS_Store'"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.2",

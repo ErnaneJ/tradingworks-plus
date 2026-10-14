@@ -4,6 +4,7 @@
   import { sendWebhook } from '../../lib/notify/webhook';
   import { sendDiscordNotification } from '../../lib/notify/discord';
   import { showBrowserNotification } from '../../lib/notify/browser';
+  import { ensureOriginPermission } from '../../lib/notify/permissions';
   import { renderEvent } from '../../lib/notify/render';
   import type { NotificationEvent } from '../../lib/notify/events';
   import { NOTIFICATION_EVENT_KINDS, type NotificationChannel } from '../../lib/storage/schema';
@@ -50,7 +51,15 @@
     settingsStore.update((current) => ({ ...current, discord: { ...current.discord, ...patch } }));
   }
 
-  function toggleChannel(kind: string, channel: NotificationChannel, value: boolean) {
+  async function toggleChannel(kind: string, channel: NotificationChannel, value: boolean) {
+    if (channel === 'webhook' && value) {
+      const granted = await ensureOriginPermission($settingsStore.webhook.url);
+      if (!granted) {
+        pushToast($t('notifications.originPermissionDenied'), 'error');
+        return;
+      }
+    }
+
     settingsStore.update((current) => ({
       ...current,
       notificationChannels: {
@@ -65,7 +74,12 @@
     const payload = renderEvent(SAMPLE_EVENTS[kind], $t);
     try {
       if (channels?.browser) showBrowserNotification(payload);
-      if (channels?.webhook && $settingsStore.webhook.url) await sendWebhook($settingsStore.webhook.url, payload);
+      if (channels?.webhook && $settingsStore.webhook.url) {
+        if (!(await ensureOriginPermission($settingsStore.webhook.url))) {
+          throw new Error('origin permission denied');
+        }
+        await sendWebhook($settingsStore.webhook.url, payload);
+      }
       if (channels?.discord && $settingsStore.discord.url) await sendDiscordNotification($settingsStore.discord.url, payload);
       pushToast($t('notifications.testSent'), 'success');
     } catch {

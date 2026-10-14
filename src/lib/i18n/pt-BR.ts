@@ -128,6 +128,7 @@ export const ptBR: Dictionary = {
     testFailed: 'Não foi possível enviar a mensagem de teste.',
     browserPermissionHint: 'Notificações do navegador precisam de permissão do sistema operacional para o Chrome. Se elas nunca aparecerem, verifique as configurações de notificação do Chrome no seu sistema.',
     browserPermissionDenied: 'O Chrome não tem permissão para exibir notificações neste sistema, então os alertas de "Navegador" nunca vão aparecer. Ative as notificações do Chrome nas configurações do seu sistema operacional.',
+    originPermissionDenied: 'Pra enviar pro endereço informado, o Chrome precisa de permissão pra acessá-lo. Permissão negada ou URL inválida.',
     settingsChangedBody: 'Suas configurações do TradingWorks+ foram atualizadas.',
     punchInBody: 'Você bateu o ponto de entrada.',
     punchOutBody: 'Você bateu o ponto de saída.',

@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TradingWorks+",
+    "description": "Nome da extensão"
+  },
+  "extDescription": {
+    "message": "Bate o ponto, acompanhe o banco de horas e receba avisos — direto do navegador, sem precisar abrir o TradingWorks.",
+    "description": "Descrição curta da extensão"
+  }
+}

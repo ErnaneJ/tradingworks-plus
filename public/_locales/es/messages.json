@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TradingWorks+",
+    "description": "Nombre de la extensión"
+  },
+  "extDescription": {
+    "message": "Marca tu entrada, controla tu bolsa de horas y recibe avisos — directo desde el navegador, sin necesidad de abrir TradingWorks.",
+    "description": "Descripción corta de la extensión"
+  }
+}

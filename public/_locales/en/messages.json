@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TradingWorks+",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Clock in, track your time bank, and get notified — straight from the browser, no need to open TradingWorks.",
+    "description": "Short extension description"
+  }
+}

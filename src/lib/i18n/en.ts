@@ -128,6 +128,7 @@ export const en: Dictionary = {
     testFailed: 'Could not send the test message.',
     browserPermissionHint: 'Browser notifications need OS-level permission for Chrome. If they never show up, check your system notification settings for Chrome.',
     browserPermissionDenied: 'Chrome has no permission to show notifications on this system, so "Browser" alerts will never appear. Enable notifications for Chrome in your OS settings.',
+    originPermissionDenied: 'To send to that address, Chrome needs permission to access it. Permission denied or the URL is invalid.',
     settingsChangedBody: 'Your TradingWorks+ settings were updated.',
     punchInBody: "You've clocked in.",
     punchOutBody: "You've clocked out.",
