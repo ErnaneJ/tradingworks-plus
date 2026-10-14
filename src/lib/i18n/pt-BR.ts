@@ -55,6 +55,7 @@ export const ptBR: Dictionary = {
     currentTimeLabel: 'Hora atual',
     estimatedFinishLabel: 'Estimativa de saída às {{time}}',
     remainingLabel: 'Faltam',
+    extraLabel: 'Extra',
   },
   dashboard: {
     title: 'Painel',

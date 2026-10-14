@@ -10,7 +10,9 @@
 
   $: timeBankLabel = timeBankMinutes === null ? '—' : minutesToTime(timeBankMinutes);
   $: timeBankTone = timeBankMinutes === null ? 'neutral' : timeBankMinutes < 0 ? 'negative' : timeBankMinutes > 0 ? 'positive' : 'neutral';
-  $: remainingMinutes = Math.max($settingsStore.dailyRequiredWorkMinutes - workedMinutes, 0);
+  $: goal = $settingsStore.dailyRequiredWorkMinutes;
+  $: isOvertime = workedMinutes > goal;
+  $: remainingMinutes = isOvertime ? workedMinutes - goal : goal - workedMinutes;
 </script>
 
 <div class="row" class:grid={layout === 'grid'}>
@@ -27,8 +29,8 @@
     <span class="label">{$t('popup.timeBankLabelShort')}</span>
   </div>
   <div class="stat">
-    <span class="value">{minutesToTime(remainingMinutes)}</span>
-    <span class="label">{$t('popup.remainingLabel')}</span>
+    <span class="value" class:tone-positive={isOvertime}>{minutesToTime(remainingMinutes)}</span>
+    <span class="label">{isOvertime ? $t('popup.extraLabel') : $t('popup.remainingLabel')}</span>
   </div>
 </div>
 
@@ -58,8 +60,10 @@
   .stat {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2px;
     flex: 1;
+    text-align: center;
   }
 
   .value {

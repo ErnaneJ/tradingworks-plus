@@ -3,7 +3,6 @@
   import type { TrackedState } from '../../lib/storage/schema';
   import { settingsStore } from '../../lib/storage/stores';
   import { minutesToTime, formatDurationHMm } from '../../lib/domain/time';
-  import { statusColor } from '../statusColors';
   import StatusPill from '../components/StatusPill.svelte';
   import PunchButton from '../components/PunchButton.svelte';
 
@@ -23,8 +22,33 @@
 
   $: goal = $settingsStore.dailyRequiredWorkMinutes;
   $: fraction = goal > 0 ? Math.min(Math.max(state.workedMinutes / goal, 0), 1) : 0;
-  $: dashOffset = CIRCUMFERENCE * (1 - fraction);
   $: percent = Math.round(fraction * 100);
+
+  /**
+   * Splits the ring into one arc per worked/break interval, in order, each sized
+   * by its share of the daily goal — so the ring reads like the linear timeline
+   * bar: worked time in one color, break time in another, instead of a single
+   * flat progress color. Capped at a full lap so a long break or overtime
+   * doesn't wrap an arc back over an earlier one.
+   */
+  $: segments = (() => {
+    if (goal <= 0) return [];
+    let cumulative = 0;
+    const result: { kind: string; rotation: number; dashArray: string }[] = [];
+    for (const interval of state.intervals) {
+      if (cumulative >= 1) break;
+      const duration = interval.durationMinutes ?? 0;
+      if (duration <= 0) continue;
+      const length = Math.min(duration / goal, 1 - cumulative);
+      result.push({
+        kind: interval.kind,
+        rotation: -90 + cumulative * 360,
+        dashArray: `${length * CIRCUMFERENCE} ${CIRCUMFERENCE}`,
+      });
+      cumulative += length;
+    }
+    return result;
+  })();
 
   $: firstPunchTime = state.punches[0]?.time ?? null;
   $: lastPunchTime = state.punches[state.punches.length - 1]?.time ?? null;
@@ -37,19 +61,20 @@
   <div class="ring-wrap" data-tooltip={tooltip}>
     <svg viewBox="0 0 140 140" class="ring">
       <circle class="track" cx="70" cy="70" r={RADIUS} stroke-width="10" fill="none" />
-      <circle
-        class="progress"
-        cx="70"
-        cy="70"
-        r={RADIUS}
-        stroke-width="10"
-        fill="none"
-        stroke-linecap="round"
-        stroke={statusColor(state.status)}
-        stroke-dasharray={CIRCUMFERENCE}
-        stroke-dashoffset={dashOffset}
-        transform="rotate(-90 70 70)"
-      />
+      {#each segments as segment}
+        <circle
+          class="progress"
+          class:break={segment.kind === 'break'}
+          cx="70"
+          cy="70"
+          r={RADIUS}
+          stroke-width="10"
+          fill="none"
+          stroke-linecap="round"
+          stroke-dasharray={segment.dashArray}
+          transform="rotate({segment.rotation} 70 70)"
+        />
+      {/each}
     </svg>
     <div class="ring-center">
       <span class="worked">{minutesToTime(state.workedMinutes)}</span>
@@ -116,7 +141,12 @@
   }
 
   .progress {
-    transition: stroke-dashoffset 0.4s ease;
+    stroke: var(--color-working);
+    transition: stroke-dasharray 0.4s ease;
+  }
+
+  .progress.break {
+    stroke: var(--color-break);
   }
 
   .ring-center {

@@ -176,15 +176,17 @@
 
   .compact-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     gap: 8px;
   }
 
   .stat {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2px;
     flex: 1;
+    text-align: center;
   }
 
   .value {

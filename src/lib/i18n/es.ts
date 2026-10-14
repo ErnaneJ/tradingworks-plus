@@ -55,6 +55,7 @@ export const es: Dictionary = {
     currentTimeLabel: 'Hora actual',
     estimatedFinishLabel: 'Salida estimada a las {{time}}',
     remainingLabel: 'Faltan',
+    extraLabel: 'Extra',
   },
   dashboard: {
     title: 'Panel',

@@ -57,6 +57,7 @@ export interface Dictionary {
     currentTimeLabel: string;
     estimatedFinishLabel: string;
     remainingLabel: string;
+    extraLabel: string;
   };
   dashboard: {
     title: string;

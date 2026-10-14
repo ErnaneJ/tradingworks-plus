@@ -128,6 +128,7 @@
   .track {
     position: relative;
     height: 8px;
+    margin: 0 6px;
     border-radius: 4px;
     background: var(--color-border);
   }
@@ -180,6 +181,7 @@
   .ticks {
     position: relative;
     height: 12px;
+    margin: 0 6px;
   }
 
   .ticks-above {
